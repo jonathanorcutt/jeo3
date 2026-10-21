@@ -1,0 +1,87 @@
+﻿@namespace JEO3.Site.Components.Charting
+@using JEO3.Generation.Models
+@inherits EChartBase
+
+<div id="@_containerId" class="schema-relations-3d" style="width: @(Width); height: @(Height); padding: @(PaddingStyle); position:absolute; background-color: #000">
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "JEO3 Metric";
+    private IQueryTracker Tracker { get { return W.Result.DiagramResultDatabase.Tracker; } }
+
+    private readonly string _containerId = $"chart-jeo3-tree-{Guid.NewGuid():N}";
+
+    private IJSObjectReference? _module;
+    private IQueryTracker? _renderedTracker;
+    protected override string JavascriptFilePath { get; set; } = "./js/echarts/charts2d.js";
+
+    protected override string? ContainerId => _containerId;
+
+    // Constructor runs before parameters are applied, so this only changes the default; an explicit Height still wins.
+    public JEO3Tree() { Height = "100%"; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Registers the container with the shared ResizeObserver.
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (IsDisposed) return;
+
+        try
+        {
+            _module ??= await JSRuntime.InvokeAsync<IJSObjectReference>("import", JavascriptFilePath);
+
+            if (IsDisposed) return;
+
+            // Only (re)build when a different tracker arrives, not on every render.
+            if (!ReferenceEquals(Tracker, _renderedTracker))
+            {
+                _renderedTracker = Tracker;
+                await BuildDepthTreeAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"JEO3Tree render failed: {ex}");
+        }
+    }
+
+    private async Task BuildDepthTreeAsync()
+    {
+        if (IsDisposed || _module == null || Tracker == null) return;
+
+        // Include the root explicitly. Nodes may or may not include it.
+        var nodes = Tracker.Nodes.Prepend(Tracker.Root).Where(n => n != null).DistinctBy(n => n.Id).ToList();
+
+        var payload = nodes.Select(node => new
+        {
+            id = node.Id.ToString("N"),
+            parentId = node.Parent?.Id.ToString("N"),
+            databaseName = "",//node.Table?.DatabaseName ?? "",
+            schemaName = node.Table?.SchemaName ?? "",
+            tableName = node.Table?.Name ?? "",
+            depth = node.Depth,
+            direction = node.Direction.ToString(),
+            relationshipId = node.RelationshipObjectId,
+            requiresLeftJoin = node.RequiresLeftJoin,
+            isRoot = node.Id == Tracker.Root.Id
+        }).ToList();
+
+        try { await _module.InvokeVoidAsync("renderQueryDepthTree", _containerId, Title, payload); }
+        catch (JSException ex) { Console.Error.WriteLine($"Query depth tree JS error: {ex.Message}"); }
+    }
+
+    // Base class has already detached the resize observer by the time this runs.
+    protected override async ValueTask OnDisposeAsync()
+    {
+        if (_module == null) return;
+
+        try { await _module.InvokeVoidAsync("disposeQueryDepthTree", _containerId); }
+        catch { /* JS runtime can already be gone during circuit shutdown. */ }
+
+        try { await _module.DisposeAsync(); }
+        catch { /* Ignore module disposal during shutdown. */ }
+
+        _module = null;
+    }
+}
