@@ -61,3 +61,7 @@
 /JEO3.API/appsettings.json
 /.kiro/settings
 /JEO3.Console/App.config
+/JEO3.Charts/bin
+/JEO3.Charts/obj
+/JEO3.Contracts/bin/Debug/net10.0
+/JEO3.Contracts/obj
