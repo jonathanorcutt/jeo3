@@ -55,3 +55,9 @@
 /JEO3.API/Properties/launchSettings.json
 /JEO3.Site/Properties/PublishProfiles
 /JEO3.Site/Properties/launchSettings.json
+/JEO3.Site/appsettings.Development.json
+/JEO3.Site/appsettings.json
+/JEO3.API/appsettings.Development.json
+/JEO3.API/appsettings.json
+/.kiro/settings
+/JEO3.Console/App.config
