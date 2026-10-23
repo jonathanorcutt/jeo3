@@ -37,6 +37,12 @@
     }
 }
 
+@keyframes insane-text-lg {
+    to {
+        background-position: 600% center;
+    }
+}
+
 @keyframes insane-progress {
     0% {
         transform: translateX(-120%);

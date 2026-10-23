@@ -21,9 +21,6 @@ namespace JEO3.Site.Infrastructure
 
             try
             {
-                // Include a server-discriminating component in the key so two providers pointing
-                // at the same database name on different servers get separate cache entries.
-                // IConnectionDto only exposes ConnectionString, so hash it for a stable key.
                 string cacheKey = $"SchemaMetadata_{provider.Connection.Database}_{Math.Abs(provider.Connection.ConnectionString.GetHashCode())}";
                 var ctx = await _cache.GetOrCreateAsync(cacheKey, async token =>
                 {

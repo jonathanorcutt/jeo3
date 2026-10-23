@@ -2,7 +2,6 @@ namespace JEO3.Schema
 {
     public sealed class RelationColumnPair : IRelationColumnPair
     {
-        // JEO
         public bool IsComposite { get; internal init; }
         public bool IsNullable { get; internal init; }
 

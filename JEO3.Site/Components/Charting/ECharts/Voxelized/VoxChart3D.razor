@@ -2,7 +2,6 @@
 @implements IAsyncDisposable
 @namespace JEO3.Site.Components.Charting
 
-@* Clear container matching your dark dashboard theme *@
 <div id="@_containerId" class="schema-contour-3d" style="width: @(Width); height: @(Height); background-color: #0a0c10;">
 
 
@@ -11,7 +10,6 @@
 </div>
 
 @code {
-    // Parameters to keep it highly reusable across your application
     [Parameter] public string Title { get; set; } = "Voxelized Heat Map Logo";
     [Parameter] public string Width { get; set; } = "1530px";
     [Parameter] public string Height { get; set; } = "900px";
@@ -30,7 +28,6 @@
         {
             _jsAvailable = true;
 
-            // Imports your updated voxelized charts3d.js script context thread
             _module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/echarts/charts3d.js");
             await BuildVoxelChartAsync();
         }

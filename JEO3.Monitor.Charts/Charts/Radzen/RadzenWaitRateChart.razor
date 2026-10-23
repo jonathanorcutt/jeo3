@@ -54,10 +54,10 @@
 
 	private string FilterLabels(object value)
 	{
-		// 1. Cast or parse the incoming raw object value safely
+		// Cast or parse the incoming raw object value safely
 		if (value is double numericValue)
 		{
-			// 2. Enforce your "Value exceeds X" condition
+			// Enforce "Value exceeds X" condition
 			if (numericValue > 300000)
 			{
 				var sec = Math.Round(numericValue / 1000, 0);
@@ -66,7 +66,7 @@
 			}
 		}
 
-		// 3. Return an empty string to completely suppress the label
+		// Return an empty string to completely suppress the label
 		return string.Empty;
 	}
 

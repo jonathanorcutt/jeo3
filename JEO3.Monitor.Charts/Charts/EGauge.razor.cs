@@ -11,7 +11,7 @@ namespace JEO3.Monitor.ECharts
         #region Properties
         [Parameter] public override string Width { get; set; } = "270px";
         [Parameter] public override string Height { get; set; } = "270px";
-        [Parameter] public string Title { get; set; } = "PRESSURE";
+        [Parameter] public string Title { get; set; } = "DB PRESSURE";
         private static double currentWaitPressure = 0;
         protected override ChartOptions Options { get; set; } = ChartOptionsLibrary.EGauge_Options;
         #endregion

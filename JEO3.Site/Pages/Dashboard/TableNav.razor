@@ -17,7 +17,7 @@
 			<Tabs>
 				<RadzenTabsItem>
 					<Template>
-						<VSIcon Width="22" Height="22" Name="Consortium" Type="VSIconType.VSCodeGithub" Class="fa-mr7 fa-ml2" Extension="ImageType.svg"></VSIcon> Tables Tree
+						<VSIcon Width="22" Height="22" Name="Consortium" Type="VSIconType.VSCodeGithub" Class="fa-mr7 fa-ml2" Extension="ImageType.svg"></VSIcon> Object Explorer
 					</Template>
 					<ChildContent>
 
@@ -30,14 +30,14 @@
 									<div class="dashboard-pane-titlebar-right-container titlebar-right-wrapper-gap">
 										<button type="button" class="dashboard-pane-titlebar-right-expand-button toggle-fullscreen-btn"
 												@onclick=" @(async () => await TogglePaneExpansionFullScreen(tablesTreePaneDiv))">
-												@if (W.UI.Appearance.IsPaneFullScreenResults)
-												{
-													<IconMinimize />
-												}
-												else
-												{
-													<IconMaximize />
-												}
+											@if (W.UI.Appearance.IsPaneFullScreenResults)
+											{
+												<IconMinimize />
+											}
+											else
+											{
+												<IconMaximize />
+											}
 										</button>
 									</div>
 								</div>
@@ -46,14 +46,13 @@
 							<div class="dashboard-pane-body-container-scroll">
 								@if (W.UI.Appearance.IsSchemaLoaded)
 								{
-									<div class="monitor-grid" style="display: flex;
+									<div class="jeo-tree-container" style="display: flex;
 										flex-wrap: wrap;
 										gap: 12px;
 										align-items: flex-start;">
-										<JeoTreeView Items="@(new List<IObject>() { W.Context.Database})"
+										<JeoTreeView Items="@(new List<IObject>() { W.Context.Database })"
 													 OnClick="@OnTreeNodeClick"
-													 SelectedItem="W.SelectedTable"
-													 />
+													 SelectedItem="W.SelectedTable" />
 									</div>
 									@* CellContextMenu="@OnTableContextMenu" *@
 
@@ -62,9 +61,9 @@
 						</div>
 					</ChildContent>
 				</RadzenTabsItem>
-				<RadzenTabsItem>
+				<RadzenTabsItem Style="width:100px">
 					<Template>
-						<VSIcon Width="22" Height="22" Name="API_Center" Type="VSIconType.VSCodeGithub" Class="fa-mr7 fa-ml2" Extension="ImageType.svg"></VSIcon> Tables List
+						<VSIcon Width="22" Height="22" Name="API_Center" Type="VSIconType.VSCodeGithub" Class="fa-mr7 fa-ml2" Extension="ImageType.svg"></VSIcon> Tables
 					</Template>
 					<ChildContent>
 
@@ -77,14 +76,14 @@
 									<div class="dashboard-pane-titlebar-right-container titlebar-right-wrapper-gap">
 										<button type="button" class="dashboard-pane-titlebar-right-expand-button toggle-fullscreen-btn"
 												@onclick="@(async () => await TogglePaneExpansionFullScreen(tablesPaneDiv))">
-												@if (W.UI.Appearance.IsPaneFullScreenResults)
-												{
-													<IconMinimize />
-												}
-												else
-												{
-													<IconMaximize />
-												}
+											@if (W.UI.Appearance.IsPaneFullScreenResults)
+											{
+												<IconMinimize />
+											}
+											else
+											{
+												<IconMaximize />
+											}
 										</button>
 									</div>
 								</div>
@@ -133,15 +132,15 @@
 					<div class="dashboard-pane-titlebar-right-container titlebar-right-wrapper-gap">
 
 						<button type="button" class="dashboard-pane-titlebar-right-expand-button toggle-fullscreen-btn"
-							@onclick="@(async ()=> await TogglePaneExpansionFullScreen(columnsPaneDiv))">
-								@if (W.UI.Appearance.IsPaneFullScreenResults)
-								{
-									<IconMinimize />
-								}
-								else
-								{
-									<IconMaximize />
-								}
+								@onclick="@(async () => await TogglePaneExpansionFullScreen(columnsPaneDiv))">
+							@if (W.UI.Appearance.IsPaneFullScreenResults)
+							{
+								<IconMinimize />
+							}
+							else
+							{
+								<IconMaximize />
+							}
 						</button>
 					</div>
 				</div>
@@ -219,85 +218,96 @@
 								<RadzenCheckBox Value="@data.IsNullable" Disabled="true" TripleState="false" />
 							</Template>
 							<FilterTemplate Context="column">
-								<RadzenDropDown Data="@(new[] { new { Text = "Yes", Value = true }, new { Text = "No", Value = false } })"
+								<RadzenDropDown TValue="bool?" Data="@(new[] { new { Text = "Yes", Value = (bool?)true }, new { Text = "No", Value = (bool?)false } })"
 												TextProperty="Text" ValueProperty="Value"
-												Value="@column.GetFilterValue()"
-												Change="@(args => column.SetFilterValue(args))"
-												AllowClear="true" Style="width:60px;" />
-							</FilterTemplate>
-						</RadzenDataGridColumn>
-						<RadzenDataGridColumn Property="@nameof(IColumn.IsPrimaryKey)" Title="PK" Width="39px" Type="typeof(bool)">
-							<Template Context="data">
-								<RadzenCheckBox Value="@data.IsPrimaryKey" Disabled="true" TripleState="false" />
-							</Template>
-							<FilterTemplate Context="column">
-								<RadzenDropDown Data="@(new[] { new { Text = "Yes", Value = true }, new { Text = "No", Value = false } })"
-												TextProperty="Text" ValueProperty="Value"
-												Value="@column.GetFilterValue()"
-												Change="@(args => column.SetFilterValue(args))"
-												AllowClear="true" Style="width:39px;" />
-							</FilterTemplate>
-						</RadzenDataGridColumn>
-						<RadzenDataGridColumn Property="@nameof(IColumn.IsForeignKey)" Title="FK" Width="39px" Type="typeof(bool)">
-							<Template Context="data">
-								<RadzenCheckBox Value="@data.IsForeignKey" Disabled="true" TripleState="false" />
-							</Template>
-							<FilterTemplate Context="column">
-								<RadzenDropDown Data="@(new[] { new { Text = "Yes", Value = true }, new { Text = "No", Value = false } })"
-												TextProperty="Text" ValueProperty="Value"
-												Value="@column.GetFilterValue()"
-												Change="@(args => column.SetFilterValue(args))"
-												AllowClear="true" Style="width:39px;" />
-							</FilterTemplate>
-						</RadzenDataGridColumn>
-						<RadzenDataGridColumn Property="@nameof(IColumn.IsIdentity)" Title="ID" Width="39px" Type="typeof(bool)">
-							<Template Context="data">
-								<RadzenCheckBox Value="@data.IsIdentity" Disabled="true" TripleState="false" />
-							</Template>
-							<FilterTemplate Context="column">
-								<RadzenDropDown Data="@(new[] { new { Text = "Yes", Value = true }, new { Text = "No", Value = false } })"
-												TextProperty="Text" ValueProperty="Value"
-												Value="@column.GetFilterValue()"
-												Change="@(args => column.SetFilterValue(args))"
-												AllowClear="true" Style="width:39px;" />
-							</FilterTemplate>
-						</RadzenDataGridColumn>
-						<RadzenDataGridColumn Property="@nameof(IColumn.IsIndexKey)" Title="IK" Width="39px" Type="typeof(bool)">
-							<Template Context="data">
-								<RadzenCheckBox Value="@data.IsIndexKey" Disabled="true" TripleState="false" />
-							</Template>
-							<FilterTemplate Context="column">
-								<RadzenDropDown Data="@(new[] { new { Text = "Yes", Value = true }, new { Text = "No", Value = false } })"
-												TextProperty="Text" ValueProperty="Value"
-												Value="@column.GetFilterValue()"
-												Change="@(args => column.SetFilterValue(args))"
-												AllowClear="true" Style="width:39px;" />
-							</FilterTemplate>
-						</RadzenDataGridColumn>
-						<RadzenDataGridColumn Property="@nameof(IColumn.IsUnique)" Title="UQ" Width="41px" Type="typeof(bool)">
-							<Template Context="data">
-								<RadzenCheckBox Value="@data.IsUnique" Disabled="true" TripleState="false" />
-							</Template>
-							<FilterTemplate Context="column">
-								<RadzenDropDown Data="@(new[] { new { Text = "Yes", Value = true }, new { Text = "No", Value = false } })"
-												TextProperty="Text" ValueProperty="Value"
-												Value="@column.GetFilterValue()"
-												Change="@(args => column.SetFilterValue(args))"
-												AllowClear="true" Style="width:41px;" />
-							</FilterTemplate>
-						</RadzenDataGridColumn>
-						<RadzenDataGridColumn Property="@nameof(IColumn.IsComputed)" Title="Computed" Width="76px" Type="typeof(bool)">
-							<Template Context="data">
-								<RadzenCheckBox Value="@data.IsComputed" Disabled="true" TripleState="false" />
-							</Template>
-							<FilterTemplate Context="column">
-								<RadzenDropDown Data="@(new[] { new { Text = "Yes", Value = true }, new { Text = "No", Value = false } })"
-												TextProperty="Text" ValueProperty="Value"
-												Value="@column.GetFilterValue()"
-												Change="@(args => column.SetFilterValue(args))"
+												Value="@((bool?)column.GetFilterValue())"
+												Change="@(args => { if (args == null) column.ClearFilters(); else column.SetFilterValue((bool?)args); column.Grid.Reload(); })"
 												AllowClear="true" Style="width:76px;" />
 							</FilterTemplate>
-						</RadzenDataGridColumn>						
+						</RadzenDataGridColumn>
+
+						<!-- PK Column -->
+						<RadzenDataGridColumn Property="@nameof(IColumn.IsPrimaryKey)" Title="PK" Width="76px" Type="typeof(bool)">
+							<Template Context="data">
+								<RadzenCheckBox Value="@data.IsPrimaryKey" Disabled="true" />
+							</Template>
+							<FilterTemplate Context="column">
+								<RadzenDropDown TValue="bool?" Data="@(new[] { new { Text = "Yes", Value = (bool?)true }, new { Text = "No", Value = (bool?)false } })"
+												TextProperty="Text" ValueProperty="Value"
+												Value="@((bool?)column.GetFilterValue())"
+												Change="@(args => { if (args == null) column.ClearFilters(); else column.SetFilterValue((bool?)args); column.Grid.Reload(); })"
+												AllowClear="true" Style="width:76px;" />
+							</FilterTemplate>
+						</RadzenDataGridColumn>
+
+						<!-- FK Column -->
+						<RadzenDataGridColumn Property="@nameof(IColumn.IsForeignKey)" Title="FK" Width="76px" Type="typeof(bool)">
+							<Template Context="data">
+								<RadzenCheckBox Value="@data.IsForeignKey" Disabled="true" />
+							</Template>
+							<FilterTemplate Context="column">
+								<RadzenDropDown TValue="bool?" Data="@(new[] { new { Text = "Yes", Value = (bool?)true }, new { Text = "No", Value = (bool?)false } })"
+												TextProperty="Text" ValueProperty="Value"
+												Value="@((bool?)column.GetFilterValue())"
+												Change="@(args => { if (args == null) column.ClearFilters(); else column.SetFilterValue((bool?)args); column.Grid.Reload(); })"
+												AllowClear="true" Style="width:76px;" />
+							</FilterTemplate>
+						</RadzenDataGridColumn>
+
+						<!-- ID Column -->
+						<RadzenDataGridColumn Property="@nameof(IColumn.IsIdentity)" Title="ID" Width="76px" Type="typeof(bool)">
+							<Template Context="data">
+							</Template>
+							<FilterTemplate Context="column">
+								<RadzenDropDown TValue="bool?" Data="@(new[] { new { Text = "Yes", Value = (bool?)true }, new { Text = "No", Value = (bool?)false } })"
+												TextProperty="Text" ValueProperty="Value"
+												Value="@((bool?)column.GetFilterValue())"
+												Change="@(args => { if (args == null) column.ClearFilters(); else column.SetFilterValue((bool?)args); column.Grid.Reload(); })"
+												AllowClear="true" Style="width:76px;" />
+							</FilterTemplate>
+						</RadzenDataGridColumn>
+
+						<!-- IX Column -->
+						<RadzenDataGridColumn Property="@nameof(IColumn.IsIndexKey)" Title="IK" Width="76px" Type="typeof(bool)">
+							<Template Context="data">
+								<RadzenCheckBox Value="@data.IsIndexKey" Disabled="true" />
+							</Template>
+							<FilterTemplate Context="column">
+								<RadzenDropDown TValue="bool?" Data="@(new[] { new { Text = "Yes", Value = (bool?)true }, new { Text = "No", Value = (bool?)false } })"
+												TextProperty="Text" ValueProperty="Value"
+												Value="@((bool?)column.GetFilterValue())"
+												Change="@(args => { if (args == null) column.ClearFilters(); else column.SetFilterValue((bool?)args); column.Grid.Reload(); })"
+												AllowClear="true" Style="width:76px;" />
+							</FilterTemplate>
+						</RadzenDataGridColumn>
+
+						<!-- UQ Column -->
+						<RadzenDataGridColumn Property="@nameof(IColumn.IsUnique)" Title="UQ" Width="76px" Type="typeof(bool)">
+							<Template Context="data">
+								<RadzenCheckBox Value="@data.IsUnique" Disabled="true" />
+							</Template>
+							<FilterTemplate Context="column">
+								<RadzenDropDown TValue="bool?" Data="@(new[] { new { Text = "Yes", Value = (bool?)true }, new { Text = "No", Value = (bool?)false } })"
+												TextProperty="Text" ValueProperty="Value"
+												Value="@((bool?)column.GetFilterValue())"
+												Change="@(args => { if (args == null) column.ClearFilters(); else column.SetFilterValue((bool?)args); column.Grid.Reload(); })"
+												AllowClear="true" Style="width:76px;" />
+							</FilterTemplate>
+						</RadzenDataGridColumn>
+
+						<!-- Computer Column -->
+						<RadzenDataGridColumn Property="@nameof(IColumn.IsComputed)" Title="Computed" Width="76px" Type="typeof(bool)">
+							<Template Context="data">
+								<RadzenCheckBox Value="@data.IsComputed" Disabled="true" TriState="false" />
+							</Template>
+							<FilterTemplate Context="column">
+								<RadzenDropDown TValue="bool?" Data="@(new[] { new { Text = "Yes", Value = (bool?)true }, new { Text = "No", Value = (bool?)false } })"
+												TextProperty="Text" ValueProperty="Value"
+												Value="@((bool?)column.GetFilterValue())"
+												Change="@(args => { if (args == null) column.ClearFilters(); else column.SetFilterValue((bool?)args); column.Grid.Reload(); })"
+												AllowClear="true" Style="width:76px;" />
+							</FilterTemplate>
+						</RadzenDataGridColumn>
 						<RadzenDataGridColumn Title="Indexes" Width="65px">
 							<Template Context="data">
 								<label>@data.Indexes.Count</label>
@@ -334,6 +344,27 @@
 </RadzenSplitter>
 
 @code {
+	private static readonly object[] BooleanFilterOptions = new object[]
+	{
+		new { Text = "Yes", Value = (bool?)true },
+		new { Text = "No", Value = (bool?)false }
+	};
+
+	// Centralized handler to check null and reload the layout tree
+	private void HandleBooleanFilter(RadzenDataGridColumn<IColumn> column, object args)
+	{
+		if (args == null)
+		{
+			column.ClearFilters();
+		}
+		else
+		{
+			column.SetFilterValue(args);
+		}
+
+		column.Grid.Reload();
+	}
+
 	private async Task OpenTableContextMenu(DataGridCellMouseEventArgs<ITable> args) =>
 		ContextMenuService.Open(args, ds =>
 			@<RadzenMenu>

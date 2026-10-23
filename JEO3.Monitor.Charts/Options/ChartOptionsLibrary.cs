@@ -165,7 +165,7 @@ namespace JEO3.Monitor.ECharts
             {
                 BackgroundColor = theme.BackgroundColor,
 
-                // 1. Configure the individual, independent vertical axes
+                // Configure the individual, independent vertical axes
                 ParallelAxis = new List<ParallelAxis>
         {
             new ParallelAxis
@@ -209,7 +209,7 @@ namespace JEO3.Monitor.ECharts
                     Right = "15%",
                     Top = "15%",
                     Bottom = "10%",
-                    // Changes the default layout styling to support your dark/light theme parameters
+                    // Dark/light theme parameters
                     ParallelAxisDefault = new ParallelAxisDefault
                     {
                         Type = "value",
@@ -229,10 +229,9 @@ namespace JEO3.Monitor.ECharts
                     Opacity = 0.4, // Keep it slightly transparent so overlapping lines don't turn into a solid block
                     Color = new Color(theme.SeriesPrimary)
                 },
-                Smooth = true, // Mimics the fluid flowing curves in your example image
+                Smooth = true, // Mimics the fluid flowing curves
                 
                 // DATA FORMAT REQUIREMENT:
-                // Data expects a multi-dimensional array mapping matching the order of your dimensions:
                 // [ [IO_1, Mem_1, CPU_1, Wait_1], [IO_2, Mem_2, CPU_2, Wait_2] ]
                 Data = new List<object>
                 {
@@ -384,13 +383,13 @@ namespace JEO3.Monitor.ECharts
         {
             return new ChartOptions()
             {
-                // 1. Hide the X Axis completely
+                // Hide the X Axis completely
                 XAxis = new() { Show = false },
 
-                // 2. Hide the Y Axis completely
+                // Hide the Y Axis completely
                 YAxis = new() { Show = false },
 
-                // 3. Remove all margins/padding around the chart so it fits tightly
+                // Remove all margins/padding around the chart so it fits tightly
                 Grid = new()
                 {
                     Left = "0",
@@ -399,7 +398,7 @@ namespace JEO3.Monitor.ECharts
                     Bottom = "0"
                 },
 
-                // 4. Configure the line data
+                // Configure the line data
                 Series = new()
                 {
                     new LineSeries()

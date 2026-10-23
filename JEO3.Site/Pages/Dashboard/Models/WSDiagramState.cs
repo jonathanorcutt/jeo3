@@ -2,7 +2,6 @@
 
 namespace JEO3.Site.Dashboard
 {
-
     public sealed class WSDiagramState
     {
         public DiagramType DiagramType { get; set; } = DiagramType.Node;
@@ -24,7 +23,15 @@ namespace JEO3.Site.Dashboard
         public BaseLayoutParameters ActiveParameters { get; set; } = new KkParameters();
         public void ApplyPreset(LayoutPresetType presetType)
         {
-            ActiveParameters = LayoutPresets.GetPreset(LayoutShape, presetType);
+            switch (DiagramType)
+            {
+                case DiagramType.Node:
+                    ActiveParameters = LayoutPresets.GetPreset(LayoutShape, presetType);
+                    break;
+                case DiagramType.ERD:
+                    ActiveParameters = ERLayoutPresets.GetPreset(LayoutShape, presetType);
+                    break;
+            }
         }
     }
 }

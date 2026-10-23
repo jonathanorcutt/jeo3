@@ -10,7 +10,7 @@ h1:focus {
 }
 
 :root {
-    /* 1. Global Typography Shrink */
+    /* Global Typography Shrink */
     --rz-font-size: 0.75rem !important; /* Drops the base application font size */
     --rz-body-font-size: 0.75rem !important;
     --rz-grid-cell-font-size: 0.7rem !important; /* Makes datagrid text hyper-compact */
@@ -110,11 +110,11 @@ h1:focus {
 .flyout-accordion-panel {
     z-index: 999999 !important;
 }
-.rz-sidebar,
+/*.rz-sidebar,
 .rz-sidebar-responsive {
     box-shadow: 5px 0 10px var(--rz-primary);
     transition: none !important;
-}
+}*/
 
 .rz-sidebar-toggle {
     margin-right: 0px;
@@ -125,9 +125,9 @@ h1:focus {
     }
 
     .rz-sidebar-expanded {
-        width: 135px;
-        resize: horizontal;
-        /*transition: ease .1s;*/
+        width: 190px;
+        /*resize: horizontal;*/
+        transition: ease 1.5s;
     }
 
 .rz-sidebar-toggle-right {

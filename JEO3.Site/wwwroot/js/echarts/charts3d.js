@@ -99,7 +99,7 @@ export function renderVox3DChart(containerId, title, xAxisTitle, yAxisTitle, int
 
     var chartInstance = echarts.getInstanceByDom(chartContainer) || echarts.init(chartContainer);
 
-    // 1. Structural look variables
+    // Structural look variables
     var config = {
         scale: 0.15,
         roughness: 0,
@@ -127,13 +127,13 @@ export function renderVox3DChart(containerId, title, xAxisTitle, yAxisTitle, int
         yAxis3D: { type: 'value' },
         zAxis3D: { type: 'value', min: 0, max: 100 },
         animationThreshold: 99999,
-        animationDurationUpdate: 10000, // Matches your fallback timeline
+        animationDurationUpdate: 10000, // Matches fallback timeline
         grid3D: {
             show: false,
             viewControl: {
                 projection: config.projection,
-                alpha: 0,           // Matches your starting flat alignment look
-                beta: -360,         // Matches your full rotation launch spin
+                alpha: 0,           // Matches starting flat alignment look
+                beta: -360,         // Matches full rotation launch spin
                 distance: 8,        // 🌟 FORCE starting camera location right into the mesh strings!
                 // targetCoord:, // 🌟 Shifts camera center right into the physical block cluster center
                 panSensitivity: config.move ? 1 : 0,
@@ -264,7 +264,7 @@ export function renderRelations3DFlights(containerId, title, tablesNodes, foreig
     let chartInstance = echarts.getInstanceByDom(chartContainer);
     if (!chartInstance) { chartInstance = echarts.init(chartContainer); }
 
-    /* 1. Bounds first, so layout x/y can be mapped into lng/lat */
+    /* Bounds first, so layout x/y can be mapped into lng/lat */
     const validNodes = (tablesNodes || []).filter(node => node && node.id);
     const bounds = calculateBounds(validNodes);
     const spanX = Math.max(1, bounds.maxX - bounds.minX);
@@ -467,8 +467,8 @@ export async function renderPanoramicBuildings3D(containerId, title, geoJsonPath
 
         echarts.registerMap('buildings', buildingsGeoJson);
 
-        // Convert your incoming metrics collection into a quick-lookup map array
-        // keyed completely on your dynamic TablePath identifiers
+        // Convert incoming metrics collection into a quick-lookup map array
+        // keyed completely on dynamic TablePath identifiers
         const metricLookup = {};
         if (tableMetrics && Array.isArray(tableMetrics)) {
             tableMetrics.forEach(m => {
@@ -478,13 +478,13 @@ export async function renderPanoramicBuildings3D(containerId, title, geoJsonPath
 
         var regionsData = buildingsGeoJson.features.map(function (feature) {
             const featureName = feature.properties.name;
-            // Extract the live complex metrics value from your database model instance, fallback to 0.1 if missing
+            // Extract the live complex metrics value from database model instance, fallback to 0.1 if missing
             const activeIntensity = metricLookup[featureName] !== undefined ? metricLookup[featureName] : 0.1;
 
             return {
                 name: featureName,
                 value: activeIntensity,
-                // Scales the physical height dynamically based on your live database telemetry matrix
+                // Scales the physical height dynamically based on live database telemetry matrix
                 height: (feature.properties.height * activeIntensity) / 10
             };
         });

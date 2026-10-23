@@ -294,7 +294,6 @@ namespace JEO3.IO.Processes
                 }
                 catch (Exception ex)
                 {
-                    // To Be Implemented: Throw Custom Exception...
                     Console.WriteLine(ex.ToString());
                 }
             };
@@ -322,14 +321,12 @@ namespace JEO3.IO.Processes
                     }
                     catch (Exception ex)
                     {
-                        // To Be Implemented: Throw Custom Exception...
                         Console.WriteLine(ex.ToString());
                     }
                 }
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
             }
 

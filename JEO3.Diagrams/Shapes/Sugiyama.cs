@@ -57,7 +57,6 @@ namespace JEO3.Diagrams
                     : parameters.Direction == DiagramLayoutDirection.RightToLeft ? LayoutDirection.RightToLeft
                     : parameters.Direction == DiagramLayoutDirection.TopToBottom ? LayoutDirection.TopToBottom
                     : parameters.Direction == DiagramLayoutDirection.BottomToTop ? LayoutDirection.BottomToTop : LayoutDirection.LeftToRight,
-                // JEO3
                 LayerGap = parameters.LayerGap,
                 SliceGap = parameters.SliceGap,
                 OptimizeWidth = parameters.OptimizeWidth,

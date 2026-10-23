@@ -39,6 +39,16 @@
 
 					<Columns>
 						<RadzenDataGridColumn TItem="ActiveRequestRow"
+											  Property="@nameof(ActiveRequestRow.DatabaseName)"
+											  Title="Database"
+											  Width="160px" />
+
+						<RadzenDataGridColumn TItem="ActiveRequestRow"
+											  Property="@nameof(ActiveRequestRow.LoginName)"
+											  Title="Login"
+											  Width="180px" />
+
+						<RadzenDataGridColumn TItem="ActiveRequestRow"
 											  Property="@nameof(ActiveRequestRow.SessionId)"
 											  Title="SPID"
 											  Width="80px" />
@@ -92,16 +102,6 @@
 											  Title="Txns"
 											  TextAlign="TextAlign.Right"
 											  Width="80px" />
-
-						<RadzenDataGridColumn TItem="ActiveRequestRow"
-											  Property="@nameof(ActiveRequestRow.DatabaseName)"
-											  Title="Database"
-											  Width="160px" />
-
-						<RadzenDataGridColumn TItem="ActiveRequestRow"
-											  Property="@nameof(ActiveRequestRow.LoginName)"
-											  Title="Login"
-											  Width="180px" />
 
 						<RadzenDataGridColumn TItem="ActiveRequestRow"
 											  Property="@nameof(ActiveRequestRow.Command)"

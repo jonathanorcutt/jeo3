@@ -2,7 +2,7 @@
 {
     public sealed class LinLogParameters : BaseLayoutParameters
     {
-        private const int _minIter = 10;
+        private const int _minIter = 100;
         private const int _maxIterLimit = 1000;
         private const double _minExp = -5.0;
         private const double _maxExp = 5.0;
@@ -10,7 +10,7 @@
         private const double _minGrav = 0.0;
         private const double _maxGrav = 10.0;
 
-        [DiagramParameter("Max Iterations", _minIter, _maxIterLimit, 10)]
+        [DiagramParameter("Max Iterations", _minIter, _maxIterLimit, 100)]
         public int MaxIterations
         {
             get;

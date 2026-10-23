@@ -126,7 +126,7 @@ namespace JEO3.Diagrams
                     Zoom = { Enabled = true },
                     AllowPanning = true,
                     GridSnapToCenter = true,
-                    GridSize = 5
+                    GridSize = 7
                 };
 
                 var diagram = new BlazorDiagram(options);
@@ -357,7 +357,7 @@ namespace JEO3.Diagrams
                     Zoom = { Enabled = true },
                     AllowPanning = true,
                     GridSnapToCenter = true,
-                    GridSize = 5
+                    GridSize = 7
                 };
 
                 var diagram = new BlazorDiagram(options);
@@ -409,8 +409,8 @@ namespace JEO3.Diagrams
                     if (!depthCounters.ContainsKey(qTable.Depth))
                         depthCounters[qTable.Depth] = 0;
 
-                    double xPos = 30 + (depthCounters[qTable.Depth] * 30);
-                    double yPos = 30 + (qTable.Depth * 30);
+                    double xPos = 20 + (depthCounters[qTable.Depth] * 30);
+                    double yPos = 20 + (qTable.Depth * 30);
                     depthCounters[qTable.Depth]++;
 
                     var node = new TableNodeModel(new Point(xPos, yPos), qTable.Table)

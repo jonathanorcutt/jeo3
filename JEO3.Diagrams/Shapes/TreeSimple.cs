@@ -50,7 +50,7 @@ namespace JEO3.Diagrams
                 : parameters.Direction == DiagramLayoutDirection.BottomToTop ? LayoutDirection.BottomToTop : LayoutDirection.LeftToRight,
                 LayerGap = parameters.LayerGap,
                 VertexGap = parameters.VertexGap,
-                SpanningTreeGeneration = parameters.SpanTreeGeneration == SpanTreeGeneration.BFS ? SpanningTreeGeneration.BFS : SpanningTreeGeneration.DFS
+                SpanningTreeGeneration = parameters.SpanTreeGeneration == DiagramSpanTreeGeneration.BFS ? SpanningTreeGeneration.BFS : SpanningTreeGeneration.DFS
             };
 
             var factory = new StandardLayoutAlgorithmFactory<NodeModel, Edge<NodeModel>, BidirectionalGraph<NodeModel, Edge<NodeModel>>>();

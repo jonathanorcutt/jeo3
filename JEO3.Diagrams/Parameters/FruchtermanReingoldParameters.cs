@@ -4,7 +4,7 @@
     {
         private const double _minStep = 0.1;
         private const int _minIter = 10;
-        private const int _maxIterLimit = 200;
+        private const int _maxIterLimit = 1000;
         private const double _minMult = 0.1;
         private const double _maxMult = 25.0;
 

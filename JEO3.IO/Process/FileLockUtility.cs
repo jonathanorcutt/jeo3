@@ -67,13 +67,13 @@ namespace JEO3.IO.Processes
             var processes = new List<System.Diagnostics.Process>();
             string sessionKey = Guid.NewGuid().ToString();
 
-            // 1. Start a Restart Manager Session
+            // Start a Restart Manager Session
             if (RmStartSession(out uint sessionHandle, 0, sessionKey) != ERROR_SUCCESS)
                 return processes;
 
             try
             {
-                // 2. Register the file resource we want to check
+                // Register the file resource we want to check
                 string[] resources = { filePath };
                 if (RmRegisterResources(sessionHandle, (uint)resources.Length, resources, 0, null, 0, null) != ERROR_SUCCESS)
                     return processes;

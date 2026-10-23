@@ -40,11 +40,11 @@ namespace JEO3.Extensions
                         continue;
                     }
 
-                    // Fallback to your custom SQLTypeMap dictionary for standard primitive type casting
+                    // Fallback to custom SQLTypeMap dictionary for standard primitive type casting
                     var matchingPair = SQLTypeMap.TypeCodes.FirstOrDefault(kvp => kvp.Key == underlyingType);
                     if (matchingPair.Key != null)
                     {
-                        // Convert type safely using your mapping logic
+                        // Convert type safely using mapping logic
                         var convertedValue = Convert.ChangeType(rawValue, matchingPair.Value);
                         SetPropertyValue(item, property, convertedValue);
                     }

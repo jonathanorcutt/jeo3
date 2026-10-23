@@ -63,7 +63,7 @@ namespace JEO3.Site.Dashboard
                 var dmg = DiagramBuilder.CreateDiagramFromQueryTablesFull(W.Result.DiagramResultDatabase.ExecutionNodes, W.UI.Appearance.ERDiagramTheme == SqlEditorTheme.Light);
                 ActiveDiagram2 = dmg;
                 ActiveDiagram2?.RegisterComponent<TableNodeModel, JErTableNode>();
-                DiagramBuilder.SetViewport(ActiveDiagram2, W.UI.ERDiagram.DiagramZoom);
+                DiagramBuilder.SetViewport(ActiveDiagram2, W.UI.ERDiagram.DiagramZoom, -100, 100);
                 ActiveDiagram2?.Refresh();
             }
         }
@@ -160,75 +160,83 @@ namespace JEO3.Site.Dashboard
                 await ProcessDatabaseDiagram(token);
             }
         }
+
         private async Task ProcessDatabaseDiagram(CancellationToken token)
         {
+            // Extract the raw execution nodes
             var finalNodes = W.Result.DiagramResultDatabase.GetFinalExecutionNodes();
             var diagram = DiagramBuilder.CreateDiagramFromQueryTablesFull(finalNodes, W.UI.Appearance.ERDiagramTheme == SqlEditorTheme.Light);
 
             var width = ActiveDiagram2?.Container?.Width ?? 800;
             var height = ActiveDiagram2?.Container?.Height ?? 400;
 
-            if (W.UI.ERDiagram.ActiveParameters == null)
-            {
-                W.UI.ERDiagram.ApplyPreset(LayoutPresetType.JEO);
-            }
-            else
-            {
-                W.UI.ERDiagram.ActiveParameters.CanvasWidth = width;
-                W.UI.ERDiagram.ActiveParameters.CanvasHeight = height;
-            }
+            // 2. Build the structural graph model to access Depth and Lineage
+            var activeGraph = DiagramBuilder.BuildActiveGraph(W.Result.DiagramResultDatabase.Tracker);
 
-            W.UI.ERDiagram.ActiveParameters.UseEntityRelationMode = true;
-            var parameters = W.UI.ERDiagram.ActiveParameters;
+            var parameters = W.UI.ERDiagram.ActiveParameters ?? new ERParameters();
+            parameters.CanvasWidth = width;
+            parameters.CanvasHeight = height;
+            parameters.UseEntityRelationMode = true;
+
             token.ThrowIfCancellationRequested();
 
+            // 🔥 THE CRITICAL HANDOFF: 
+            // Pass the activeGraph alongside the diagram so ER2 can use real tracking depths and parents!
+            await DiagramBuilder.ApplyGraphShapeLayoutER2(diagram, activeGraph, new ERParameters()
+            {
+                CanvasHeight = height,
+                CanvasWidth = width,
+                UseEntityRelationMode = true,
+                IdealDistance = 250,
+                ParentChildSpacing = 30,
+                SiblingSpacing = 350
+            });
 
-            await DiagramBuilder.ApplyGraphShapeLayoutER2(diagram, new ERParameters() { CanvasHeight = width, CanvasWidth = height, UseEntityRelationMode = true, IdealDistance = 220, SiblingSpacing = 20 });
-            //await DiagramBuilder.ApplyGraphShapeLayoutER(diagram, new ERParameters() { CanvasHeight = width, CanvasWidth = height, UseEntityRelationMode = true });
-
-
-            //switch (W.UI.ERDiagram.LayoutShape)
-            //{
-            //    case GraphLayoutShape.CircularStar:
-            //        await DiagramBuilder.ApplyGraphShapeLayoutCircular(diagram);
-            //        break;
-            //    case GraphLayoutShape.FruchtermanReingold:
-            //        await DiagramBuilder.ApplyGraphShapeLayoutFruchtermanReingold(diagram, (FruchtermanReingoldParameters)parameters);
-            //        break;
-            //    case GraphLayoutShape.ISOM:
-            //        await DiagramBuilder.ApplyGraphShapeLayoutISOM(diagram, (IsomParameters)parameters);
-            //        break;
-            //    case GraphLayoutShape.KamadaKawai:
-            //        await DiagramBuilder.ApplyGraphShapeLayoutKamadaKawai(diagram, (KkParameters)parameters);
-            //        break;
-            //    case GraphLayoutShape.Sugiyama:
-            //        await DiagramBuilder.ApplyGraphShapeLayoutSugiyama(diagram, (SugiyamaParameters)parameters);
-            //        break;
-            //    case GraphLayoutShape.FruchtermanReingoldBounded:
-            //        await DiagramBuilder.ApplyGraphShapeLayoutFructermanReingoldBounded(diagram, (FruchtermanReingoldParameters)parameters);
-            //        break;
-            //    case GraphLayoutShape.LinLog:
-            //        await DiagramBuilder.ApplyGraphShapeLayoutLinLog(diagram, (LinLogParameters)parameters);
-            //        break;
-            //    case GraphLayoutShape.Random:
-            //        await DiagramBuilder.ApplyGraphShapeLayoutRandom(diagram, (RandomParameters)parameters);
-            //        break;
-            //    case GraphLayoutShape.TreeBallon:
-            //        var selectedNodeVertex = diagram.Nodes.FirstOrDefault(v => ((TableNodeModel)v).IsRootNode);
-            //        if (selectedNodeVertex != null)
-            //        {
-            //            await DiagramBuilder.ApplyGraphShapeLayoutTreeBalloon(diagram, selectedNodeVertex, (TreeBalloonParameters)parameters);
-            //        }
-            //        break;
-            //    case GraphLayoutShape.TreeDouble:
-            //        await DiagramBuilder.ApplyGraphShapeLayoutTreeDouble(diagram, (TreeDoubleParameters)parameters);
-            //        break;
-            //    case GraphLayoutShape.TreeSimple:
-            //        await DiagramBuilder.ApplyGraphShapeLayoutTreeSimple(diagram, (TreeSimpleParameters)parameters);
-            //        break;
-            //    case GraphLayoutShape.None:
-            //        break;
-            //}
+            switch (W.UI.ERDiagram.LayoutShape)
+            {
+                case GraphLayoutShape.CircularStar:
+                    await DiagramBuilder.ApplyGraphShapeLayoutCircular(diagram);
+                    break;
+                case GraphLayoutShape.FruchtermanReingold:
+                    await DiagramBuilder.ApplyGraphShapeLayoutFruchtermanReingold(diagram, (FruchtermanReingoldParameters)parameters);
+                    break;
+                case GraphLayoutShape.ISOM:
+                    await DiagramBuilder.ApplyGraphShapeLayoutISOM(diagram, (IsomParameters)parameters);
+                    break;
+                case GraphLayoutShape.KamadaKawai:
+                    await DiagramBuilder.ApplyGraphShapeLayoutKamadaKawai(diagram, (KkParameters)parameters);
+                    break;
+                case GraphLayoutShape.Sugiyama:
+                    await DiagramBuilder.ApplyGraphShapeLayoutSugiyama(diagram, (SugiyamaParameters)parameters);
+                    break;
+                case GraphLayoutShape.FruchtermanReingoldBounded:
+                    await DiagramBuilder.ApplyGraphShapeLayoutFructermanReingoldBounded(diagram, (FruchtermanReingoldParameters)parameters);
+                    break;
+                case GraphLayoutShape.LinLog:
+                    await DiagramBuilder.ApplyGraphShapeLayoutLinLog(diagram, (LinLogParameters)parameters);
+                    break;
+                case GraphLayoutShape.Random:
+                    await DiagramBuilder.ApplyGraphShapeLayoutRandom(diagram, (RandomParameters)parameters);
+                    break;
+                case GraphLayoutShape.TreeBallon:
+                    var selectedNodeVertex = diagram.Nodes.FirstOrDefault(v => ((TableNodeModel)v).IsRootNode);
+                    if (selectedNodeVertex != null)
+                    {
+                        await DiagramBuilder.ApplyGraphShapeLayoutTreeBalloon(diagram, selectedNodeVertex, (TreeBalloonParameters)parameters);
+                    }
+                    break;
+                case GraphLayoutShape.TreeDouble:
+                    await DiagramBuilder.ApplyGraphShapeLayoutTreeDouble(diagram, (TreeDoubleParameters)parameters);
+                    break;
+                case GraphLayoutShape.TreeSimple:
+                    await DiagramBuilder.ApplyGraphShapeLayoutTreeSimple(diagram, (TreeSimpleParameters)parameters);
+                    break;
+                //case GraphLayoutShape.EntityRelation:
+                //    await DiagramBuilder.ApplyGraphShapeLayoutER2(diagram, new ERParameters() { CanvasHeight = width, CanvasWidth = height, UseEntityRelationMode = true, IdealDistance = 220, SiblingSpacing = 20 });
+                //    break;
+                case GraphLayoutShape.None:
+                    break;
+            }
 
             token.ThrowIfCancellationRequested();
 
@@ -242,14 +250,14 @@ namespace JEO3.Site.Dashboard
                     foreach (var node in diagram.Nodes) ActiveDiagram2.Nodes.Add(node);
                     foreach (var link in diagram.Links) ActiveDiagram2.Links.Add(link);
 
-                    DiagramBuilder.SetViewport(ActiveDiagram2, W.UI.ERDiagram.DiagramZoom, 0, 0);
+                    DiagramBuilder.SetViewport(ActiveDiagram2, W.UI.ERDiagram.DiagramZoom, -100, 100);
                     ActiveDiagram2.Refresh();
                 }
                 else
                 {
                     ActiveDiagram2 = diagram;
                     ActiveDiagram2.RegisterComponent<TableNodeModel, JErTableNode>();
-                    DiagramBuilder.SetViewport(ActiveDiagram2, W.UI.ERDiagram.DiagramZoom, 0, 0);
+                    DiagramBuilder.SetViewport(ActiveDiagram2, W.UI.ERDiagram.DiagramZoom, -100, 100);
                     ActiveDiagram2.Refresh();
                 }
             });
@@ -259,9 +267,9 @@ namespace JEO3.Site.Dashboard
         #region Themes
         public async Task ApplySqlTheme()
         {
-            if (DiagramBackgroundColor != "#E2E2E2" || DiagramStyle != "")
+            if (DiagramBackgroundColor != "#DFF2FC" || DiagramStyle != "")
             {
-                DiagramBackgroundColor = "#E2E2E2";
+                DiagramBackgroundColor = "#DFF2FC";
                 DiagramStyle = "";
                 await InvokeAsync(StateHasChanged);
             }

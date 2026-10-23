@@ -189,7 +189,6 @@ namespace JEO3.IO.Directory
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return false;
             }
@@ -235,7 +234,6 @@ namespace JEO3.IO.Directory
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return false;
             }
@@ -261,7 +259,6 @@ namespace JEO3.IO.Directory
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
 
                 return false;
@@ -313,7 +310,6 @@ namespace JEO3.IO.Directory
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return false;
             }
@@ -347,7 +343,6 @@ namespace JEO3.IO.Directory
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return false;
             }
@@ -379,7 +374,6 @@ namespace JEO3.IO.Directory
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return false;
             }
@@ -442,7 +436,6 @@ namespace JEO3.IO.Directory
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return false;
             }
@@ -550,25 +543,21 @@ namespace JEO3.IO.Directory
             }
             catch (UnauthorizedAccessException e)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(e.Message);
                 return null;
             }
             catch (DirectoryNotFoundException e)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(e.Message);
                 return null;
             }
             catch (IOException e)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(e.Message);
                 return null;
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
@@ -578,7 +567,8 @@ namespace JEO3.IO.Directory
             try
             {
                 // Determine Search Pattern
-                var finds = (find == null || find.Any() == false) ? "*" : string.Join(",", find);
+                find = (find == null || find.Any() == false) ? new string[] { "*" } : find;
+                var finds = (find == null || find.Any() == false) ? "*" : string.Join(",", find.Select(v => v.StartsWith("*") ? v : "*" + v).ToArray());
 
                 // Determine Search Option
                 System.IO.SearchOption option = (recurse == true) ? System.IO.SearchOption.AllDirectories : System.IO.SearchOption.TopDirectoryOnly;
@@ -593,25 +583,21 @@ namespace JEO3.IO.Directory
             }
             catch (UnauthorizedAccessException e)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(e.Message);
                 return null;
             }
             catch (DirectoryNotFoundException e)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(e.Message);
                 return null;
             }
             catch (IOException e)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(e.Message);
                 return null;
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
@@ -649,7 +635,6 @@ namespace JEO3.IO.Directory
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
@@ -724,7 +709,6 @@ namespace JEO3.IO.Directory
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
@@ -785,7 +769,6 @@ namespace JEO3.IO.Directory
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }

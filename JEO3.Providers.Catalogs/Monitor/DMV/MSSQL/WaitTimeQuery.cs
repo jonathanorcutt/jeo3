@@ -29,7 +29,7 @@
 //-- Query Store version: Safe for all Azure SQL Database and Managed Instance tiers
 //DECLARE @CurrentIntervalId BIGINT;
 
-//-- 1. Grab the ID of the active/most recent interval slot being tracked right now
+//--  Grab the ID of the active/most recent interval slot being tracked right now
 //SELECT TOP 1 @CurrentIntervalId = runtime_stats_interval_id
 //FROM sys.query_store_runtime_stats_interval
 //ORDER BY start_time DESC;
@@ -114,7 +114,7 @@
 //   SELECT * FROM TopWaits";
 
 //        internal const string WaitTimeDMV_ViewServerStateQuery_Blocking = @"
-//-- 1. Create a temporary table to store the initial snapshot and start time
+//-- Create a temporary table to store the initial snapshot and start time
 //IF OBJECT_ID('tempdb..#InitialSnapshot') IS NOT NULL 
 //    DROP TABLE #InitialSnapshot;
 

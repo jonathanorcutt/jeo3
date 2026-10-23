@@ -1,5 +1,6 @@
 ﻿@namespace JEO3.Site.Components
 @using JEO3.Site.Components
+@using JEO3.Site.Components.Icons
 @inject TooltipService TooltipService
 @inject IJSRuntime JS
 
@@ -18,8 +19,16 @@
 			class="costello-trigger-btn shadow"
 			@onmouseover="@(args => TooltipService.Open(pacmanButton, (IsRunning ? "Stop" : "Start") + " Pacman Animation!", new TooltipOptions { Position = TooltipPosition.Left }))"
 			title="@(IsRunning ? "stop animation" : "start pacman volcano animation")"
-			@onclick="@(async () => { if (IsRunning) { Swarm = new(); IsRunning = false; } else { await TriggerFlashMob(25, true); } })">
-		<span style="font-family: 'JetBrains Mono', monospace, Consolas;">🥠</span>
+			@onclick="@(async () => { if (IsRunning) { Swarm = new(); IsRunning = false; } else { await TriggerFlashMob(15, true); } })">
+		@if (!IsRunning)
+		{
+			<ImageIcon Width="22" Height="22" Category=" ImageIcon.CategoryType.pacman" FileName="pacman_ghost_3.png" />
+		}
+		else
+		{
+			<ImageIcon Width="22" Height="22" Category=" ImageIcon.CategoryType.pacman" FileName="pacman_ghost_gif_17.png" />
+		}
+		@* <span style="font-family: 'JetBrains Mono', monospace, Consolas; outline:none !important;">🥠</span> *@
 	</button>
 </div>
 
@@ -36,7 +45,7 @@
 	private string _previousStateHash = string.Empty;
 	public async Task DeleteBob(MascotBob bob)
 	{
-		if (IsRunning == false) { return;  }
+		if (IsRunning == false) { return; }
 		Swarm.Remove(bob);
 		await InvokeAsync(StateHasChanged);
 	}
@@ -56,7 +65,7 @@
 				VelocityY = Rnd.Next(40, sendFlying ? 90 : 60), // Volcano blast power
 				VelocityX = Rnd.NextDouble() * 16 - 8,
 				State = MascotState.Erupting,
-				 ImageSourceOverride = "../img/pacman/pacman_ghost_gif_17.png"
+				ImageSourceOverride = "../img/pacman/pacman_ghost_gif_17.png"
 			});
 		}
 
@@ -70,7 +79,7 @@
 			State = MascotState.Erupting,
 			PacmanHimself = true,
 		});
-		
+
 		for (int i = 0; i < count; i++)
 		{
 			Swarm.Add(new MascotBob
@@ -90,6 +99,8 @@
 			IsRunning = true;
 			await RunChoreographyLoop();
 		}
+
+		await InvokeAsync(StateHasChanged);
 	}
 
 	private string CalculateStateHash()
@@ -239,7 +250,7 @@
 				_previousStateHash = currentStateHash;
 				StateHasChanged();
 			}
-			
+
 			await Task.Delay(16); // 60 FPS smooth lock
 		}
 	}

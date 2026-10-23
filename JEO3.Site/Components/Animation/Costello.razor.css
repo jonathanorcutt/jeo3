@@ -1,0 +1,25 @@
+
+
+/* moved from jeo3.css */
+.costello-swarm-container {
+    position: absolute;
+    width: 100%;
+    height: 0px;
+    bottom: 75px;
+    overflow: hidden;
+    pointer-events: all;
+}
+
+/* moved from jeo3.css */
+.costello-trigger-btn {
+    font-size: 16pt;
+    font-family: "JetBrains Mono", monospace, Consolas;
+    letter-spacing: 0px;
+    border-radius: 4px 4px;
+    background: var(--rz-gradient-rz);
+    outline: none;
+    /*border: .5px solid white;*/
+    color: var(--rz-white);
+    /*color: var(--rz-white);*/
+    /*width:50px;*/
+}

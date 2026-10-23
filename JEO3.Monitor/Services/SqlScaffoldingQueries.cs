@@ -342,15 +342,15 @@ BEGIN
         SELECT
             @CurrentTime AS Timestamp,
             cpu.CpuPercent,
-            CAST((CAST(proc_mem.physical_memory_in_use_kb AS FLOAT) / NULLIF(sys_mem.total_physical_memory_kb, 0)) * 100 AS DECIMAL(5, 2)) AS MemoryUsagePercent,
-            MAX(CASE WHEN pc.counter_name = N'Total Server Memory (KB)' THEN pc.cntr_value END) * 1.0 / 1024 AS TotalServerMemoryMb,
-            MAX(CASE WHEN pc.counter_name = N'Target Server Memory (KB)' THEN pc.cntr_value END) * 1.0 / 1024 AS TargetServerMemoryMb,
+            ISNULL(CAST((CAST(proc_mem.physical_memory_in_use_kb AS FLOAT) / NULLIF(sys_mem.total_physical_memory_kb, 0)) * 100 AS DECIMAL(5, 2)), 0.00) AS MemoryUsagePercent,
+            ISNULL(MAX(CASE WHEN pc.counter_name = N'Total Server Memory (KB)' THEN pc.cntr_value END), 0) * 1.0 / 1024 AS TotalServerMemoryMb,
+            ISNULL(MAX(CASE WHEN pc.counter_name = N'Target Server Memory (KB)' THEN pc.cntr_value END), 0) * 1.0 / 1024 AS TargetServerMemoryMb,
             CAST(proc_mem.physical_memory_in_use_kb AS FLOAT) AS SqlMemoryUsageMb,
-            MAX(CASE WHEN pc.counter_name = N'Page life expectancy' THEN pc.cntr_value END) AS PageLifeExpectancy,
+            ISNULL(MAX(CASE WHEN pc.counter_name = N'Page life expectancy' THEN pc.cntr_value END), 0) AS PageLifeExpectancy,
             io.IoStallReadMs,
             io.IoStallWriteMs,
-            MAX(CASE WHEN pc.counter_name = N'Batch Requests/sec' THEN pc.cntr_value END) AS BatchRequestsPerSec,
-            MAX(CASE WHEN pc.counter_name = N'User Connections' THEN pc.cntr_value END) AS UserConnections
+            ISNULL(MAX(CASE WHEN pc.counter_name = N'Batch Requests/sec' THEN pc.cntr_value END), 0) AS BatchRequestsPerSec,
+            ISNULL(MAX(CASE WHEN pc.counter_name = N'User Connections' THEN pc.cntr_value END), 0) AS UserConnections
         FROM sys.dm_os_sys_memory AS sys_mem WITH (NOLOCK)
         CROSS JOIN sys.dm_os_process_memory AS proc_mem WITH (NOLOCK)
         CROSS JOIN (

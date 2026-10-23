@@ -13,7 +13,7 @@
 			</Template>
 			<ChildContent>
 				<PanoramicContour3D Width="1530px" Height="900px" TRow="ITable" Rows="@W.Context?.Tables" Columns="@MetricNames" RowLabelSelector="@(t => t.TablePath)"
-									CellSelector="@((t, m) => GetContourNormalizedMetric(t, m))" Title="Schema Heat Map" IntensityLabel="Complexity" />
+									CellSelector="@((t, m) => GetContourNormalizedMetric(t, m))" Title="Schema Complexity Map" IntensityLabel="Complexity" />
 
 			</ChildContent>
 		</RadzenTabsItem>
@@ -31,7 +31,7 @@
 			</Template>
 			<ChildContent>
 				<Contour TRow="ITable" Rows="@W.Context?.Tables" Columns="@MetricNames" RowLabelSelector="@(t => t.TablePath)"
-						 CellSelector="@((t, m) => GetContourNormalizedMetric(t, m))" Title="Schema Heat Map" IntensityLabel="Complexity" />
+						 CellSelector="@((t, m) => GetContourNormalizedMetric(t, m))" Title="Schema Complexity Map" IntensityLabel="Complexity" />
 			</ChildContent>
 		</RadzenTabsItem>
 		<RadzenTabsItem>

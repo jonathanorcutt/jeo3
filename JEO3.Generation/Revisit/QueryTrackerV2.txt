@@ -215,7 +215,7 @@ namespace JEO3.Generation
         {
             if (!Nodes.Any()) return;
 
-            // 1. Group nodes and calculate their new target aliases
+            // Group nodes and calculate their new target aliases
             var aliasRemap = Nodes
                 .Select(node => new
                 {
@@ -252,7 +252,6 @@ namespace JEO3.Generation
             }
 
             // 3. CASCADE: Update all columns, joins, and filters referencing old aliases
-            // Note: Adjust the method/property names below to match your Query Builder's AST
             CascadeAliasChanges(aliasRemap);
         }
 

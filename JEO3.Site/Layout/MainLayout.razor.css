@@ -1,0 +1,39 @@
+
+
+/* moved from jeo3.css */
+.error-boundary-container {
+    padding: 30px;
+    margin: 20px;
+    background-color: #2d1e1e;
+    border: 2px solid #ff4444;
+    color: #ff9999;
+    font-family: monospace;
+    border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+/* moved from jeo3.css */
+.error-boundary-hr {
+    border-color: #553333;
+}
+
+/* moved from jeo3.css */
+.error-boundary-stack {
+    white-space: pre-wrap;
+    background: #1a1111;
+    padding: 15px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #dddddd;
+}
+
+/* moved from jeo3.css */
+.error-boundary-stack-title {
+    color: #ffaa66;
+}
+
+/* moved from jeo3.css */
+.error-boundary-title {
+    color: #ff4444;
+    margin-top: 0;
+}

@@ -45,3 +45,88 @@
 .dashboard-config-container .rz-tabview-selected{
     background:var(--jeo-gradient-rz) !important;
 }
+
+/* moved from jeo3.css */
+.dialog-description-text {
+    font-size: 9.5pt;
+    color: var(--rz-text-secondary-color);
+    margin: 0;
+}
+
+/* moved from jeo3.css */
+.dialog-section-title {
+    font-weight: bold;
+    display: block;
+}
+
+/* moved from jeo3.css */
+.dialog-section-title-bolder {
+    font-weight: bolder;
+    display: block;
+}
+
+/* moved from jeo3.css */
+.dialog-starting-table {
+    font-size: 11.5pt;
+    color: var(--rz-text-secondary-color);
+    margin: 0;
+}
+
+/* moved from jeo3.css */
+.duplicate-bullet {
+    font-weight: bold;
+    color: var(--rz-warning);
+    user-select: none;
+}
+
+/* moved from jeo3.css */
+.duplicate-item-text {
+    word-break: break-all;
+    font-weight: 600;
+}
+
+/* moved from jeo3.css */
+.info-bullet {
+    font-weight: bold;
+    color: var(--rz-info);
+    user-select: none;
+}
+
+/* moved from jeo3.css */
+.metric-value-wrapper-2 {
+    font-size: 9.5pt;
+    font-weight: bold;
+    color: var(--rz-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* moved from jeo3.css */
+.penalty-message {
+    word-break: break-all;
+    font-weight: 600;
+}
+
+/* moved from jeo3.css */
+.penalty-value {
+    font-weight: bold;
+    color: var(--rz-warning);
+    user-select: none;
+}
+
+/* moved from jeo3.css */
+.score-info-wrapper {
+    color: var(--rz-info);
+    display: inline-flex;
+    align-items: center;
+    margin-right: 2px;
+}
+
+/* moved from jeo3.css */
+.score-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}

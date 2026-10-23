@@ -5,22 +5,34 @@
         ERD,
         Node
     }
+
+    public enum LayoutPresetType
+    {
+        JEO,
+        BalancedDefault,
+        StrongCouplingClustered,
+        LooseSprawlingExploration,
+        HighDensityCompact
+    }
+
     public enum GraphLayoutShape
     {
         FruchtermanReingold,
         KamadaKawai,
         EntityRelation,
         CircularStar,
-        ISOM,
         LinLog,
-        Random,
+        ISOM,
         FruchtermanReingoldBounded,
         Sugiyama,
         TreeBallon,
         TreeDouble,
         TreeSimple,
+        Random,
         None
     }
+
+    // Specific
     public enum DiagramLayoutDirection
     {
         LeftToRight,
@@ -28,20 +40,17 @@
         TopToBottom,
         BottomToTop
     }
-
     public enum DiagramCoolingFunction
     {
         Exponential,
         Orthoganal
     }
-
     public enum DiagramEdgeRoutingFunction
     {
         Traditional,
         Orthoganal
     }
-
-    public enum SpanTreeGeneration
+    public enum DiagramSpanTreeGeneration
     {
         //
         // Summary:

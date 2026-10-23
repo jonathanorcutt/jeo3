@@ -39,12 +39,12 @@
 		<div class="jeo-tree-children">
 			@foreach (var grouping in Item.Children)
 			{
-				// 1. Leech the concrete type of the children inside this grouping
+				// Leech the concrete type of the children inside this grouping
 				var firstChild = grouping.Children.Cast<IObject>().FirstOrDefault();
 
 				if (firstChild != null)
 				{
-					// 2. Turn the problem upside down: Grab the display name from the grouping itself
+					// Turn the problem upside down: Grab the display name from the grouping itself
 					string folderName = grouping.Name;
 
 					<div class="jeo-tree-node">
@@ -52,7 +52,7 @@
 							<span class="jeo-tree-spacer"></span>
 
 							<span class="jeo-tree-label">
-								@* 3. Leech the icon context! Use the parent's icon state or a generic folder style *@
+								@* Leech the icon context! Use the parent's icon state or a generic folder style *@
 								@if (IconName != string.Empty)
 								{
 									<span class="fa-mr-5" style="color: #d4af37;">▶</span>
@@ -61,7 +61,7 @@
 							</span>
 						</div>
 
-						@* 4. Recursively render by casting the non-generic IEnumerable *@
+						@* Recursively render by casting the non-generic IEnumerable *@
 						<div class="jeo-tree-children">
 							@foreach (var child in grouping.Children)
 							{

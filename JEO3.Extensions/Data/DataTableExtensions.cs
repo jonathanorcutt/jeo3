@@ -80,7 +80,6 @@ namespace JEO3.Extensions
                 var row = dt.NewRow();
                 foreach (PropertyInfo prop in properties)
                 {
-                    // 🌟 COMPILED EXPRESSION TRICK: High speed property access using your cached getter!
                     object val = MetaDataCache.GetPropertyValue(item!, prop);
 
                     if (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Meta<>))

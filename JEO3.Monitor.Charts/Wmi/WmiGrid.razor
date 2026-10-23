@@ -79,16 +79,16 @@ else if (WmiType == WmiDataType.WebService)
 		if (dict == null || dict.Count == 0)
 			return dt;
 
-		// 1. Create columns using the dictionary keys
+		// Create columns using the dictionary keys
 		foreach (string key in dict.Keys)
 		{
 			dt.Columns.Add(key, typeof(object));
 		}
 
-		// 2. Find the maximum row count among all lists
+		// Find the maximum row count among all lists
 		int maxRows = dict.Values.Max(list => list?.Count ?? 0);
 
-		// 3. Populate rows dynamically
+		// Populate rows dynamically
 		for (int i = 0; i < maxRows; i++)
 		{
 			DataRow row = dt.NewRow();

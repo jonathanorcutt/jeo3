@@ -564,7 +564,7 @@
         });
     }
 
-    //1. The Database Corruption Meltdown (panicRoll)
+    //The Database Corruption Meltdown (panicRoll)
 
     //The Vibe: You just triggered a cyclical dependency or a query timed out.Bob completely loses his mind, vibrating rapidly before rolling across the screen like a bowling ball.
     panicRoll(distance = -200, duration = 1000) {
@@ -694,7 +694,7 @@
             const originalTransformOrigin = this.el.style.transformOrigin;
             this.el.style.transformOrigin = "bottom center";
 
-            // --- 1. REAL HARD STRETCH (Stretching that gas pedal foot) ---
+            // --- REAL HARD STRETCH (Stretching that gas pedal foot) ---
             // Bob hinges backward and sticks one foot way out forward to prep
             await this.el.animate([
                 { transform: `translate3d(${this.x}px, ${this.y}px, 0) rotate(0deg) scale(1, 1)` },

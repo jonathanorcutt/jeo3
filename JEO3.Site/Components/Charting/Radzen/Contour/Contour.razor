@@ -33,7 +33,7 @@
     [Parameter] public Func<TRow, string> RowLabelSelector { get; set; } = _ => string.Empty;
     [Parameter] public Func<TRow, string, double> CellSelector { get; set; } = (_, _) => 0;
 
-    [Parameter] public string Title { get; set; } = "Schema Heat Map";
+    [Parameter] public string Title { get; set; } = "Schema Complexity Map";
     [Parameter] public string XAxisTitle { get; set; } = "Metric";
     [Parameter] public string YAxisTitle { get; set; } = "Table";
     [Parameter] public string IntensityLabel { get; set; } = "Intensity";

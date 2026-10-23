@@ -60,7 +60,7 @@
 
 					<div class="sidebar-header-row">
 							<label class="sidebar-label">
-								<VSIcon Type="VSIconType.VSCodeGithub" Name="Collaborative_Service" Extension="ImageType.svg" Width="20" Height="20" class="fa-ml5 fa-mr7"></VSIcon> Engine Layout
+								<VSIcon Type="VSIconType.VSCodeGithub" Name="Consortium" Extension="ImageType.svg" Width="20" Height="20" class="fa-ml5 fa-mr7"></VSIcon> Engine Layout
 							</label>
 						<button type="button" @onclick="ToggleDiagramSidebar" title="Collapse Panel" class="sidebar-toggle-button-left collapsed">
 							«
@@ -77,13 +77,13 @@
 											Data="@(Enum.GetValues(typeof(JEO3.Diagrams.GraphLayoutShape)))"
 											@bind-Value="@W.UI.ERDiagram.LayoutShape"
 											Change="@(async (val) => await OnDiagramLayoutShapeChanged(val))"
-											class="dropdown-full-width" Disabled="true" />
+											class="dropdown-full-width" />
 						</div>
 
 						<hr class="sidebar-divider" />
 						<div class="sidebar-form-group">
 							<label class="sidebar-label">
-								<VSIcon Type="VSIconType.VSCodeGithub" Name="Collaborative_Service" Extension="ImageType.svg" Width="20" Height="20" class="fa-ml5 fa-mr7"></VSIcon> Presets
+								<VSIcon Type="VSIconType.VSCodeGithub" Name="Integration_Environments" Extension="ImageType.svg" Width="20" Height="20" class="fa-ml5 fa-mr7"></VSIcon> Presets
 							</label>
 							<RadzenDropDown TValue="LayoutPresetType?"
 											Data="@(Enum.GetValues(typeof(LayoutPresetType)).Cast<LayoutPresetType?>())"
@@ -95,7 +95,7 @@
 						<hr class="sidebar-divider" />
 						<div class="sidebar-form-group">
 							<span class="sidebar-label-bottom">
-								<VSIcon Type="VSIconType.VSCodeGithub" Name="Collaborative_Service" Extension="ImageType.svg" Width="20" Height="20" class="fa-ml5 fa-mr7"></VSIcon> Tuning
+								<VSIcon Type="VSIconType.VSCodeGithub" Name="Microsoft_Discovery" Extension="ImageType.svg" Width="20" Height="20" class="fa-ml5 fa-mr7"></VSIcon> Tuning
 							</span>
 							<ParameterEditor TargetParameters="@W.UI.ERDiagram.ActiveParameters" OnParameterChanged="DebouncedReRunLayout" />
 						</div>
@@ -114,11 +114,9 @@
 				</button>
 				@if (!W.UI.Appearance.IsSidebarExpandedERDiagram)
 				{
-					<button type="button" 
-						@* @onclick="ToggleDiagramSidebar"  *@
-						title="Expand Configuration Options" class="sidebar-toggle-button-left expanded vertical-text-standard sidebar-toggle-expanded" style="color:var(--rz-text-selection-inactive)">
+					<button type="button" @onclick="ToggleDiagramSidebar" title="Expand Configuration Options" class="sidebar-toggle-button-left expanded vertical-text-standard sidebar-toggle-expanded">
 						⚙️
-						<span style="color:grey !important;">OPTIONS</span>
+						<span>OPTIONS</span>
 					</button>
 				}
 

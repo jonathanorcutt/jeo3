@@ -1,0 +1,28 @@
+﻿@namespace JEO3.Site.Layout
+
+<div class="matrix-nav">
+    @foreach (var route in HardcodedRoutes)
+    {
+        <div class="matrix-nav-group">
+            <a class="matrix-nav-header" href="/?View=@route.Path">
+                <span class="matrix-nav-header-icon">@route.Icon</span>
+                <span class="matrix-nav-header-label">@route.Label</span>
+            </a>
+        </div>
+    }
+</div>
+
+@code {
+    private static readonly List<RouteItem> HardcodedRoutes = new()
+    {
+        new("enterprisetorture", "Enterprise Torture", "🚀"),
+        new("adventureworks", "AdventureWorks", "🚲"),
+        new("sportsdb", "Sports DB", "⚽"),
+        new("graphtorture", "Graph Torture", "🕸️"),
+        new("graphintelligence", "Graph Intelligence", "🧠"),
+        new("monitor", "Monitor", "🖥️"),
+        new("wwi", "Wide World Importers", "🌍")
+    };
+
+    private record RouteItem(string Path, string Label, string Icon);
+}

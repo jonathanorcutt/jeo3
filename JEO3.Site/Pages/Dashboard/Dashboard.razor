@@ -35,39 +35,7 @@
 					<RadzenTabs RenderMode="TabRenderMode.Client"
 								TabPosition="TabPosition.Left" @bind-SelectedIndex="@this.W.UI.Nav.SelectedTabIndex" @bind-SelectedIndex:after="OnNavTabIndexChanged"
 								class="main-nav-tabs" Style="background: var(--jeo-primary-rz) !important; color: var(--rz-white) !important;">
-						<Tabs>
-							<RadzenTabsItem>
-								<Template>
-									<VSIcon Width="22" Height="22" Name="file_type_pipeline" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" /> Flow
-								</Template>
-								<ChildContent>
-									<JEO3Sankey></JEO3Sankey>
-								</ChildContent>
-							</RadzenTabsItem>
-							<RadzenTabsItem>
-								<Template>
-									<VSIcon Width="22" Height="22" Name="Bonsai" Type="VSIconType.VSCodeGithub" Class="fa-mr7 fa-ml2" /> Ancestry
-								</Template>
-								<ChildContent>
-										<JEO3Tree></JEO3Tree>
-								</ChildContent>
-							</RadzenTabsItem>
-							<RadzenTabsItem>
-								<Template>
-									<VSIcon Width="22" Height="22" Name="Intune_Trends" Type="VSIconType.VSCodeGithub" Class="fa-mr7 fa-ml2" /> Depth
-								</Template>
-								<ChildContent>
-									<JEO3SchemaDepth></JEO3SchemaDepth>
-								</ChildContent>
-							</RadzenTabsItem>
-							<RadzenTabsItem>
-								<Template>
-									<VSIcon Width="22" Height="22" Name="file_type_reactjs" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" /> Cycles
-								</Template>
-								<ChildContent>
-									<JEO3Circular></JEO3Circular>
-								</ChildContent>
-							</RadzenTabsItem>
+						<Tabs>						
 							<RadzenTabsItem>
 								<Template>
 									<VSIcon Width="22" Height="22" Name="file_type_opencl" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" /> Live
@@ -90,7 +58,10 @@
 							</RadzenTabsItem>
 							<RadzenTabsItem>
 								<Template>
-									<VSIcon Width="22" Height="22" Name="file_type_cabal" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" />Diagram
+									@* <VSIcon Width="22" Height="22" Name="file_type_cabal" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" />Diagram *@
+									@* <ImageIcon Width="22" Height="22" Category="ImageIcon.CategoryType.pacman" FileName="pacman_ghost_gif.gif" Class="fa-mr7 fa-ml2" />Diagram *@
+
+									<ImageIcon Width="34" Height="28" Category="ImageIcon.CategoryType.pacman" FileName="pacmanbob113.gif" Class="fa-mr2" Style="margin-left:-5px" />Diagram
 								</Template>
 								<ChildContent>
 
@@ -121,7 +92,9 @@
 							</RadzenTabsItem>
 							<RadzenTabsItem>
 								<Template>
-									<VSIcon Width="22" Height="22" Name="file_type_n64" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" /> Shapes
+									@* <ImageIcon Width="22" Height="22" Category="ImageIcon.CategoryType.pacman" FileName="pacman_ghost_15.png" Class="fa-mr7 fa-ml2" />Nodes *@
+									@* <VSIcon Width="22" Height="22" Name="file_type_numpy" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" /> Nodes *@
+									<ImageIcon Width="34" Height="28" Category="ImageIcon.CategoryType.pacman" FileName="pacmanbob117.gif" Class="fa-mr2" Style="margin-left:-5px" />Nodes
 								</Template>
 								<ChildContent>
 									<div class="diagram-pane-wrapper">
@@ -278,10 +251,43 @@
 							</RadzenTabsItem>
 							<RadzenTabsItem>
 								<Template>
-									<VSIcon Width="22" Height="22" Name="file_type_pulumi" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" /> Density
+									<VSIcon Width="22" Height="22" Name="file_type_cabal" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" /> Density
 								</Template>
 								<ChildContent>
 									<ContourTemplateDisplay />
+								</ChildContent>
+							</RadzenTabsItem>
+							<RadzenTabsItem>
+								<Template>
+									@* <VSIcon Width="22" Height="22" Name="Bonsai" Type="VSIconType.VSCodeGithub" Class="fa-mr7 fa-ml2" /> Ancestry *@
+									<VSIcon Width="22" Height="22" Name="file_type_favicon" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" /> Ancestry
+								</Template>
+								<ChildContent>
+									<JEO3Tree></JEO3Tree>
+								</ChildContent>
+							</RadzenTabsItem>
+							<RadzenTabsItem>
+								<Template>
+									<VSIcon Width="22" Height="22" Name="Journey_Hub" Type="VSIconType.VSCodeGithub" Class="fa-mr7 fa-ml2" /> Flow
+								</Template>
+								<ChildContent>
+									<JEO3Sankey></JEO3Sankey>
+								</ChildContent>
+							</RadzenTabsItem>
+							<RadzenTabsItem>
+								<Template>
+									<VSIcon Width="22" Height="22" Name="Intune_Trends" Type="VSIconType.VSCodeGithub" Class="fa-mr7 fa-ml2" /> Depth
+								</Template>
+								<ChildContent>
+									<JEO3SchemaDepth></JEO3SchemaDepth>
+								</ChildContent>
+							</RadzenTabsItem>
+							<RadzenTabsItem>
+								<Template>
+									<VSIcon Width="22" Height="22" Name="file_type_reactjs" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" /> Cycles
+								</Template>
+								<ChildContent>
+									<JEO3Circular></JEO3Circular>
 								</ChildContent>
 							</RadzenTabsItem>
 							<RadzenTabsItem>
@@ -292,7 +298,7 @@
 									@if (W.UI.Appearance.IsSchemaLoaded)
 									{
 										<Heatmap TItem="ITable" Items="@W.Context?.Tables" Title="Schema Heat Map"
-												 LabelSelector="@(t => t.TablePath)" ValueSelector="GetTableMetric" CellWidth="292" CellHeight="47" />
+												 LabelSelector="@(t => t.TablePath)" CellWidth="291" CellHeight="46" />
 									}
 								</ChildContent>
 							</RadzenTabsItem>
@@ -318,7 +324,7 @@
 							</RadzenTabsItem>
 							<RadzenTabsItem>
 								<Template>
-									<VSIcon Width="22" Height="22" Name="file_type_mojo" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" />  Data
+									<VSIcon Width="22" Height="22" Name="SQL_Database" Type="VSIconType.VSCodeGithub" Class="fa-mr7 fa-ml2" />  Data
 								</Template>
 								<ChildContent>
 									<DataDisplay />
@@ -397,6 +403,15 @@
 							</RadzenTabsItem> *@
 							<RadzenTabsItem>
 								<Template>
+									<ImageIcon Category="ImageIcon.CategoryType.branding" FileName="logo-2.png" Width="75" Height="16" Style="object-fit: contain;" Class="fa-mr5 fa-ml7"></ImageIcon>
+								</Template>
+								<ChildContent>
+									<!-- Simply call the component and feed it an image path! -->
+									<VoxChart3D Title="Voxel Asset Blueprint" ImageUrl="../../img/branding/vox.jpg" />
+								</ChildContent>
+							</RadzenTabsItem>
+							<RadzenTabsItem>
+								<Template>
 									<VSIcon Width="22" Height="22" Name="file_type_dtd" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" /> About
 								</Template>
 								<ChildContent>
@@ -437,21 +452,12 @@
 									</RadzenTabs>
 								</ChildContent>
 							</RadzenTabsItem>
-							@* <RadzenTabsItem>
-								<Template>
-									<ImageIcon Category="ImageIcon.CategoryType.branding" FileName="logo-2.png" Width="75" Height="16" Style="object-fit: contain;" Class="fa-mr5 fa-ml7"></ImageIcon>
-								</Template>
-								<ChildContent>
-									<!-- Simply call the component and feed it an image path! -->
-									<VoxChart3D Title="Voxel Asset Blueprint" ImageUrl="../../img/branding/vox.jpg" />
-								</ChildContent>
-							</RadzenTabsItem> *@
 							<RadzenTabsItem>
 								<Template>
-									<VSIcon Width="22" Height="22" Name="file_type_liara" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" /> SOON...
+									<VSIcon Width="22" Height="22" Name="file_type_shaderlab" Type="VSIconType.VSCode" Class="fa-mr7 fa-ml2" /> SOON...
 								</Template>
 								<ChildContent>
-									@* <PacmanGame /> *@
+									<PacmanGame />
 									@* <ChartsTemplateDisplay /> *@
 								</ChildContent>
 							</RadzenTabsItem>

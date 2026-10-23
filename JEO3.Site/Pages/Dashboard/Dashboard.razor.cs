@@ -11,7 +11,6 @@ using JEO3.Monitor.ECharts;
 using JEO3.Providers;
 using JEO3.Providers.Extensions;
 using JEO3.Schema;
-using JEO3.Site.Components;
 using JEO3.Site.Extensions;
 using JEO3.Site.Infrastructure;
 using JEO3.Site.Models;
@@ -27,8 +26,17 @@ namespace JEO3.Site.Dashboard
     {
         #region Properties
 
+        // Test References
+        private const string defaultSelectedTableName = "salesorderdetail"; // AW2025
+        private const string defaultConnectionStringName = "adventureworks"; // enterprisetorture, adventureworks, sportsdb, graphtorture, graphintelligence, monitor, wwi
+
+        [Parameter]
+        [SupplyParameterFromQuery]
+        public string? View { get; set; } = "";
+
         [Inject] private IJSRuntime JS { get; set; }
         [Inject] private DialogService DialogService { get; set; }
+        [Inject] private NavigationManager UriHelper { get; set; }
         [Inject] private WSWorkspace W { get; set; } = new();
         [Inject] private ConnectionService ConnectionService { get; set; }
         [Inject] private ISchemaCacheService SchemaService { get; set; }
@@ -62,23 +70,25 @@ namespace JEO3.Site.Dashboard
         {
             W.OnMainLayoutStateChanged += OnGlobalWorkspaceUpdated;
 
+            // Primary Connection String
+            if (System.Configuration.ConfigurationManager.ConnectionStrings.Count == 0) throw new Exception("Exception: No Connection Strings.");
+            var defaultConn = ConnectionService.ConnectionSettings.FirstOrDefault(v => v.Name.ToLower() == (View ?? defaultConnectionStringName).ToLower());
+            var prov = defaultConn?.ToDatabaseProvider();
+            if (prov == null)
+            {
+                UriHelper.NavigateTo("/not-found");
+                return;
+            }
+
             try
             {
-                // Primary Connection String
-                if (System.Configuration.ConfigurationManager.ConnectionStrings.Count == 0) throw new Exception("Exception: No Connection Strings.");
-                var conns = ConnectionService.ConnectionSettings.ToDatabaseProviderList();
-                var prov = conns.FirstOrDefault();
-
                 // Validation
-                if (prov != null)
-                {
-                    // Load Context :)
-                    var context = await SchemaService.GetDatabaseSchemaAsync(prov);
-                    W.LoadSchemaContext(context, prov);
+                // Load Context :)
+                var context = await SchemaService.GetDatabaseSchemaAsync(prov);
+                W.LoadSchemaContext(context, prov);
 
-                    // Populate tables
-                    await PopulateDatabarsGrids();
-                }
+                // Populate tables
+                await PopulateDatabarsGrids();
             }
             catch (Exception ex)
             {
@@ -93,7 +103,7 @@ namespace JEO3.Site.Dashboard
                 {
                     var defaultTbl = W.UI.Grids.Core.Tables.FirstOrDefault();
                     // Send Some Data To The Data Display Tab
-                    ITable? tbl = W.UI.Grids.Core.Tables.FirstOrDefault(v => v.Name.ToLower() == "salesorderdetail") ?? defaultTbl;
+                    ITable? tbl = W.UI.Grids.Core.Tables.FirstOrDefault(v => v.Name.ToLower() == defaultSelectedTableName) ?? defaultTbl;
 
                     // AW Only
                     if (tbl != null)
@@ -170,10 +180,8 @@ namespace JEO3.Site.Dashboard
 
                 // Run Engine
                 var options = W.UI.Settings.ToGenerationOptions(W.UI.Grids.ActiveConstraints);
-                //QueryGenerationResult jarvisResult = await GenerationService.GoJarvis(selectedTable, options);
-
                 var gen = new DiagramDrivenGraphGenerator();
-                QueryGenerationResult jarvisResult = gen.Generate(selectedTable, options);
+                var jarvisResult = gen.Generate(selectedTable, options);
                 if (jarvisResult == null) return;
 
                 jarvisResult.Coverage = CoverageCalculator.CalculateCoverage(selectedTable, W.Context.Tables, W.Context.Relations);
@@ -185,7 +193,7 @@ namespace JEO3.Site.Dashboard
                     await diagramViewer.ReloadDiagram(selectedTable, options);
                     await diagramViewer2.ReloadDiagram(selectedTable, options);
                     await queryEditor.UpdateEditorQuery(jarvisResult.GeneratedQuery);
-                    
+
                     //+"\r\n\r\n" + "-- GPT: " + selectedTable.Name + "\r\n\r\n--" + string.Join("\r\n", jarvisResult.Tracker.Events.OrderBy(v => v.Timestamp).Select(v => $"-- Time: {v.Timestamp.ToShortTimeString()} - Depth: {v.Depth} Direction: {v.Direction} From: {v.FromTableId} To: {v.ToTableId} Relation: {v.RelationId} Reason: {v.Reason}").ToList()));
                 }
             }
@@ -206,10 +214,7 @@ namespace JEO3.Site.Dashboard
                     }
                 }
 
-
                 await SelectTop1000(selectedTable);
-
-                // await InvokeAsync(StateHasChanged); // Essential fix: force render chain execution
                 W.NotifyDashboardStateChanged();
                 StateHasChanged();
             }
@@ -521,34 +526,6 @@ namespace JEO3.Site.Dashboard
         }
         #endregion
 
-        #region Heatmap
-        private double GetTableMetric(ITable table, Heatmap<ITable>.HeatMapMetric metric)
-        {
-            return metric switch
-            {
-                Heatmap<ITable>.HeatMapMetric.Rows
-                    => table.Rows ?? 0,
-                Heatmap<ITable>.HeatMapMetric.CheckConstraints
-                    => table.CheckConstraints.Count,
-                Heatmap<ITable>.HeatMapMetric.Triggers
-                    => table.Triggers.Count,
-                Heatmap<ITable>.HeatMapMetric.Indexes
-                    => table.Indexes.Count,
-                Heatmap<ITable>.HeatMapMetric.MissingIndexes
-                    => table.MissingIndexes.Count,
-                Heatmap<ITable>.HeatMapMetric.Relations
-                    => table.Relations.Count,
-                Heatmap<ITable>.HeatMapMetric.ExtendedProperties
-                    => table.ExtendedProperties.Count,
-                Heatmap<ITable>.HeatMapMetric.Columns
-                    => table.Columns.Count,
-                Heatmap<ITable>.HeatMapMetric.ReferencedBy
-                    => table.ReferencedByForeignKeys.Count,
-                _ => 0
-            };
-        }
-        #endregion
-
         #region Tab Groups
         private async Task OnNavTabIndexChanged()
         {
@@ -559,7 +536,7 @@ namespace JEO3.Site.Dashboard
                 await Task.Delay(50);
                 await JS.InvokeVoidAsync("resizeCharts");
             }
-            catch (Exception ex)            
+            catch (Exception ex)
             {
 
             }
@@ -568,22 +545,6 @@ namespace JEO3.Site.Dashboard
         {
             selectedEntitiesNavTabIndex = index;
         }
-
-        #endregion
-
-        #region Tree
-        private IObject? SelectedObject { get; set; }
-        private async Task OnTreeNodeClick(IObject? obj)
-        {
-            SelectedObject = obj;
-            if (obj is ITable)
-            {
-                var tbl = (ITable)obj;
-                await SelectedTableChanged(tbl);
-            }
-        }
-        private async Task<IEnumerable<object>> GetChildrenAsync(ITable table, object node) =>
-           await Task.FromResult(node is ITable t ? t.Columns.Cast<object>() : Enumerable.Empty<object>());
 
         #endregion
 
@@ -608,9 +569,6 @@ namespace JEO3.Site.Dashboard
                 await JS.InvokeVoidAsync("bob.play", "NavigatorClimb");
             }
         }
-
-        #endregion
-
 
         #region Pac-Man Bob
         // Pac-Man Bob
@@ -646,6 +604,8 @@ namespace JEO3.Site.Dashboard
                 }
             });
         }
+        #endregion
+
         #endregion
     }
 }

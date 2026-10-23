@@ -122,3 +122,51 @@ h1 {
     animation: none;
     -webkit-text-stroke: 1px #fff;
 }
+
+/* moved from jeo3.css */
+.matrix-bg {
+    overflow: hidden;
+    margin: 0;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+/* moved from jeo3.css */
+.matrix-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    overflow: hidden;
+    z-index: 2;
+    margin-bottom: 10px;
+}
+
+/* moved from jeo3.css */
+.matrix-text {
+    color: #0f0;
+    font-family: monospace;
+    position: absolute;
+    top:15%;
+    text-shadow: 0 0 10px #0f0, 0 0 20px #0f0, 0 0 30px #0f0;
+    z-index: 2; /* Ensure it stays above the rain effect */
+}
+.matrix-text::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation: glitch 2s infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    transform: translate(-8px, -2px) !important;
+    color: #0f0;
+    text-shadow: 0 0 5px #0f0, 0 0 15px #0f0;
+}
+
+/* moved from jeo3.css */
+.matrix-text-label {
+    font-size: 70px !important;
+}

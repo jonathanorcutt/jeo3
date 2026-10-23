@@ -39,7 +39,7 @@
                 <RadzenAxisTitle Text="Selected Metric Vector" />
             </RadzenCategoryAxis>
 
-            <!-- Y Axis scales automatically to match your physical database objects -->
+            <!-- Y Axis scales automatically to match physical database objects -->
             <RadzenValueAxis Min="0" Max="@YMax" Step="1">
                 <RadzenGridLines Visible="true" />
                 <RadzenAxisTitle Text="@YAxisTitle" />
@@ -115,7 +115,7 @@
     private string _activeMetric = string.Empty;
     private int _rowCount = 0;
 
-    // Boundary scales cleanly to match your physical database tables
+    // Boundary scales cleanly to match physical database tables
     private double YMax => Math.Max(1, _rowCount - 1);
 
     private IList<SeriesColorRange> ColorRanges { get; } =
@@ -129,16 +129,16 @@
 
     protected override void OnParametersSet()
     {
-        // 1. Build the raw multidimensional coordinate mesh
+        // Build the raw multidimensional coordinate mesh
         BuildMasterSamples();
 
-        // 2. Set default dropdown choice if not already active
+        // Set default dropdown choice if not already active
         if (string.IsNullOrEmpty(_activeMetric) && Columns.Count > 0)
         {
             _activeMetric = Columns[0];
         }
 
-        // 3. Slice the matrix down to the chosen parameter
+        // Slice the matrix down to the chosen parameter
         FilterActiveSamples();
     }
 

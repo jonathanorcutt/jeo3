@@ -8,11 +8,11 @@ namespace JEO3.Site.Dashboard
     public sealed class WSUiState
     {
         // ER
-        public WSDiagramState ERDiagram { get; set; } = new() { DiagramType = Diagrams.DiagramType.ERD, DiagramZoom = .2, LayoutShape = Diagrams.GraphLayoutShape.EntityRelation };
+        public WSDiagramState ERDiagram { get; set; } = new() { DiagramType = Diagrams.DiagramType.ERD, DiagramZoom = .05, LayoutShape = Diagrams.GraphLayoutShape.EntityRelation };
         public WSDiagramSettingsState ERSettings { get; set; } = new();
 
         // Node
-        public WSDiagramState Diagram { get; set; } = new() { DiagramType = Diagrams.DiagramType.Node, DiagramZoom = 1.2, LayoutShape = Diagrams.GraphLayoutShape.KamadaKawai };
+        public WSDiagramState Diagram { get; set; } = new() { DiagramType = Diagrams.DiagramType.Node, DiagramZoom = 1.2, LayoutShape = Diagrams.GraphLayoutShape.FruchtermanReingold };
         public WSDiagramSettingsState Settings { get; set; } = new();
 
         public WSNavState Nav { get; set; } = new();

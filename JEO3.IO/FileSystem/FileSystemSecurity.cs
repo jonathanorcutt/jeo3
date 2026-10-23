@@ -177,8 +177,7 @@ namespace JEO3.IO.Foundation
         //    }
         //    catch (Exception ex)
         //    {
-        //        // To Be Implemented: Throw Custom Exception...
-        //        Console.WriteLine(ex.ToString());
+        //                //        Console.WriteLine(ex.ToString());
         //        return false;
         //    }
         //}

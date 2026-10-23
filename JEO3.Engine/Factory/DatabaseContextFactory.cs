@@ -53,7 +53,7 @@ namespace JEO3.Engine
                 var indexesByTable = indexHydration.GroupBy(x => x.TableKey).ToDictionary(x => x.Key, x => (IReadOnlyList<IIndex>)x.Select(y => y.Index).ToList(), StringComparer.OrdinalIgnoreCase);
 
                 // TABLES
-                var tableList = ctx.Tables.OrderBy(v => v.DatabaseName).ThenBy(v => v.TablePath).ToList();
+                var tableList = ctx.Tables.OrderBy(v => v.DatabaseName).ThenBy(v => v.SchemaName).ThenBy(v => v.Name).ToList();
 
                 // Database Set
                 foreach (var db in ctx.Databases)

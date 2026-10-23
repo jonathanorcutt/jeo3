@@ -2,7 +2,6 @@
 {
     public interface IRelation : IObject
     {
-        // JEO
         string KeyName { get; }
 
         long? RelationId { get; }

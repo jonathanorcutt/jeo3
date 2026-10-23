@@ -61,7 +61,7 @@ namespace JEO3.Monitor.ECharts
 
             bool hasUpdates = false;
 
-            // 1. Process new Waits
+            // Process new Waits
             if (delta.History != null && delta.History.Count > 0)
             {
                 foreach (var sample in delta.History.OrderBy(h => h.Timestamp))

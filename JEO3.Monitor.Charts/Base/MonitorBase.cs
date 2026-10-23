@@ -27,17 +27,17 @@ namespace JEO3.Monitor.ECharts
             }
         }
 
-        // --- 1. CUMULATIVE & TIME-SERIES LOGS (Appended & Capped) ---
+        // --- CUMULATIVE & TIME-SERIES LOGS (Appended & Capped) ---
         protected readonly List<WaitRateSample> WaitHistory = new(MaxRetention);
         protected readonly List<MonitorHistorySample> PerformanceHistory = new(MaxRetention);
         protected readonly List<DeadlockEvent> RecentDeadlocks = new(2000);
 
-        // --- 2. LIVE STATE (Overwritten on update) ---
+        // --- LIVE STATE (Overwritten on update) ---
         protected IReadOnlyList<ActiveRequestRow> ActiveRequests = Array.Empty<ActiveRequestRow>();
         protected IReadOnlyList<BlockingRow> BlockingChain = Array.Empty<BlockingRow>();
         protected IReadOnlyList<TopExpensiveQueryRow> TopExpensiveQueries = Array.Empty<TopExpensiveQueryRow>();
 
-        // --- 3. STATUS ---
+        // --- STATUS ---
         protected MonitorPollingStatus Status { get; private set; }
         protected string? LastError { get; private set; }
 

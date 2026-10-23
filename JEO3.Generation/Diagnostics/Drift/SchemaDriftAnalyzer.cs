@@ -32,7 +32,7 @@ namespace JEO3.Generation.Diagnostics
             var sourceTables = source.Tables.ToDictionary(t => t.TablePath, StringComparer.OrdinalIgnoreCase);
             var targetTables = target.Tables.ToDictionary(t => t.TablePath, StringComparer.OrdinalIgnoreCase);
 
-            // 1. Missing in Target (Needs to be deployed)
+            // Missing in Target (Needs to be deployed)
             foreach (var key in sourceTables.Keys.Except(targetTables.Keys, StringComparer.OrdinalIgnoreCase))
             {
                 report.Drifts.Add(new SchemaDrift(
@@ -121,13 +121,13 @@ namespace JEO3.Generation.Diagnostics
             var tgtProcs = target.Procedures
             .ToDictionary(p => $"{p.SchemaName}.{p.Name}", StringComparer.OrdinalIgnoreCase);
 
-            // 1. Missing in Target (Need to be created)
+            // Missing in Target (Need to be created)
             foreach (var key in srcProcs.Keys.Except(tgtProcs.Keys, StringComparer.OrdinalIgnoreCase))
             {
                 report.Drifts.Add(new SchemaDrift(DriftType.MissingInTarget, "StoredProcedure", key, "Missing in target database."));
             }
 
-            // 2. Missing in Source (Orphaned in Target)
+            // Missing in Source (Orphaned in Target)
             foreach (var key in tgtProcs.Keys.Except(srcProcs.Keys, StringComparer.OrdinalIgnoreCase))
             {
                 report.Drifts.Add(new SchemaDrift(DriftType.MissingInSource, "StoredProcedure", key, "Orphaned procedure in target database."));

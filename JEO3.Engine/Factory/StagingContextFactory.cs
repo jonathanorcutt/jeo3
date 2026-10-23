@@ -80,7 +80,7 @@ namespace JEO3.Engine
             }
             else
             {
-                // 1. Kick off all tasks simultaneously
+                // Kick off all tasks simultaneously
                 var flatDatabaseTask = prov.GetInstances<Database>(SchemaQueryType.DatabaseQuery);
                 var flatSchemasTask = prov.GetInstances<JEO3.Schema.Schema>(SchemaQueryType.SchemaQuery);
                 var flatTablesTask = prov.GetInstances<Table>(SchemaQueryType.TableQuery);

@@ -88,7 +88,7 @@ namespace JEO3.Site.Services
         private async Task RunLoopAsync(CancellationToken ct)
         {
             DateTime now = DateTime.Now;
-            // 1. Initial Snapshot (Populate the UI immediately)
+            // Initial Snapshot (Populate the UI immediately)
             var initial = await _apiClient.GetInitialSnapshotAsync(ct).ConfigureAwait(false);
             if (initial != null)
             {
@@ -162,7 +162,7 @@ namespace JEO3.Site.Services
             _workspace.Status = delta.Status;
             _workspace.LastError = delta.LastError;
 
-            // 1. TIME-SERIES: Append wait stats to sparklines/charts
+            // TIME-SERIES: Append wait stats to sparklines/charts
             if (delta.History != null && delta.History.Count > 0)
             {
                 foreach (var sample in delta.History)

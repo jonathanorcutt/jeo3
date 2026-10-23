@@ -121,7 +121,6 @@ namespace JEO3.IO.File
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return "";
             }

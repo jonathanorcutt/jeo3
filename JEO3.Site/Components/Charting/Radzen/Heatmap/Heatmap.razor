@@ -1,4 +1,5 @@
 ﻿@namespace JEO3.Site.Components
+@using JEO3.Schema
 
 @typeparam TItem
 
@@ -56,7 +57,7 @@
     public IReadOnlyList<TItem> Items { get; set; } = [];
     [Parameter] public string Title { get; set; } = "Schema Heat Map";
     [Parameter, EditorRequired] public Func<TItem, string> LabelSelector { get; set; } = default!;
-    [Parameter, EditorRequired] public Func<TItem, HeatMapMetric, double> ValueSelector { get; set; } = default!;
+    [Parameter] public Func<TItem, HeatMapMetric, double> ValueSelector { get; set; } = (item, metric) => item is ITable table ? GetTableMetric(table, metric) : 0;
     [Parameter, EditorRequired] public int CellWidth { get; set; } = 160;
     [Parameter, EditorRequired]  public int CellHeight { get; set; } = 35;
 
@@ -132,6 +133,24 @@
         }
     }
 
+    private static double GetTableMetric(ITable table, HeatMapMetric metric)
+    {
+        return metric switch
+        {
+            HeatMapMetric.Rows => table.Rows ?? 0,
+            HeatMapMetric.CheckConstraints => table.CheckConstraints.Count,
+            HeatMapMetric.Triggers => table.Triggers.Count,
+            HeatMapMetric.Indexes => table.Indexes.Count,
+            HeatMapMetric.MissingIndexes => table.MissingIndexes.Count,
+            HeatMapMetric.Relations => table.Relations.Count,
+            HeatMapMetric.ExtendedProperties => table.ExtendedProperties.Count,
+            HeatMapMetric.Columns => table.Columns.Count,
+            HeatMapMetric.ReferencedBy => table.ReferencedByForeignKeys.Count,
+            _ => 0
+        };
+    }
+
+
     public enum HeatMapMetric
     {
         Rows,
@@ -146,4 +165,5 @@
     }
 
     public sealed record HeatMapMetricOption(string Label, HeatMapMetric Value);
+
 }

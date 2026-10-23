@@ -2,7 +2,6 @@ namespace JEO3.Schema
 {
     public class Relation : ObjectBase, IRelation
     {
-        // JEO
         public override DatabaseObjectType ObjectType => DatabaseObjectType.ForeignKey;
         public bool IsNullable { get; internal init; }
         public bool IsNotTrusted { get; internal init; }

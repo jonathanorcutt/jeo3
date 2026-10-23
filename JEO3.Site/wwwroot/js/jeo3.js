@@ -150,7 +150,7 @@ window.downloadFileFromStream = async (fileName, contentStreamReference) => {
 
 // EGauge Crosshairs
 function updateCoordinates(e) {
-    const container = e.currentTarget; // This is now your .monitor-panel
+    const container = e.currentTarget; // This is now .monitor-panel
     const rect = container.getBoundingClientRect();
 
     // Calculate relative mouse positions within the panel frame
@@ -206,11 +206,11 @@ window.initializeGlobalGridScroller = () => {
 // 🌟 THE ZOOM PROTECTION SHIELD
 // Intercepts the mouse wheel event right at the browser window root level
 window.addEventListener('wheel', function (e) {
-    // 1. Check if the mouse cursor is currently hovering over your Blazor diagram canvases
+    // Check if the mouse cursor is currently hovering over Blazor diagram canvases
     const target = e.target.closest('.sample-tile-layout .canvas-container');
 
     if (target) {
-        // 2. Stop the browser window from moving up or down!
+        // Stop the browser window from moving up or down!
         e.preventDefault();
 
         // 3. Manually bubble or dispatch the wheel delta event straight to the diagram handler if needed, 

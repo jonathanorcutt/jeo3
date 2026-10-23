@@ -1,0 +1,15 @@
+
+
+/* moved from jeo3.css */
+.sidebar-right-section-titlebar {
+    background-color: var(--rz-header-background-color);
+    color: var(--rz-white);
+    height: 24px;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 10pt;
+    font-weight: bold;
+    padding-left: 5px;
+    margin-top: 5px;
+    display: flex;
+    /*border: .5px solid var(--rz-black);*/
+}

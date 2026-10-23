@@ -25,10 +25,9 @@
     width: 200px;
     height: 200px;
     animation: insane-glow 1.8s ease-in-out infinite alternate !important;
-    /* NEW STYLES ADDED HERE */
-    position: absolute; /* Kept absolute, but acts as relative coordinate anchor now */
-    overflow: hidden; /* Clips the crosshair lines exactly to your 110px rounded corners */
-    cursor: crosshair; /* Changes cursor to a precision crosshair over the panel */
+    position: absolute;
+    overflow: hidden;
+    cursor: crosshair;
 }
 
 /*insane-float 4s ease-in-out infinite,*/
@@ -53,14 +52,14 @@ g {
     .coordinate-selector::after {
         content: '';
         position: absolute;
-        background-color: lime; /* Matches your panel's lime theme */
+        background-color: lime;
         opacity: 0.6; /* Slightly semi-transparent so chart shows through */
     }
 
     /* Horizontal line */
     .coordinate-selector::before {
         top: 0;
-        left: -200px; /* Covers the full 200px width of your panel */
+        left: -200px;
         width: 400px;
         height: 1px;
     }
@@ -68,7 +67,7 @@ g {
     /* Vertical line */
     .coordinate-selector::after {
         left: 0;
-        top: -200px; /* Covers the full 200px height of your panel */
+        top: -200px;
         height: 400px;
         width: 1px;
     }

@@ -29,31 +29,26 @@ namespace JEO3.IO.File
             }
             catch (FileNotFoundException ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return "";
             }
             catch (IOException ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return "";
             }
             catch (UnauthorizedAccessException ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return "";
             }
             catch (SecurityException ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return "";
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return "";
             }
@@ -80,31 +75,26 @@ namespace JEO3.IO.File
             }
             catch (FileNotFoundException ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
             catch (IOException ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
             catch (UnauthorizedAccessException ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
             catch (SecurityException ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
@@ -134,31 +124,26 @@ namespace JEO3.IO.File
             }
             catch (FileNotFoundException ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
             catch (IOException ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
             catch (UnauthorizedAccessException ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
             catch (SecurityException ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
@@ -215,7 +200,6 @@ namespace JEO3.IO.File
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }
@@ -267,7 +251,6 @@ namespace JEO3.IO.File
             }
             catch (Exception ex)
             {
-                // To Be Implemented: Throw Custom Exception...
                 Console.WriteLine(ex.ToString());
                 return null;
             }

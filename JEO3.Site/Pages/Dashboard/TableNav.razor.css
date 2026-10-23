@@ -1,0 +1,15 @@
+
+
+/* moved from jeo3.css */
+.checkbox-no-pointer {
+    pointer-events: none;
+}
+
+/* moved from jeo3.css */
+.filter-input-full-width {
+    width: 100%;
+}
+
+.rz-tabview-nav button[role="tab"] {
+font-size:7.5pt !important;
+}

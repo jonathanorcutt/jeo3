@@ -174,6 +174,7 @@
         gap: 6px;
         padding-right: 5px;
         padding-top: 0px;
+        font-size: 8.5pt !important;
     }
 
     .dashboard-pane-titlebar-right-container2 {
@@ -365,27 +366,39 @@
         overflow: hidden !important;
     }*/
 
-    .rz-tabview-nav, .rz-tabview-nav li[role="presentation"] {
+    .rz-tabview-nav, .main-nav-tabs li[role="presentation"]
+    .rz-tabview-nav, .rz-tabview-left li[role="presentation"] {
         color: var(--rz-white);
-        background: var(--jeo-gradient-black) !important;
     }
 
-        .rz-tabview-nav li[role="presentation"] > span {
-            /*letter-spacing:0px;*/
-        }
-        /* ----------  Query Result Tabs   ---------- */
-        .rz-tabview-nav button[role="tab"] {
-            padding: 2px 5px 0px 5px;
-            font-size: 8pt;
-            font-weight: 500;
-            border: 1px solid white;
-            color: var(--rz-white);
-            background: var(--jeo-gradient-black) !important;
-            border: 0px;
-        }
+    .rz-tabview-nav, .main-nav-tabs li[role="presentation"] {
+        background: var(--jeo-gradient-black);
+    }
+
+    .rz-tabview-nav, .rz-tabview-left li[role="presentation"] {
+        background: var(--jeo-gradient-black);
+    }
+
+    .jeo-tree-container{
+        background: var(--jeo-gradient-dark) !important;
+    }
+
+    .rz-tabview-nav li[role="presentation"] > span {
+        /*letter-spacing:0px;*/
+    }
+    /* ----------  Query Result Tabs   ---------- */
+    .rz-tabview-nav button[role="tab"] {
+        padding: 2px 5px 0px 5px;
+        font-size: 8pt;
+        font-weight: 500;
+        border: 1px solid white;
+        color: var(--rz-white);
+        /*background: var(--jeo-gradient-black) !important;*/
+        border: 0px;
+    }
 
     .dashboard-config-container .rz-tabview-nav .rz-tabview-selected button[role="tab"] {
-        background: var(--jeo-gradient-rz) !important;
+        /*background: var(--jeo-gradient-rz) !important;*/
     }
     /* Query Result Tabs Hover */
     /*.rz-tabview-nav button[role="tab"]:hover {
@@ -583,8 +596,7 @@
     }
     /* Cleanup for interior blocks */
     .sidebar-config-block {
-        padding: 10px 2px 10px 5px;
-        border-bottom: 1px solid var(--rz-border-color, #eee);
+        padding: 10px 2px 10px 7px;
     }
 
     .rz-sortable-column-icon {

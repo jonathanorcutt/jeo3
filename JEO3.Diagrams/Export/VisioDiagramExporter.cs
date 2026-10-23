@@ -121,10 +121,9 @@ namespace JEO3.Diagrams.Export
 
             document.Save(stream);
         }
-        // Add this near your PixelsPerInch constant
         private const double SpreadFactor = 2.0; // Increase to 3.0 if you need even more breathing room
         private const double LineHeightInches = 0.18; // Approximate height per row of text
-                                                      // 1. CRITICAL: You MUST use this specific format method for every single double/float.
+                                                      // CRITICAL: MUST use this specific format method for every single double/float.
                                                       // This prevents culture-based decimal commas (e.g., 4,25) from corrupting the XML.
         private static string FormatDouble(double value)
         {

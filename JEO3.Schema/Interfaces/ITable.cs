@@ -2,7 +2,6 @@
 {
     public interface ITable : IObject
     {
-        // JEO        
         string TablePath { get; }
 
         bool IsView { get; }

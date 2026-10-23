@@ -46,8 +46,8 @@ namespace JEO3.Schema
         public override IEnumerable<IChildGrouping> Children => //Array.Empty<IChildGrouping>();
         new IChildGrouping[]
         {
-            new ChildGrouping<IColumn> { Children = KeyColumns },
-            new ChildGrouping<IColumn> { Children = IncludedColumns }
+            new ChildGrouping<IColumn> { Name = "Key Columns", Children = KeyColumns },
+            new ChildGrouping<IColumn> { Name = "Included Columns", Children = IncludedColumns }
     };
 }
 }

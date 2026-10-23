@@ -1,0 +1,9 @@
+
+
+/* moved from jeo3.css */
+.sidebar-title-text {
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: var(--rz-text-color);
+}

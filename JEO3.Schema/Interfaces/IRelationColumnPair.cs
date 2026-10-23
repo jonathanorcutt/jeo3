@@ -2,7 +2,6 @@
 {
     public interface IRelationColumnPair
     {
-        // JEO
         bool IsComposite { get; }
         bool IsNullable { get; }
 

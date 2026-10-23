@@ -14,6 +14,7 @@
 				<RadzenSidebarToggle Click="@(async () => { await OnSidebarToggleClicked.InvokeAsync(!W.UI.Appearance.IsSidebarExpandedLeft); })" />
 				<ImageIcon Width="40" Height="32" Category="ImageIcon.CategoryType.icons" FileName="jeo3-white.png" Class="fa-ml10 fa-mr10" />
 				<span class="navbar-header-label jeo3-xolonium-regular fa-mr10">Visual Database Intelligence</span>
+				<span class="navbar-header-label-database jeo3-xolonium-regular fa-ml2">@(W.Context?.Provider?.Connection?.Database != null ? "(" + W.Context?.Provider?.Connection?.Database + ")" : "")</span>
 			</RadzenStack>
 		</RadzenColumn>
 		<RadzenColumn Size="4" class="navbar-container-right">
@@ -22,13 +23,13 @@
 					<DemoLinks></DemoLinks>
 				</div>
 				<div>
-					<ProjectCountdown Label="Project Age" StartTime="@(new DateTime(2026, 5, 26, 15, 48, 0))" />
+					<ProjectCountdown Label="Age" StartTime="@(new DateTime(2026, 5, 26, 15, 48, 0))" />
 				</div>
 				<RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center">
 					<RadzenLabel Text="" Style="font-variant:small-caps; color: #a0a0a0; font-size: 11px;"></RadzenLabel>
 					<ToggleSwitch @bind-Value="@W.UI.Appearance.ShowMonitorGauge" Label="Gauge" Change="@(async (val) => { await OnGaugeToggleClicked.InvokeAsync(val); })" />
 				</RadzenStack>
-				<a href="https://github.com/jorcutt1337/jeo3" target="_blank" rel="noopener noreferrer" class="github-admin-badge">
+				<a href="https://github.com/jonathanorcutt/jeo3" target="_blank" rel="noopener noreferrer" class="github-admin-badge">
 					<i class="rz-icon-element rzi">
 						<IconGithub />
 					</i>
@@ -37,8 +38,8 @@
 								   ShowButton="false"
 								   Change="@(async (hex) => { await OnGlobalThemeColorChanged(hex); DialogService.Close(); })"
 								   class="navbar-right-colorpicker" />
-				<div class="fa-mr15">
-					<RadzenSidebarToggle Icon="fullscreen" Click="FullScreenClicked" class="fa-mt8" />
+				<div class="fa-mr15 fa-mt7">
+					<RadzenSidebarToggle Icon="fullscreen" Click="FullScreenClicked" />
 				</div>
 				<Costello @ref="@_costello" />
 				@* <RadzenSidebarToggle Icon="settings" Click="@OnGlobalWorkspaceUpdated" class="rz-sidebar-toggle-right" /> *@

@@ -294,7 +294,7 @@ namespace JEO3.Providers.Extensions.MSSQL
             const int batchSize = 100;
             var entityList = entities.ToList();
 
-            // Reuse the connection string from your existing provider metadata contract
+            // Reuse the connection string from existing provider metadata contract
             using var conn = new SqlConnection(provider.Connection.ConnectionString);
             await conn.OpenAsync().ConfigureAwait(false);
 
@@ -427,7 +427,7 @@ namespace JEO3.Providers.Extensions.MSSQL
 
         private async Task<DataTable> ExecuteCommandToDataTable(IDatabaseProvider provider, SqlCommand cmd, SqlConnection conn)
         {
-            // Leverages your custom unique column mapper loops cleanly inside an isolated data retrieval stream
+            // Isolated data retrieval stream
             await conn.OpenAsync().ConfigureAwait(false);
             using var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false);
             DataTable dt = new DataTable(); var columnNames = GeneralExtensions.GetUniqueColumnNames(reader);

@@ -6,8 +6,8 @@
     public abstract class BaseLayoutParameters
     {
         // System wide sizing inputs from JSInterop canvas measurements
-        public double CanvasWidth { get; set; } = 800;
-        public double CanvasHeight { get; set; } = 400;
+        public double CanvasWidth { get; set; } = 1920;
+        public double CanvasHeight { get; set; } = 1280;
         public bool UseEntityRelationMode { get; set; }
 
         /// <summary>

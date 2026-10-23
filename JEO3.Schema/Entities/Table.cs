@@ -154,10 +154,11 @@ namespace JEO3.Schema
         {
             new ChildGrouping<IColumn> { Name = "Columns", Children = Columns },
             new ChildGrouping<IForeignKey> { Name = "Foreign Keys", Children = ForeignKeys },
+            new ChildGrouping<IForeignKey> { Name = "Referenced By FKs", Children = ReferencedByForeignKeys },
             new ChildGrouping<IIndex> { Name = "Indexes", Children = Indexes },
             new ChildGrouping<IMissingIndex> {  Name = "Missing Indexes",Children = MissingIndexes },
-            //new ChildGrouping<IStatistic> { Name = "Statistics", Children = Statistics },
             new ChildGrouping<ITrigger> { Name = "Triggers", Children = Triggers },
+            //new ChildGrouping<IStatistic> { Name = "Statistics", Children = Statistics },
             //new ChildGrouping<IExtendedProperty> {  Name = "ExtendedProperties",Children = ExtendedProperties }
         };
 

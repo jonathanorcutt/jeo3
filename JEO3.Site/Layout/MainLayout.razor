@@ -28,9 +28,10 @@
 	{
 		<!-- LEFT SIDEBAR -->
 		<RadzenSidebar Position="SidebarPosition.Start" Visible="@W.UI.Appearance.IsSidebarExpandedLeft" class="sidebar-left-container">
-			<MatrixNavAccordion Groups="_navGroups"
+@* 			<MatrixNavAccordion Groups="_navGroups"
 								ExpandedIndices="W.UI.Nav.ExpandedGroupIndices" ExpandedIndicesChanged="i => W.UI.Nav.ExpandedGroupIndices = i"
-								ActiveTabIndex="W.UI.Nav.SelectedTabIndex" ItemSelected="OnNavItemSelected" />
+								ActiveTabIndex="W.UI.Nav.SelectedTabIndex" ItemSelected="OnNavItemSelected" /> *@
+		<MainLeftNav></MainLeftNav>
 		</RadzenSidebar>
 	}
 	<ErrorBoundary>

@@ -60,7 +60,7 @@
 
 					<div class="sidebar-header-row">
 						<span class="sidebar-title-text">
-							<VSIcon Type="VSIconType.VSCodeGithub" Name="Collaborative_Service" Extension="ImageType.svg" Width="20" Height="20" class="fa-ml5 fa-mr7"></VSIcon> Engine Layout
+							<VSIcon Type="VSIconType.VSCodeGithub" Name="Consortium" Extension="ImageType.svg" Width="20" Height="20" class="fa-ml5 fa-mr7"></VSIcon> Engine Layout
 						</span>
 						<button type="button" @onclick="ToggleDiagramSidebar" title="Collapse Panel" class="sidebar-toggle-button-left collapsed">
 							«
@@ -82,7 +82,7 @@
 						<hr class="sidebar-divider" />
 						<div class="sidebar-form-group">
 							<label class="sidebar-label">
-								<VSIcon Type="VSIconType.VSCodeGithub" Name="Collaborative_Service" Extension="ImageType.svg" Width="20" Height="20" class="fa-ml5 fa-mr7"></VSIcon>  Presets
+								<VSIcon Type="VSIconType.VSCodeGithub" Name="Integration_Environments" Extension="ImageType.svg" Width="20" Height="20" class="fa-ml5 fa-mr7"></VSIcon>  Presets
 							</label>
 							<RadzenDropDown TValue="LayoutPresetType?"
 											Data="@(Enum.GetValues(typeof(LayoutPresetType)).Cast<LayoutPresetType?>())"
@@ -94,7 +94,7 @@
 						<hr class="sidebar-divider" />
 						<div class="sidebar-form-group">
 							<span class="sidebar-label-bottom">
-								<VSIcon Type="VSIconType.VSCodeGithub" Name="Collaborative_Service" Extension="ImageType.svg" Width="20" Height="20" class="fa-ml5 fa-mr7"></VSIcon> Tuning
+								<VSIcon Type="VSIconType.VSCodeGithub" Name="Microsoft_Discovery" Extension="ImageType.svg" Width="20" Height="20" class="fa-ml5 fa-mr7"></VSIcon> Tuning
 							</span>
 							<ParameterEditor TargetParameters="@W.UI.Diagram.ActiveParameters" OnParameterChanged="DebouncedReRunLayout" />
 						</div>

@@ -195,7 +195,7 @@ namespace JEO3.Diagrams
             {
                 foreach (var node in nodes) displacements[node] = new Point(0, 0);
 
-                // 1. REPULSION: Make it fall off aggressively at a distance (Inverse Square Law)
+                // REPULSION: Make it fall off aggressively at a distance (Inverse Square Law)
                 for (int i = 0; i < nodes.Count; i++)
                 {
                     var v = nodes[i];

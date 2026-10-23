@@ -115,7 +115,7 @@ namespace JEO3.Generation.Diagnostics
         {
             var sb = new StringBuilder();
 
-            // 1. HTML Header & Embedded Fluent Styles
+            // HTML Header & Embedded Fluent Styles
             sb.AppendLine("<!DOCTYPE html>");
             sb.AppendLine("<html lang=\"en\">");
             sb.AppendLine("<head>");

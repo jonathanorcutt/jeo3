@@ -2,7 +2,6 @@
 {
     public interface IColumn : IObject
     {
-        // JEO
         string TablePath { get; }
         public bool IsIndexKey { get; }
         long? ColumnId { get; }

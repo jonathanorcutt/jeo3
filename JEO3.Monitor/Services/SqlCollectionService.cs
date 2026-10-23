@@ -201,7 +201,7 @@ namespace JEO3.Monitor
                 }
 
                 // 🌟 STAGE A: PRUNE THE MASTER ROOTS (Solves the GC Heap & LOH Leak)
-                // Hard limits the in-memory master linked list boundaries back down to your 
+                // Hard limits the in-memory master linked list boundaries back down to 
                 // configured appsettings parameters before any sorting allocations take place.
                 while (_history.Count > _options.HistoryCapacity)
                 {
@@ -247,14 +247,14 @@ namespace JEO3.Monitor
                     PerformanceMetrics = performanceMetrics,
                     PerformanceHistory = performanceHistoryList
                 };
-                // 1. Commit the computed wait sample instantly to the persistent history table
+                // Commit the computed wait sample instantly to the persistent history table
                 if (waitSample != null && waitSample.TopWaits.Count > 0)
                 {
-                    // Use your existing provider extension layer to run the batch engine asynchronously
+                    // Use existing provider extension layer to run the batch engine asynchronously
                     await provider.UpsertRange<WaitRateSample>(new List<WaitRateSample> { waitSample });
                 }
 
-                // 2. Commit hydrated deadlock participants if a deadlock query executed
+                // Commit hydrated deadlock participants if a deadlock query executed
                 if (runDeadlockQueries && newDeadlocks.Count > 0)
                 {
                     var computedParticipants = new List<DeadlockParticipant>();
@@ -291,7 +291,7 @@ namespace JEO3.Monitor
                 // frontend endpoint hit receives the fresh background updates down the wire
                 try
                 {
-                    // Resolve HybridCache context from your constructor DI container references
+                    // Resolve HybridCache context from Constructor DI container references
                     await _cache.RemoveAsync($"monitor:initial:{_schemaName}", ct);
                 }
                 catch { }
@@ -313,7 +313,7 @@ namespace JEO3.Monitor
                 var provider = DatabaseProvider.From(_options.ProviderName, _options.ConnectionString);
                 var initialLoadParam = 1;
 
-                // 1. Establish the clean 1-hour initial startup window boundary
+                // Establish the clean 1-hour initial startup window boundary
                 var initialWindowStartUtc = DateTime.UtcNow.AddMinutes(-_Last_X_Minutes_Initial);
                 string minTimeParamStr = initialWindowStartUtc.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
@@ -342,7 +342,7 @@ namespace JEO3.Monitor
                 DataSet r2 = await r2Task.ConfigureAwait(false);
                 DataSet r3 = await r3Task.ConfigureAwait(false);
 
-                // 2. Map structural database results to internal memory models (Verbatim Aliasing)
+                // Map structural database results to internal memory models (Verbatim Aliasing)
                 var rawWaits = r1.Tables[0].ToList<WaitStatRow>();
                 var performanceMetrics = r1.Tables[1].ToList<PerformanceMetricRow>();
                 var activeRequests = r2.Tables[0].ToList<ActiveRequestRow>();
@@ -380,7 +380,7 @@ namespace JEO3.Monitor
                 _performanceHistory.Clear();
                 _prevWaits.Clear();
 
-                // 🌟 3. CHRONOLOGICAL TIMELINE RECONSTRUCTION LOOPS
+                // 🌟 CHRONOLOGICAL TIMELINE RECONSTRUCTION LOOPS
                 // Group raw metrics into distinct slices sorted sequentially from oldest to newest
                 var sortedWaitIntervals = rawWaits
                     .GroupBy(w => w.Timestamp)
@@ -432,7 +432,7 @@ namespace JEO3.Monitor
                         }
 
                         // 🌟 HISTORICAL CREATESAMPLE: Append computed rate objects sequentially into 
-                        // your historical trend cache to feed your main line graph timeline immediately.
+                        // historical trend cache to feed main line graph timeline immediately.
                         if (rates.Count > 0)
                         {
                             _history.AddLast(new WaitRateSample
@@ -454,7 +454,7 @@ namespace JEO3.Monitor
                     loopPrevSampleUtc = currentTimestamp;
                 }
 
-                // 🌟 4. SEQUENTIAL HEALTH METRICS INGESTION
+                // 🌟 SEQUENTIAL HEALTH METRICS INGESTION
                 var sortedPerfMetrics = performanceMetrics.OrderBy(p => p.Timestamp).ToList();
                 foreach (var perf in sortedPerfMetrics)
                 {
@@ -471,7 +471,7 @@ namespace JEO3.Monitor
                 while (_history.Count > _options.HistoryCapacity) _history.RemoveFirst();
                 while (_performanceHistory.Count > _options.HistoryCapacity) _performanceHistory.RemoveFirst();
 
-                // 5. Hydrate Deadlock Events
+                // Hydrate Deadlock Events
                 for (int i = 0; i < newDeadlocks.Count; i++)
                 {
                     newDeadlocks[i] = HydrateFromXml(newDeadlocks[i]);
@@ -488,7 +488,7 @@ namespace JEO3.Monitor
                 // Hand over the final chronological state cursor to subsequent PollOnce delta tracking cycles
                 _prevSampleUtc = loopPrevSampleUtc ?? DateTime.UtcNow;
 
-                // 6. Push the finalized historical timeline to the frontend store
+                // Push the finalized historical timeline to the frontend store
                 var snapshot = new MonitorSnapshot
                 {
                     ServerTimeUtc = DateTime.UtcNow,

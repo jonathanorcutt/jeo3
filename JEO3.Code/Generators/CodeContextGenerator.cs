@@ -70,7 +70,7 @@ namespace JEO3.Code
 
             foreach (var entry in entries)
             {
-                sb.Append($"\t\tpublic virtual DbSet<{_nameSpace}.{entry.SchemaName}.{entry.TypeName}> {entry.PropertyName} {{ get; set; }}\r\n");
+                sb.Append($"\t\tpublic virtual ICollection<{_nameSpace}.{entry.SchemaName}.{entry.TypeName}> {entry.PropertyName} {{ get; set; }}\r\n");
             }
 
             sb.Append("\t}\r\n}\r\n");

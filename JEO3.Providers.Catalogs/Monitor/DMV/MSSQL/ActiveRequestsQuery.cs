@@ -2,7 +2,7 @@ namespace JEO3.Providers.Catalogs
 {
     public static partial class MSMonitorQueries
     {
-        // 1. LIVE ACTIVE REQUESTS (Un-minified for readability)
+        // LIVE ACTIVE REQUESTS (Un-minified for readability)
         // Maps to MonitorQueryType.ActiveRequestsQuery -> ActiveRequestRow
         public const string ActiveRequestsQuery = @"
 SELECT TOP 50    

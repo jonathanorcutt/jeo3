@@ -16,11 +16,11 @@
         public SqlEditorTheme DiagramTheme { get; set; } = SqlEditorTheme.AS400;
         public SqlEditorTheme EditorTheme { get; set; } = SqlEditorTheme.AS400;
         // Internal Sidebars
-        public bool IsSidebarExpandedDiagram { get; set; } = false;
-        public bool IsSidebarExpandedERDiagram { get; set; } = false;
+        public bool IsSidebarExpandedDiagram { get; set; } = true;
+        public bool IsSidebarExpandedERDiagram { get; set; } = true;
         public bool IsSidebarExpandedQueryEditor { get; set; } = true;
         // Page Sidebars
-        public bool IsSidebarExpandedRight { get; set; } = true;
+        public bool IsSidebarExpandedRight { get; set; } = false;
         public bool IsSidebarExpandedLeft { get; set; } = false;
         // Fullscreen
         public bool IsPaneFullScreenResults { get; set; } = false;
@@ -31,6 +31,5 @@
         public bool IsPaneCollapsedAllObjects { get; set; } = false;
         public bool IsPaneCollapsedRelations { get; set; } = false;
         public bool IsPaneExpandedResults { get; set; } = false;
-        public bool IsToolboxCollapsed { get; set; } = true;
     }
 }

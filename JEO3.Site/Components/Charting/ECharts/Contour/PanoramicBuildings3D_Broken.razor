@@ -41,8 +41,8 @@
         var rowsList = Rows.ToList();
         if (rowsList.Count == 0) return;
 
-        // 🌟 THE CORRECTION: Iterate over your cached generic rowsList list context array!
-        // This ensures the row identifier (r) accurately matches your Func<TRow, string, double> signature type.
+        // Iterate over cached generic rowsList list context array!
+        // This ensures the row identifier (r) accurately matches Func<TRow, string, double> signature type.
         var transportPayload = rowsList.Select(r => new
         {
             tablePath = RowLabelSelector(r),

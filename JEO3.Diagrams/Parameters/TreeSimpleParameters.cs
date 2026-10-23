@@ -22,7 +22,7 @@
             set => field = Math.Clamp(value, _minGap, _maxGap);
         } = 20.0;
 
-        public SpanTreeGeneration SpanTreeGeneration { get; set; } = SpanTreeGeneration.BFS;
+        public DiagramSpanTreeGeneration SpanTreeGeneration { get; set; } = DiagramSpanTreeGeneration.BFS;
 
         public override BaseLayoutParameters Clone()
         {

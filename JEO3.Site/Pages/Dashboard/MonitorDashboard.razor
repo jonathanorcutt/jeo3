@@ -25,8 +25,8 @@
 				<RadzenLabel Text="@W.Observation.Traffic.CurrentTable" />
 				<RadzenLabel Text="@W.Observation.Traffic.PercentCompleted" />
 			</RadzenStack>
-		}
- *@
+		} *@
+
 		<div class="monitor">
 			<div class="monitor-header">
 				<div>
@@ -47,13 +47,13 @@
 					<div class="monitor-grid" style="width:1495px">
 						<RadzenAccordion Style="width:1495px">
 							<Items>
-								<RadzenAccordionItem Text="View Expensive Query.." Icon="account_balance_wallet" CollapseTitle="Hide Query"
+								<RadzenAccordionItem Text="View Expensive Query.." Icon="account_balance_wallet" CollapseTitle="Hide Query" Selected="true"
 													 ExpandTitle="Show Selected Query" CollapseAriaLabel=""
 													 ExpandAriaLabel="Show The Selected Expensive Query" class="monitor-accordion">
 									<RadzenStack Gap="1rem">
 										<div class="dashboard-query-editor-container" style="min-height:100px; height:275px">
 
-											<div class="grid-query-editor" oncontextmenu="return false;" onpointerup="if(event.button === 2) { this.releasePointerCapture(event.pointerId); }">
+											<div class="grid-query-editor" oncontextmenu="return false;" onpointerup="if(event.button === 2) { this.releasePointerCapture(event.pointerId); }" style="background:var(--jeo-gradient-black)">
 												<StandaloneCodeEditor @key=@("query-editor-instance-expensive-queries") CssClass="txtQueryEditor" ConstructionOptions="EditorOptionsTopExpensiveQueries"
 																	  @ref="queryEditorTopExpensiveQueries" OnDidInit="OnEditorInitializedTopExpensiveQueries" OnDidChangeModelContent="OnEditorContentChangedTopExpensiveQueries" />
 											</div>
@@ -166,6 +166,7 @@
 	#endregion
 
 	private ChartThemeType _selectedTheme = ChartThemeType.Default;
+	private bool isMonacoEditorReady = false;
 
 	private readonly HashSet<string> _expandedSqlHandleHexs = new();
 	private TopExpensiveQueriesGrid gridTopExpensiveQueries;
@@ -207,13 +208,16 @@
 		StateHasChanged();
 	}
 
-	private void OnEditorInitializedTopExpensiveQueries() { }
-
 	private void OnEditorContentChangedTopExpensiveQueries() { }
+	private async Task OnEditorInitializedTopExpensiveQueries()
+	{
+		isMonacoEditorReady = true;
+		await InvokeAsync(StateHasChanged);
+	}
 
 	private async Task SelectedQueryChanged(TopExpensiveQueryRow qry)
 	{
-		if (queryEditorTopExpensiveQueries == null) { return; }
+		if (isMonacoEditorReady == false || queryEditorTopExpensiveQueries == null) { return; }
 		await queryEditorTopExpensiveQueries.SetValue(qry?.QueryText ?? string.Empty);
 	}
 

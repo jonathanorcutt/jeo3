@@ -64,7 +64,7 @@
             Title = "Panoramic Contour 3D",
             Icon = "analytics",
             Col = 33, Row = 17, ColSpan = 35, RowSpan = 27,
-            ChildContent = @<PanoramicContour3D TRow="ITable" Rows="@W.Context?.Tables" Columns="@MetricNames" RowLabelSelector="@(t => t.TablePath)" Width="700px" Height="400px"
+            ChildContent = @<PanoramicContour3D TRow="ITable" Rows="@W.Context?.Tables" Columns="@MetricNames" RowLabelSelector="@(t => t.TablePath)" Width="770px" Height="400px"
 						  CellSelector="@((t, m) => GetContourNormalizedMetric(t, m))" Title="Schema Heat Map" IntensityLabel="Complexity" />
 
         },
@@ -74,7 +74,7 @@
             Title = "Query Editor",
             Icon = "analytics",
             Col = 33, Row = 44, ColSpan = 35, RowSpan = 46,
-            ChildContent = @<PanoramicRelations3D Width="700px" Height="700px" Title="Welcome. Feel free to explore." Tables="@W.Context?.Tables" />
+            ChildContent = @<PanoramicRelations3D Width="770px" Height="700px" Title="Welcome. Feel free to explore." Tables="@W.Context?.Tables" />
             //@<PanoramicRelations3D Width="700px" 
             //           Height="400px" 
             //           Title="Database Transaction Flight Paths" 

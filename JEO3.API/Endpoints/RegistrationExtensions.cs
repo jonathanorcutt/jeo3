@@ -18,7 +18,7 @@ namespace JEO3.API.Endpoints
                 [FromServices] HybridCache cache, // 🌟 Inject the hybrid cache provider
                 HttpContext context) =>
             {
-                // 1. Trigger the heavy SQL stored procedure background tasks
+                // Trigger the heavy SQL stored procedure background tasks
                 // Passing the HTTP lifecycle request token ensures thread safety if the user closes the window mid-transit
                 string cacheKey = $"monitor:initial:{EntityDescriptor.DefaultSchemaOverride}";
 

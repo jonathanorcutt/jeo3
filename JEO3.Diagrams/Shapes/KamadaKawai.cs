@@ -14,12 +14,12 @@ namespace JEO3.Diagrams
 
             if (parameters.UseEntityRelationMode)
             {
-                // 1. Inflate canvas bounds based on table count so KK doesn't force 60+ cards into 800x400
+                // Inflate canvas bounds based on table count so KK doesn't force 60+ cards into 800x400
                 double canvasScale = Math.Max(2.5, Math.Sqrt(diagram.Nodes.Count) * 0.4);
                 parameters.CanvasWidth = parameters.CanvasWidth * canvasScale;
                 parameters.CanvasHeight = parameters.CanvasHeight * canvasScale;
 
-                // 2. Define center and radius of the initial placement ring
+                // Define center and radius of the initial placement ring
                 double centerX = parameters.CanvasWidth / 2.0;
                 double centerY = parameters.CanvasHeight / 2.0;
                 double ringRadius = Math.Min(parameters.CanvasWidth, parameters.CanvasHeight) * 0.35;
@@ -71,7 +71,7 @@ namespace JEO3.Diagrams
             var algorithm = factory.CreateAlgorithm("KK", context, parametersNew);
             await ComputeQueryNodeAlgorithm(algorithm);
 
-            // 1. Map node coordinates and physical sizes into a GraphShape Rect layout dictionary
+            // Map node coordinates and physical sizes into a GraphShape Rect layout dictionary
             var rectangles = algorithm.VerticesPositions.ToDictionary(
                 kvp => (TableNodeModel)kvp.Key,
                 kvp => new GraphShape.Rect(

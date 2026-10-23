@@ -4,7 +4,7 @@
     {
         internal const string DatabasePermissionQuery = @"
 WITH all_permissions AS (
-    -- 1. Database Level Permissions
+    -- Database Level Permissions
     SELECT 
         grantee_role.oid AS GranteePrincipalId,
         p.grantee AS GranteeName,

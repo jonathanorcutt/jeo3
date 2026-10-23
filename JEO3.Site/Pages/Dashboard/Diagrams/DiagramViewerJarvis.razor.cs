@@ -74,7 +74,7 @@ namespace JEO3.Site.Dashboard
                 var dmg = DiagramBuilder.CreateDiagramFromQueryTables(W.Result.DiagramResultJarvis.ExecutionNodes, W.UI.Appearance.DiagramTheme == SqlEditorTheme.Light);
                 ActiveDiagram = dmg;
                 ActiveDiagram?.RegisterComponent<TableNodeModel, NodeTableNode>();
-                DiagramBuilder.SetViewport(ActiveDiagram, W.UI.Diagram.DiagramZoom, 200, 300);
+                DiagramBuilder.SetViewport(ActiveDiagram, W.UI.Diagram.DiagramZoom, 100, 75);
                 ActiveDiagram?.Refresh();
 
                 // Ensure event is attached upon creation
@@ -176,13 +176,14 @@ namespace JEO3.Site.Dashboard
                 await ProcessJarvisDiagram(token);
             }
         }
+
         private async Task ProcessJarvisDiagram(CancellationToken token)
         {
             var finalNodes = GetFinalExecutionNodes(W.Result.DiagramResultJarvis);
             var diagram = DiagramBuilder.CreateDiagramFromQueryTables(finalNodes, W.UI.Appearance.DiagramTheme == SqlEditorTheme.Light);
 
-            var width =  ActiveDiagram?.Container?.Width ?? 1600;
-            var height = ActiveDiagram?.Container?.Height ?? 800;
+            var width = ActiveDiagram?.Container?.Width ?? 800;
+            var height = ActiveDiagram?.Container?.Height ?? 400;
 
             if (W.UI.Diagram.ActiveParameters == null)
             {
@@ -255,7 +256,7 @@ namespace JEO3.Site.Dashboard
                     foreach (var node in diagram.Nodes) ActiveDiagram.Nodes.Add(node);
                     foreach (var link in diagram.Links) ActiveDiagram.Links.Add(link);
 
-                    DiagramBuilder.SetViewport(ActiveDiagram, W.UI.Diagram.DiagramZoom, 300, 200);
+                    DiagramBuilder.SetViewport(ActiveDiagram, W.UI.Diagram.DiagramZoom, 50, 75);
                     ActiveDiagram.Refresh();
                 }
                 else
@@ -263,7 +264,7 @@ namespace JEO3.Site.Dashboard
                     ActiveDiagram = diagram;
                     ActiveDiagram.RegisterComponent<TableNodeModel, NodeTableNode>();
                     ActiveDiagram.SelectionChanged += OnDiagramSelectionChanged;
-                    DiagramBuilder.SetViewport(ActiveDiagram, W.UI.Diagram.DiagramZoom, 300, 200);
+                    DiagramBuilder.SetViewport(ActiveDiagram, W.UI.Diagram.DiagramZoom, 50, 75);
                     ActiveDiagram.Refresh();
                 }
             });
@@ -273,9 +274,9 @@ namespace JEO3.Site.Dashboard
         #region Themes
         public async Task ApplySqlTheme()
         {
-            if (DiagramBackgroundColor != "#E2E2E2" || DiagramStyle != "")
+            if (DiagramBackgroundColor != "#DFF2FC" || DiagramStyle != "")
             {
-                DiagramBackgroundColor = "#E2E2E2";
+                DiagramBackgroundColor = "#DFF2FC";
                 DiagramStyle = "";
                 await InvokeAsync(StateHasChanged);
             }
@@ -351,11 +352,6 @@ namespace JEO3.Site.Dashboard
         {
             W.UI.Appearance.IsSidebarExpandedDiagram = !W.UI.Appearance.IsSidebarExpandedDiagram;
         }
-        private async Task TogglePaneExpansionHalfScreen()
-        {
-            W.UI.Appearance.IsPaneExpandedResults = !W.UI.Appearance.IsPaneExpandedResults;
-            await JS.InvokeVoidAsync("toggleElementHalfscreen", queryResultsPaneDiv, W.UI.Appearance.IsPaneExpandedResults);
-        }
         private async Task TogglePaneExpansionFullScreen()
         {
             W.UI.Appearance.IsPaneFullScreenResults = !W.UI.Appearance.IsPaneFullScreenResults;
@@ -384,18 +380,24 @@ namespace JEO3.Site.Dashboard
                 {
                     SortByIndexWeight = true,
                     // TEST 1: Flip this to false temporarily.
-                    // If your node count jumps to 15+, your database schema simply lacks indexes on those FKs!
+                    // If node count jumps to 15+, database schema simply lacks indexes on those FKs!
                     FilterUnindexedHazards = options.Traversal.StrictIndexMatchingOnly,
                 },
 
                 PostTraversalCompression = (tracker) =>
                 {
+                    // Do not touch! Kills Diagrams
+                    if (!options.Traversal.EnforceStrictLeafCollapse) return;
+
                     // PHASE 2: Trim the fat using our strategy compression pass!
                     // Group all discovered nodes by their physical table ID
                     var tableGroups = tracker.Nodes
                         .Where(n => n.Direction != TraversalDirection.Root)
                         .GroupBy(n => n.TableObjectId)
                         .ToList();
+
+                    // Do not touch! Kills Diagrams
+                    var parentIds = tracker.Nodes.Where(n => n.Parent != null).Select(n => n.Parent.Id).ToHashSet();
 
                     foreach (var group in tableGroups)
                     {
@@ -429,6 +431,8 @@ namespace JEO3.Site.Dashboard
                             {
                                 if (redundantNode != optimalNode)
                                 {
+                                    // Do not touch! Kills Diagrams
+                                    //if (redundantNode != optimalNode && !parentIds.Contains(redundantNode.Id)) tracker.Nodes.Remove(redundantNode);
                                     tracker.Nodes.Remove(redundantNode);
                                 }
                             }
