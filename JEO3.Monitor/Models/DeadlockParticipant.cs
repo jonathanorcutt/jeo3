@@ -1,10 +1,11 @@
 ﻿using System.Text.Json.Serialization;
+using JEO3.Contracts;
 using JEO3.Providers.Extensions;
 
 namespace JEO3.Monitor
 {
     [JeoTable(nameof(DeadlockParticipant), Schema = "Prod")]
-    public sealed class DeadlockParticipant
+    public sealed class DeadlockParticipant : IDeadlockParticipant
     {
         [JeoKey(IsDbGenerated = false, IsPrimaryKey = true, Name = nameof(Timestamp))]
         [JsonPropertyName("T")]

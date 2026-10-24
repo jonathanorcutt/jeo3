@@ -331,3 +331,15 @@ h1:focus {
     min-height: 0;
     overflow: hidden;
 }
+
+.rz-group-header {
+    padding: 8px 8px 8px 8px !important;
+}
+
+.rz-accordion-content{
+    padding: 0px 0px 0px 0px;
+}
+
+.rz-checkbox-list .rz-checkbox{
+    padding-left:0px !important;
+}

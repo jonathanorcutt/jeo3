@@ -1,8 +1,9 @@
 ﻿using System.Text.Json.Serialization;
+using JEO3.Contracts;
 
 namespace JEO3.Monitor.Models;
 
-public sealed class PerformanceMetricRow
+public sealed class PerformanceMetricRow : IPerformanceMetricRow
 {
     [JsonPropertyName("T")]
     public DateTime Timestamp { get; set; }

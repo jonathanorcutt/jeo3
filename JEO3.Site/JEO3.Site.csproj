@@ -47,11 +47,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\JEO3.Charts\JEO3.Charts.csproj" />
 		<ProjectReference Include="..\JEO3.Code\JEO3.Code.csproj" />
 		<ProjectReference Include="..\JEO3.Diagrams\JEO3.Diagrams.csproj" />
 		<ProjectReference Include="..\JEO3.Engine\JEO3.Engine.csproj" />
-		<ProjectReference Include="..\JEO3.Monitor.Charts\JEO3.Monitor.Charts.csproj" />
 		<ProjectReference Include="..\JEO3.Monitor\JEO3.Monitor.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\img\docs\" />
 	</ItemGroup>
 
 </Project>

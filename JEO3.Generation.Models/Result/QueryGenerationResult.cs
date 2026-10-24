@@ -14,7 +14,7 @@
             GenerationMethod.Backtracking => "Backtracking",
             GenerationMethod.JEO3 => "JEO3",
             GenerationMethod.ExtendedDiscovery => "Extended Discovery",
-            GenerationMethod.PlanDrivenExecution => "PlanDrivenExecution",
+            GenerationMethod.PlanDrivenExecution => "JEO3 Metric",
             _ => "Constrained Recursive Normalization"
         };
         public string MatrixEvaluationLabel

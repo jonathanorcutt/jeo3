@@ -1,0 +1,193 @@
+﻿@using System.Data
+@using JEO3.Charts
+@using JEO3.Contracts
+@using JEO3.Extensions
+@using JEO3.Monitor
+@inherits MonitorBase
+@namespace JEO3.Monitor.ECharts
+
+<div class="monitor-panel">
+	@if (LabelText != string.Empty)
+	{
+		<div class="monitor-panel-title">
+			<label class="dashboard-monitor-label">
+				<img src="../img/vs_icons/StoredProcedurefromCLRWarning_16x.png" width="18" height="18" class="fa-mr-7" />
+				@LabelText
+			</label>
+
+			<span class="monitor-section-badge">
+				@Blocking.Count
+			</span>
+		</div>
+	}
+
+	<div class="dashboard-pane-container" style="height:@(Height); width:@(Width)">
+		<div class="dashboard-pane-body-container-scroll">
+
+			<RadzenDataGrid Data="@Blocking"
+							TItem="IBlockingRow"
+							AllowSorting="true"
+							AllowFiltering="false"
+							AllowColumnResize="true"
+							AllowColumnReorder="true"
+							Density="Density.Compact"
+							AllowAlternatingRows="true"
+							AllowVirtualization="true"
+							RowSelect="@(async (t) => { await OnSelectionChanged.InvokeAsync(t); })"
+							CellRender="@OnCellRender"
+							Style="width: 100%; font-family: monospace; background-color: #111; color: #eee;">
+				<Columns>
+
+					<RadzenDataGridColumn TItem="IBlockingRow"
+										  Property="@nameof(IBlockingRow.BlockingSessionId)"
+										  Title="BSID"
+										  TextAlign="TextAlign.Right"
+										  Width="30px" />
+					<RadzenDataGridColumn TItem="IBlockingRow"
+										  Property="@nameof(IBlockingRow.SessionId)"
+										  Title="SID"
+										  TextAlign="TextAlign.Right"
+										  Width="30px" />
+
+					<RadzenDataGridColumn TItem="IBlockingRow" Property="@nameof(IBlockingRow.HostName)" Title="Host" Width="65px" />
+
+					<RadzenDataGridColumn TItem="IBlockingRow" Property="@nameof(IBlockingRow.LoginName)" Title="Login" Width="65px" />
+
+					<RadzenDataGridColumn TItem="IBlockingRow" Property="@nameof(IBlockingRow.ProgramName)" Title="Program Name" Width="160px" />
+
+					<!-- Fixed alignment: Changed from Right to Center for short text status -->
+					<RadzenDataGridColumn TItem="IBlockingRow" Property="@nameof(IBlockingRow.Status)" Title="Status" TextAlign="TextAlign.Center" Width="75px">
+						<Template Context="data">
+							<span style="color: @(data.Status == "sleeping" ? "#888" : "#2675FF"); font-weight: bold;">
+								@data.Status
+							</span>
+						</Template>
+					</RadzenDataGridColumn>
+
+					<RadzenDataGridColumn TItem="IBlockingRow" Property="@nameof(IBlockingRow.RequestStartTime)" Title="Request Start" Width="105px" FormatString="{0:10/24 HH:mm:ss}" />
+
+					<RadzenDataGridColumn TItem="IBlockingRow" Property="@nameof(IBlockingRow.TransactionBeginTime)" Title="Tran Begin" Width="105px" FormatString="{0:10/24 HH:mm:ss}" />
+
+					<RadzenDataGridColumn TItem="IBlockingRow" Property="@nameof(IBlockingRow.BlockingSessionId)" Title="Blocker ID" TextAlign="TextAlign.Center" Width="75px">
+						<Template Context="data">
+							<!-- Bold and color-code the blocker ID so it draws the eye immediately -->
+							<span style="font-weight: bold; color: @(data.BlockingSessionId > 0 ? "#FF4D4D" : "#4CAF50")">
+								@(data.BlockingSessionId > 0 ? data.BlockingSessionId.ToString() : "0")
+							</span>
+						</Template>
+					</RadzenDataGridColumn>
+
+					<RadzenDataGridColumn TItem="IBlockingRow" Property="@nameof(IBlockingRow.IsBlocked)" Title="Blocked?" TextAlign="TextAlign.Center" Width="70px" Type="typeof(bool)">
+						<Template Context="data">
+							@if (data.IsBlocked)
+							{
+								<!-- True: Victims who are frozen waiting on 115 get the Red icon -->
+								<RadzenIcon Icon="cancel" Style="color: #FF4D4D; font-size: 16px; vertical-align: middle;" />
+							}
+							else
+							{
+								<!-- False: The sleeping root blocker who is free gets the Green icon -->
+								<RadzenIcon Icon="radio_button_unchecked" Style="color: #4CAF50; font-size: 16px; vertical-align: middle;" />
+							}
+						</Template>
+					</RadzenDataGridColumn>
+
+					<!-- Visual Progress Bar Column for Wait Time -->
+					<RadzenDataGridColumn TItem="IBlockingRow" Property="@nameof(IBlockingRow.WaitTimeSec)" Title="Wait Time (Sec)" Width="140px">
+						<Template Context="data">
+							@if (data.WaitTimeSec > 0)
+							{
+								<div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+									<span style="font-size: 11px; margin-right: 6px; min-width: 50px; text-align: right;">@data.WaitTimeSec.ToString("N2")</span>
+									<div style="flex-grow: 1; background-all: #222; border-radius: 2px; overflow: hidden; height: 12px; border: 1px solid #333;">
+										<RadzenProgressBar Value="@((data.WaitTimeSec / MaxWaitTime) * 100)"
+														   ShowValue="false"
+														   Style="height: 10px; --rz-progressbar-value-background-color: #D32F2F;" />
+									</div>
+								</div>
+							}
+							else
+							{
+								<span style="color: #555; font-size: 11px;">0.00</span>
+							}
+						</Template>
+					</RadzenDataGridColumn>
+
+					<!-- Visual Progress Bar Column for Transaction Open Duration -->
+					<RadzenDataGridColumn TItem="IBlockingRow" Property="@nameof(IBlockingRow.OpenTranDurationSec)" Title="Open Tran (Sec)" Width="140px">
+						<Template Context="data">
+							@if (data.OpenTranDurationSec > 0)
+							{
+								<div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+									<span style="font-size: 11px; margin-right: 6px; min-width: 50px; text-align: right;">@data.OpenTranDurationSec?.ToString("N2")</span>
+									<div style="flex-grow: 1; background-all: #222; border-radius: 2px; overflow: hidden; height: 12px; border: 1px solid #333;">
+										<RadzenProgressBar Value="@(((data.OpenTranDurationSec ?? 1) / MaxTranTime) * 100)"
+														   ShowValue="false"
+														   Style="height: 10px; --rz-progressbar-value-background-color: #388E3C;" />
+									</div>
+								</div>
+							}
+							else
+							{
+								<span style="color: #555; font-size: 11px;">0.00</span>
+							}
+						</Template>
+					</RadzenDataGridColumn>
+				</Columns>
+			</RadzenDataGrid>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter] public EventCallback<IBlockingRow> OnSelectionChanged { get; set; }
+	[Parameter] public EventCallback<(object? Id, string? Name)> OnRowClick { get; set; }
+	private IReadOnlyList<IBlockingRow> Blocking { get; set; } = Array.Empty<IBlockingRow>();
+	private IBlockingRow selectedQueryRow { get; set; }
+	private int currentQueryRetentionCounter = 0;
+	private double MaxWaitTime => Blocking?.Max(x => x.WaitTimeSec) ?? 1.0;
+	private double MaxTranTime => Blocking?.Max(x => x.OpenTranDurationSec) ?? 1.0;
+
+	protected override async Task RenderInitialAsync(IMonitorSnapshot initial)
+	{
+		if (initial.BlockingChain != null && initial.BlockingChain.Count > 0)
+		{
+			Blocking = initial.BlockingChain.OrderBy(v => v.IsBlocked).ThenByDescending(r => r.WaitTimeSec).ToList();
+
+			selectedQueryRow = Blocking.Count > 0 ? Blocking.First() : selectedQueryRow;
+			await OnSelectionChanged.InvokeAsync(Blocking.FirstOrDefault());
+
+			await InvokeAsync(StateHasChanged);
+		}
+	}
+
+	protected override async Task AppendDeltasAsync(IMonitorDeltaResponse delta)
+	{
+		// The API only returns this cache when it updates, so don't wipe it out if it's null
+		if (delta.BlockingChain != null && delta.BlockingChain.Count > 0)
+		{
+			Blocking = delta.BlockingChain.OrderBy(v => v.IsBlocked).ThenByDescending(r => r.WaitTimeSec).ToList();
+
+			if (selectedQueryRow == null || (selectedQueryRow != null && currentQueryRetentionCounter + 1 >= 1))
+			{
+				currentQueryRetentionCounter = 0;
+				selectedQueryRow = Blocking.Count > 0 ? Blocking.First() : selectedQueryRow;
+				await OnSelectionChanged.InvokeAsync(Blocking.FirstOrDefault());
+			}
+			else if (selectedQueryRow != null)
+			{
+				currentQueryRetentionCounter++;
+			}
+
+			await InvokeAsync(StateHasChanged);
+		}
+	}
+
+	private void OnCellRender(DataGridCellRenderEventArgs<IBlockingRow> args)
+	{
+		if (args.Data.BlockingSessionId == 0 && !args.Data.IsBlocked)
+		{
+			args.Attributes.Add("style", "background-color: rgba(76, 175, 80, 0.15) !important; font-weight: bold;");
+		}
+	}
+}

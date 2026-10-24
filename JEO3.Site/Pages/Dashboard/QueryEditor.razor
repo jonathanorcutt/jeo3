@@ -180,15 +180,15 @@
 				
 				<label class="sidebar-right-section-titlebar"><VSIcon Type="VSIconType.VSCode" Name="file_type_freemarker" Extension="ImageType.svg" Width="20" Height="20" class="fa-pr-7"></VSIcon> ANNOTATION</label>
 				<div class="sidebar-config-block sidebar-config-block-no-border">
-					<RadzenCheckBoxList @bind-Value="@SelectedAnnotationFlags" TValue="AnnotationVerbosity" Change="@OnAnnotationSelectionChanged" class="annotation-checklist">
+					<RadzenCheckBoxList @bind-Value="@SelectedAnnotationFlags" TValue="AnnotationVerbosity" Change="@OnAnnotationSelectionChanged" class="annotation-checklist" Gap="6">
 						<Items>
-							<RadzenCheckBoxListItem Text="Generation Info" Value="AnnotationVerbosity.GenerationInfo" class="fa-pt5" />
-							<RadzenCheckBoxListItem Text="Graph Summary" Value="AnnotationVerbosity.ExecutionSummary" class="fa-pt5" />
-							<RadzenCheckBoxListItem Text="Traversal Summary" Value="AnnotationVerbosity.TraversalSummary" class="fa-pt5" />
-							<RadzenCheckBoxListItem Text="Cardinality Estimates" Value="AnnotationVerbosity.CardinalityEstimation" class="fa-pt5" />
-							<RadzenCheckBoxListItem Text="Table Footers" Value="AnnotationVerbosity.TableFooter" class="fa-pt5" />
-							<RadzenCheckBoxListItem Text="Path Breadcrumbs" Value="AnnotationVerbosity.PathBreadcrumbs" class="fa-pt5" />
-							<RadzenCheckBoxListItem Text="SELECT Warning" Value="AnnotationVerbosity.DoNotRemoveAscii" class="fa-pt5" />
+							<RadzenCheckBoxListItem Text="Generation Info" Value="AnnotationVerbosity.GenerationInfo" />
+							<RadzenCheckBoxListItem Text="Graph Summary" Value="AnnotationVerbosity.ExecutionSummary"  />
+							<RadzenCheckBoxListItem Text="Traversal Summary" Value="AnnotationVerbosity.TraversalSummary" />
+							<RadzenCheckBoxListItem Text="Cardinality Estimates" Value="AnnotationVerbosity.CardinalityEstimation" />
+							<RadzenCheckBoxListItem Text="Table Footers" Value="AnnotationVerbosity.TableFooter"  />
+							<RadzenCheckBoxListItem Text="Path Breadcrumbs" Value="AnnotationVerbosity.PathBreadcrumbs" />
+							<RadzenCheckBoxListItem Text="SELECT Warning" Value="AnnotationVerbosity.DoNotRemoveAscii" />
 						</Items>
 					</RadzenCheckBoxList>
 				</div>

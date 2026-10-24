@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using JEO3.Contracts;
 using JEO3.Logging;
 using JEO3.Monitor;
 
@@ -24,9 +25,9 @@ namespace JEO3.Site.Services
         private readonly MonitorState _workspace = new MonitorState();
         private CancellationTokenSource? _cts;
         private Task? _loopTask;
-        private readonly List<WaitRateSample> _history = new(HistoryCapacity + 1);
+        private readonly List<IWaitRateSample> _history = new(HistoryCapacity + 1);
         private DateTime _lastServerTimeUtc = DateTime.MinValue;
-        private readonly List<DeadlockEvent> _deadlockLog = [];
+        private readonly List<IDeadlockEvent> _deadlockLog = [];
 
         // Constants
         private const int DefaultIntervalSeconds = 3;
@@ -114,7 +115,7 @@ namespace JEO3.Site.Services
             var log = Math.Round((DateTime.Now - now).TotalSeconds, 2);
             Trace.WriteLine($"JEO3.Site - SqlServerMonitorService - RunLoopAsync - Elapsed {log}sec");
         }
-        private void ApplyInitialSnapshot(MonitorSnapshot snapshot)
+        private void ApplyInitialSnapshot(IMonitorSnapshot snapshot)
         {
             DateTime now = DateTime.Now;
             _lastServerTimeUtc = snapshot.ServerTimeUtc;
@@ -155,7 +156,7 @@ namespace JEO3.Site.Services
             var log = Math.Round((DateTime.Now - now).TotalSeconds, 2);
             Trace.WriteLine($"JEO3.Site - SqlServerMonitorService - ApplyInitialSnapshot - Elapsed {log}sec");
         }
-        private void ApplyDelta(MonitorDeltaResponse delta)
+        private void ApplyDelta(IMonitorDeltaResponse delta)
         {
             DateTime now = DateTime.Now;
             _lastServerTimeUtc = delta.ServerTimeUtc;

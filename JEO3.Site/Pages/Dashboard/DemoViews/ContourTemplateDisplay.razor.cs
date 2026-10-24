@@ -45,6 +45,11 @@ namespace JEO3.Site.Dashboard
         #endregion
 
         #region Charts
+
+        private void UpdateEntitiesNavTabChanged(int index)
+        {
+            selectedEntitiesNavTabIndex = index;
+        }
         // --- VIEW 2: COLUMN METRIC VECTOR ---
         public static readonly IReadOnlyList<string> ColumnMetrics = new[]
         {
@@ -69,11 +74,6 @@ namespace JEO3.Site.Dashboard
             };
 
             return Math.Min(1.0, raw / GetTableCaps()[metric]);
-        }
-
-        private void UpdateEntitiesNavTabChanged(int index)
-        {
-            selectedEntitiesNavTabIndex = index;
         }
 
         private static Dictionary<string, double> GetTableCaps()

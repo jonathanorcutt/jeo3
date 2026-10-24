@@ -255,6 +255,15 @@
             color: #2d3748;
         }
 
+/* ---------------- Monaco ------------------ */
+/* Monaco Text Editor*/
+.txtQueryEditor {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--jeo-gradient-black) !important;
+    border-bottom: 1px solid #647c64;
+}
 /*
 --------------------------------------------------------------------------------------------
 ----------------------------------    BOB    ------------------------------------
@@ -316,51 +325,12 @@ svg.navigator {
 
 /*
 --------------------------------------------------------------------------------------------
-----------------------------------    FONTS    ------------------------------------
---------------------------------------------------------------------------------------------
-*/
-
-@font-face {
-    font-family: 'NaziTypewriterRegular';
-    src: url('/fonts/NaziTypewriterRegular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'XoloniumRegular';
-    src: url('/fonts/Xolonium-Regular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'UbuntuMonoBold';
-    src: url('/fonts/UbuntuMono-Bold.ttf') format('truetype');
-}
-.jeo3-typewriter {
-    font-family: 'NaziTypewriterRegular' !important;
-    font-weight: normal;
-    font-style: normal;
-}
-
-.jeo3-ubuntu {
-    font-family: 'UbuntuMonoBold' !important;
-    font-weight: normal;
-    font-style: normal;
-}
-
-.jeo3-xolonium-regular {
-    font-family: 'XoloniumRegular' !important;
-    font-weight: normal;
-    font-style: normal;
-}
-
-/*
---------------------------------------------------------------------------------------------
 ----------------------------------    mainlayout.css    ------------------------------------
 --------------------------------------------------------------------------------------------
 Structure: Left Sidebar (NavMenu), Right Sidebar, TopNavTopBar, Sidebar Toggle btns
 Appearance: Color Picker (--rz-primary), Fullscreen btn, Dark Mode btn, Preferred Colors
 --------------------------------------------------------------------------------------------
 */
-
 /* Top Nav Bar Silver Horizontal Gradient */
 .titlebar-container {
     background: var(--jeo-gradient-silver);
@@ -371,24 +341,6 @@ Appearance: Color Picker (--rz-primary), Fullscreen btn, Dark Mode btn, Preferre
     align-items: center;
     gap: 6px;
     margin-left: auto;
-}
-
-.navbar-header-label-database {
-    font-family: "Anonymous+Pro";
-    font-variant: normal;
-    color: var(--jeo-gradient-red) !important;
-    font-family: "Consolas", "Monaco", monospace;
-    font-weight: bolder;
-    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
-    background: linear-gradient( 90deg, #ffa76d, #22ff00, #00e5ff, #c879ff );
-    background-size: 1000% auto;
-    background-clip: text;
-    font-variant: small-caps;
-    -webkit-background-clip: text;
-    color: #ffeded4d !important;
-    margin-top:8px;
-    animation: insane-text 15s linear infinite;
-    font-size: 10pt;
 }
 
 .database-title-container {
@@ -602,7 +554,7 @@ Appearance: Color Picker (--rz-primary), Fullscreen btn, Dark Mode btn, Preferre
     background: transparent;
     cursor: pointer;
     color: var(--rz-info);
-    padding: 0;
+    margin: 0 20px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1157,10 +1109,6 @@ tr.rz-data-row td[role="gridcell"]:first-child:has(.link-bold-pointer:hover) {
     margin-left: 5px;
 }
 
-.sidebar-config-block-no-border {
-    border-bottom: none;
-}
-
 .dialog-flex-column-minheight {
     height: 100%;
     display: flex;
@@ -1203,7 +1151,8 @@ tr.rz-data-row td[role="gridcell"]:first-child:has(.link-bold-pointer:hover) {
     box-shadow: 0 0 40px rgba(140, 70, 255, .25), 0 30px 100px rgba(0,0,0,.65);
     overflow: hidden;
     /*background-image: url('../img/theme/matrix.apng');*/
-    background-image: url('../img/theme/StarfieldSimulation.gif');
+    /*background-image: url('../img/theme/StarfieldSimulation.gif');*/
+    background-image: url('../img/theme/matrix-5.gif');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -1597,7 +1546,7 @@ tr.rz-data-row td[role="gridcell"]:first-child:has(.link-bold-pointer:hover) {
 }
 
 .main-nav-tabs li[role="presentation"] {
-    height: 40px;
+    height: 37px;
 }
 
 .diagram-nav-tabs li[role="presentation"] {
@@ -1605,7 +1554,7 @@ tr.rz-data-row td[role="gridcell"]:first-child:has(.link-bold-pointer:hover) {
 }
 
 .rz-tabview-selected {
-    border-right-width: 5px !important;
+    main-nav-tabs border-right-width: 5px !important;
     border-right-color: var(--jeo-gradient-rz);
 }
 
@@ -1669,4 +1618,10 @@ tr.rz-data-row td[role="gridcell"]:first-child:has(.link-bold-pointer:hover) {
 
 .schema-heatmap-header{
     margin-bottom:0px !important;
+}
+
+.monitor-panel-title,
+.monitor-accordion > button,
+.monitor-accordion > div {
+    padding: 8px 0px 5px 0px !important;
 }

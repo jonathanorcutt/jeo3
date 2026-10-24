@@ -2,6 +2,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Text;
 using JEO3.Code;
+using JEO3.Contracts;
 using JEO3.Core;
 using JEO3.Extensions;
 using JEO3.Generation;
@@ -184,16 +185,29 @@ namespace JEO3.Site.Dashboard
                 var jarvisResult = gen.Generate(selectedTable, options);
                 if (jarvisResult == null) return;
 
+                // Set Database Result here - Other components / charts reference it.
+                // And with main vertical nav tab control rendermode set to Server...
+                // Doesnt reload diagram in component until Diagram tab opened. Revisit...
+                W.Result.DiagramResultDatabase = await Task.Run(() => gen.Generate(selectedTable, options));
+
                 jarvisResult.Coverage = CoverageCalculator.CalculateCoverage(selectedTable, W.Context.Tables, W.Context.Relations);
                 W.Result.QueryEditorResult = jarvisResult;
                 W.UI.Grids.ActiveConstraints = jarvisResult.ExecutionNodes.ToGraphRelationConstraintList();
 
                 if (W.UI.Appearance.IsMonacoEditorReady && W.UI.Appearance.IsSchemaLoaded)
                 {
-                    await diagramViewer.ReloadDiagram(selectedTable, options);
-                    await diagramViewer2.ReloadDiagram(selectedTable, options);
-                    await queryEditor.UpdateEditorQuery(jarvisResult.GeneratedQuery);
-
+                    if (diagramViewer != null)
+                    {
+                        await diagramViewer.ReloadDiagram(selectedTable, options);
+                    }
+                    if (diagramViewer2 != null)
+                    {
+                        await diagramViewer2.ReloadDiagram(selectedTable, options);
+                    }
+                    if (queryEditor != null)
+                    {
+                        await queryEditor.UpdateEditorQuery(jarvisResult.GeneratedQuery);
+                    }
                     //+"\r\n\r\n" + "-- GPT: " + selectedTable.Name + "\r\n\r\n--" + string.Join("\r\n", jarvisResult.Tracker.Events.OrderBy(v => v.Timestamp).Select(v => $"-- Time: {v.Timestamp.ToShortTimeString()} - Depth: {v.Depth} Direction: {v.Direction} From: {v.FromTableId} To: {v.ToTableId} Relation: {v.RelationId} Reason: {v.Reason}").ToList()));
                 }
             }
@@ -523,6 +537,46 @@ namespace JEO3.Site.Dashboard
                 }).ToList()
             });
             this.W.UI.Tabs.SelectedIndex = this.W.UI.Tabs.Tabs.Count - 1;
+        }
+        #endregion
+
+        #region Charts
+        private static IReadOnlyList<string> MetricNames => GetTableCaps().Keys.ToList();
+        private double GetContourNormalizedMetric(ITable t, string metric)
+        {
+            double raw = metric switch
+            {
+                "Columns" => t.Columns.Count,
+                "Indexes" => t.Indexes.Count,
+                "Foreign Keys" => t.ForeignKeys.Count,
+                "Referenced By FKs" => t.ReferencedByForeignKeys.Count,
+                "Triggers" => t.Triggers.Count,
+                "Check Constraints" => t.CheckConstraints.Count,
+                "Parents" => t.ParentRelations.Count,
+                "Children" => t.ChildRelations.Count,
+                "Statistics" => t.Statistics.Count,
+                "Missing Indexes" => t.MissingIndexes.Count,
+                _ => 0
+            };
+
+            return Math.Min(1.0, raw / GetTableCaps()[metric]);
+        }
+
+        private static Dictionary<string, double> GetTableCaps()
+        {
+            return new()
+            {
+                ["Columns"] = 50,
+                ["Indexes"] = 15,
+                ["Foreign Keys"] = 15,
+                ["Referenced By FKs"] = 15,
+                ["Triggers"] = 10,
+                ["Check Constraints"] = 10,
+                ["Parents"] = 15,
+                ["Children"] = 15,
+                ["Statistics"] = 15,
+                ["Missing Indexes"] = 10
+            };
         }
         #endregion
 

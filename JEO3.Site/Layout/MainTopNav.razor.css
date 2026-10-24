@@ -18,7 +18,162 @@
 /* moved from jeo3.css */
 .navbar-header-label {
     /*font-variant: small-caps;*/
-    /*font-weight: 500;*/
-    letter-spacing: 1.5px;
-    font-size: 18pt;
+    font-weight: bold;
+    letter-spacing: 1.8px;
+    font-size: 20pt;
+    font-family: UbuntuMonoBold, Consolas, system-ui, -apple-system, sans-serif;
+    font-variant: small-caps;
+}
+
+.navbar-header-label-database {
+    font-family: UbuntuMonoBold, Consolas, system-ui, -apple-system, sans-serif;
+    font-variant: normal;
+    color: var(--jeo-gradient-red) !important;
+    font-family: "Consolas", "Monaco", monospace;
+    font-weight: bolder;
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+    background: linear-gradient( 90deg, #ffa76d, #22ff00, #00e5ff, #c879ff );
+    background-size: 1000% auto;
+    background-clip: text;
+    font-variant: small-caps;
+    -webkit-background-clip: text;
+    color: #ffeded4d !important;
+    margin-top: 5px;
+    animation: insane-text 10s linear infinite;
+    font-size: 12pt;
+    letter-spacing: 0.85px;
+}
+
+
+.schema-nav-docs {
+    color: #d8dce8;
+    background: #10121b;
+    font-size: 0.86rem;
+}
+
+.schema-nav-hero {
+    display: grid;
+    grid-template-columns: minmax(145px, 0.7fr) minmax(0, 1.7fr);
+    gap: 1.25rem;
+    padding: 1.1rem;
+}
+
+.schema-nav-image {
+    min-width: 0;
+    align-self: start;
+    padding: 5px;
+    border: 1px solid #b52bff;
+    border-radius: 5px;
+    background: #090b12;
+    box-shadow: 0 0 15px #a020f025;
+}
+
+.schema-nav-screenshot {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.schema-nav-copy {
+    min-width: 0;
+}
+
+.schema-nav-eyebrow {
+    color: #8c91a8;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+}
+
+    .schema-nav-eyebrow span {
+        color: #df4bff;
+    }
+
+.schema-nav-copy h3 {
+    margin: 0.65rem 0 0.35rem;
+    color: #f4f2ff;
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.schema-nav-lead {
+    margin-bottom: 1.1rem;
+    color: #60e7ff;
+    font-size: 0.85rem;
+}
+
+.schema-nav-section {
+    margin-top: 0.85rem;
+    padding-left: 0.75rem;
+    border-left: 2px solid #373448;
+}
+
+    .schema-nav-section h4 {
+        margin: 0 0 0.3rem;
+        color: #df4bff;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.07em;
+    }
+
+    .schema-nav-section p {
+        margin: 0;
+        color: #b7bdce;
+        line-height: 1.5;
+    }
+
+.schema-nav-callout {
+    display: flex;
+    gap: 0.7rem;
+    margin-top: 1.15rem;
+    padding: 0.8rem;
+    border: 1px solid #34334a;
+    border-radius: 4px;
+    background: #191725;
+    color: #bfc4d5;
+    line-height: 1.5;
+}
+
+.schema-nav-mark {
+    color: #60e7ff;
+}
+
+.schema-nav-callout strong {
+    color: #60e7ff;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+}
+
+.schema-nav-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 1.1rem;
+    border-top: 1px solid #343044;
+    background: #0b0d14;
+}
+
+    .schema-nav-footer > span {
+        color: #888da5;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+    }
+
+@media (max-width: 560px) {
+    .schema-nav-hero {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .schema-nav-image {
+        max-width: 240px;
+        margin: 0 auto;
+    }
+
+    .schema-nav-footer > span {
+        max-width: 60%;
+    }
 }

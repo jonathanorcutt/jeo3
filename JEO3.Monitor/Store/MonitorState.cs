@@ -1,3 +1,4 @@
+using JEO3.Contracts;
 using JEO3.Monitor.Models;
 
 namespace JEO3.Monitor
@@ -15,17 +16,17 @@ namespace JEO3.Monitor
         /// The service keeps polling; this is cleared on next successful sample.
         /// </summary>
         public string? LastError { get; set; }
-        public WaitRateSample? Latest => History.Count > 0 ? History[^1] : null;
+        public IWaitRateSample? Latest => History.Count > 0 ? History[^1] : null;
         /// <summary>
         /// Rolling ring buffer of the last N wait-rate samples, oldest first.
         /// Capacity controlled by SqlServerMonitorService.HistoryCapacity.
         /// </summary>
-        public IReadOnlyList<WaitRateSample> History { get; set; } = [];
-        public IReadOnlyList<ActiveRequestRow> ActiveRequests { get; set; } = [];
-        public IReadOnlyList<BlockingRow> BlockingChain { get; set; } = [];
-        public IReadOnlyList<DeadlockEvent> Deadlocks { get; set; } = [];
-        public IReadOnlyList<PerformanceMetricRow> PerformanceMetrics { get; set; } = [];
-        public IReadOnlyList<TopExpensiveQueryRow> TopExpensiveQueries { get; set; } = [];
+        public IReadOnlyList<IWaitRateSample> History { get; set; } = [];
+        public IReadOnlyList<IActiveRequestRow> ActiveRequests { get; set; } = [];
+        public IReadOnlyList<IBlockingRow> BlockingChain { get; set; } = [];
+        public IReadOnlyList<IDeadlockEvent> Deadlocks { get; set; } = [];
+        public IReadOnlyList<IPerformanceMetricRow> PerformanceMetrics { get; set; } = [];
+        public IReadOnlyList<ITopExpensiveQueryRow> TopExpensiveQueries { get; set; } = [];
         public List<double> SparklinePoints { get; set; } = new();
     }
 }

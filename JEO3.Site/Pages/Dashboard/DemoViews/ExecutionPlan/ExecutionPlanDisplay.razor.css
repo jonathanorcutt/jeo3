@@ -1,0 +1,26 @@
+.plan-viewer-wrapper {
+    padding: 1.5rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #0f172a;
+    color: #f8fafc;
+    min-height: 100vh;
+}
+
+.statement-sql-box {
+    background: #1e293b;
+    padding: 1rem;
+    border-radius: 6px;
+    border-left: 4px solid #38bdf8;
+    margin-bottom: 2rem;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.diagram-canvas {
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 2rem;
+    background: #020617;
+    border-radius: 8px;
+}

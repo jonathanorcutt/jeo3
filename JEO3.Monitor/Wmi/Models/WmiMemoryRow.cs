@@ -1,39 +1,41 @@
-﻿namespace JEO3.Monitor.Wmi
+﻿using JEO3.Contracts;
+
+namespace JEO3.Monitor.Wmi
 {
-    public sealed class WmiMemoryRow
+    public sealed class WmiMemoryRow : IWmiMemoryRow
     {
-        public UInt64 AllocatedBytesPersec { get; set; }
-        public string Caption { get; set; }
-        public string Description { get; set; }
-        public UInt64 FinalizationSurvivors { get; set; }
-        public UInt64 Frequency_Object { get; set; }
-        public UInt64 Frequency_PerfTime { get; set; }
-        public UInt64 Frequency_Sys100NS { get; set; }
-        public UInt64 Gen0heapsize { get; set; }
-        public UInt64 Gen0PromotedBytesPerSec { get; set; }
-        public UInt64 Gen1heapsize { get; set; }
-        public UInt64 Gen1PromotedBytesPerSec { get; set; }
-        public UInt64 Gen2heapsize { get; set; }
-        public UInt64 LargeObjectHeapsize { get; set; }
-        public String Name { get; set; }
-        public UInt64 NumberBytesinallHeaps { get; set; }
-        public UInt64 NumberGCHandles { get; set; }
-        public UInt64 NumberGen0Collections { get; set; }
-        public UInt64 NumberGen1Collections { get; set; }
-        public UInt64 NumberGen2Collections { get; set; }
-        public UInt64 NumberInducedGC { get; set; }
-        public UInt64 NumberofPinnedObjects { get; set; }
-        public UInt64 NumberofSinkBlocksinuse { get; set; }
-        public UInt64 NumberTotalcommittedBytes { get; set; }
-        public UInt64 NumberTotalreservedBytes { get; set; }
-        public UInt32 PercentTimeinGC { get; set; }
-        public UInt32 PercentTimeinGC_Base { get; set; }
-        public UInt64 ProcessID { get; set; }
-        public UInt64 PromotedFinalizationMemoryfromGen0 { get; set; }
-        public UInt64 PromotedMemoryfromGen0 { get; set; }
-        public UInt64 PromotedMemoryfromGen1 { get; set; }
-        public UInt64 Timestamp_Object { get; set; }
-        public UInt64 Timestamp_PerfTime { get; set; }
-        public UInt64 Timestamp_Sys100NS { get; set; }
+        public ulong AllocatedBytesPersec { get; set; }
+        public string Caption { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public ulong FinalizationSurvivors { get; set; }
+        public ulong Frequency_Object { get; set; }
+        public ulong Frequency_PerfTime { get; set; }
+        public ulong Frequency_Sys100NS { get; set; }
+        public ulong Gen0heapsize { get; set; }
+        public ulong Gen0PromotedBytesPerSec { get; set; }
+        public ulong Gen1heapsize { get; set; }
+        public ulong Gen1PromotedBytesPerSec { get; set; }
+        public ulong Gen2heapsize { get; set; }
+        public ulong LargeObjectHeapsize { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public ulong NumberBytesinallHeaps { get; set; }
+        public ulong NumberGCHandles { get; set; }
+        public ulong NumberGen0Collections { get; set; }
+        public ulong NumberGen1Collections { get; set; }
+        public ulong NumberGen2Collections { get; set; }
+        public ulong NumberInducedGC { get; set; }
+        public ulong NumberofPinnedObjects { get; set; }
+        public ulong NumberofSinkBlocksinuse { get; set; }
+        public ulong NumberTotalcommittedBytes { get; set; }
+        public ulong NumberTotalreservedBytes { get; set; }
+        public uint PercentTimeinGC { get; set; }
+        public uint PercentTimeinGC_Base { get; set; }
+        public ulong ProcessID { get; set; }
+        public ulong PromotedFinalizationMemoryfromGen0 { get; set; }
+        public ulong PromotedMemoryfromGen0 { get; set; }
+        public ulong PromotedMemoryfromGen1 { get; set; }
+        public ulong Timestamp_Object { get; set; }
+        public ulong Timestamp_PerfTime { get; set; }
+        public ulong Timestamp_Sys100NS { get; set; }
     }
 }

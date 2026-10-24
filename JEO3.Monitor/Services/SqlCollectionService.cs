@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Diagnostics;
+using JEO3.Contracts;
 using JEO3.Core;
 using JEO3.Extensions;
 using JEO3.Logging;
@@ -24,7 +25,7 @@ namespace JEO3.Monitor
         private readonly LinkedList<WaitRateSample> _history = new();
         private readonly List<DeadlockEvent> _deadlockHistory = [];
         private readonly LinkedList<MonitorHistorySample> _performanceHistory = [];
-        private Dictionary<string, WaitStatRow> _prevWaits = new();
+        private Dictionary<string, IWaitStatRow> _prevWaits = new();
         private DateTime _prevSampleUtc;
         private int _cycleCount = 0;
         private string _schemaName = string.Empty;
@@ -90,12 +91,14 @@ namespace JEO3.Monitor
             {
                 DateTime now = DateTime.Now;
                 var sw = Stopwatch.StartNew();
+                const int expensiveCadence = 5;
+                const int deadlockCadence = 15;
 
                 var provider = DatabaseProvider.From(_options.ProviderName, _options.ConnectionString);
                 _cycleCount++;
-                bool runExpensiveQueries = _cycleCount % 7 == 0;
-                bool runDeadlockQueries = _cycleCount % 50 == 0;
-                bool updateInstanceTimestamp = _cycleCount % 50 == 0;
+                bool runExpensiveQueries = _cycleCount % expensiveCadence == 0;
+                bool runDeadlockQueries = _cycleCount % deadlockCadence == 0;
+                bool updateInstanceTimestamp = _cycleCount % deadlockCadence == 0;
 
                 // These four calls are independent of each other, so kick them all off before awaiting any of
                 // them. Each gets its own provider instance so concurrent calls don't share a connection.
@@ -559,7 +562,7 @@ namespace JEO3.Monitor
                 }
             }
 
-            _prevWaits = lastRaw.ToDictionary(r => r.WaitType, r => r);
+            _prevWaits = lastRaw.ToDictionary(r => r.WaitType, r => (IWaitStatRow)r);
 
             // 🌟 Sync the cursor tracker using the real record time context
             _prevSampleUtc = currentRecordTime;

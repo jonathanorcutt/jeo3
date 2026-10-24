@@ -28,8 +28,6 @@ namespace JEO3.Site.Components
                 //RenderLineHighlight = "none",
                 Guides = new GuidesOptions() { Indentation = false },
                 MouseWheelZoom = true,
-                // Block the editor from downloading validation background workers for other languages
-                // --- flat 3.4.0 settings to suppress background workers ---
                 CodeLens = false,
                 SnippetSuggestions = "none",
                 QuickSuggestions = new QuickSuggestionsOptions { Other = "false", Comments = "false", Strings = "false" }

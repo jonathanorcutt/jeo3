@@ -432,3 +432,101 @@ export function disposeQueryCircular(containerId) {
     const c = el && window.echarts ? echarts.getInstanceByDom(el) : null;
     if (c) c.dispose();
 }
+
+
+// ---------------------------------------------------------------------------------
+// Treemap
+
+
+const groupedTreemaps = new Map();
+
+const DEFAULT_TREEMAP_PALETTE = ["#39ff14", "#00d9ff", "#ff3b6b", "#b388ff", "#ffd54f", "#ff8a3d", "#4dffdf", "#7c8cff"];
+
+export function renderGroupedTreemap(containerId, title, items, palette, dotNetRef) {
+    const container = document.getElementById(containerId);
+    if (!container || typeof echarts === "undefined") return;
+
+    let chart = echarts.getInstanceByDom(container);
+    if (!chart) chart = echarts.init(container);
+
+    const colors = palette && palette.length ? palette : DEFAULT_TREEMAP_PALETTE;
+    const colorOf = new Map();
+    const colorFor = key => {
+        if (!colorOf.has(key)) colorOf.set(key, colors[colorOf.size % colors.length]);
+        return colorOf.get(key);
+    };
+
+    // Items with a groupKey nest under a group node; items without one stand alone, each with its own color.
+    const groups = new Map();
+    const loose = [];
+    let total = 0;
+
+    for (const it of items || []) {
+        if (!it || !it.name) continue;
+        total += it.value;
+        const color = colorFor(it.groupKey || it.name);
+        const leaf = { name: it.name, value: it.value, subLabel: it.subLabel, index: it.index, itemStyle: { color } };
+
+        if (!it.groupKey) { loose.push(leaf); continue; }
+        if (!groups.has(it.groupKey)) groups.set(it.groupKey, { name: it.groupKey, itemStyle: { color }, children: [] });
+        groups.get(it.groupKey).children.push(leaf);
+    }
+
+    const fmt = v => Number(v || 0).toLocaleString("en-US", { maximumFractionDigits: 2 });
+    const mono = "Consolas, monospace";
+
+    chart.setOption({
+        backgroundColor: "#101318",
+        animationDurationUpdate: 450,
+        title: { text: title || "Treemap", left: "center", top: 8, textStyle: { color: "#e5eaf2", fontSize: 17, fontWeight: 500, fontFamily: mono } },
+        tooltip: {
+            confine: true,
+            backgroundColor: "rgba(15, 19, 28, 0.96)",
+            borderColor: "#56677f",
+            textStyle: { color: "#edf3ff", fontFamily: mono },
+            formatter: p => {
+                const d = p.data || {};
+                const pct = total > 0 ? (Number(p.value) / total * 100).toFixed(1) : "0.0";
+                return [`<strong>${escapeHtml(d.name || "")}</strong>`, d.subLabel ? escapeHtml(d.subLabel) : fmt(p.value), `${pct}% of total`].join("<br/>");
+            }
+        },
+        series: [{
+            type: "treemap",
+            left: 8, right: 8, top: 46, bottom: 26,
+            data: [...groups.values(), ...loose],
+            roam: false,
+            nodeClick: "zoomToNode",
+            breadcrumb: { show: true, height: 20, bottom: 2, itemStyle: { color: "#252c38", borderColor: "#101318", borderWidth: 1 }, textStyle: { color: "#cbd5e1", fontSize: 10 } },
+            squareRatio: 1.35,
+            label: { show: true, color: "#f5f7fb", fontFamily: mono, fontSize: 11, overflow: "truncate", formatter: p => p.data && p.data.subLabel ? `${p.name}\n${p.data.subLabel}` : p.name },
+            upperLabel: { show: true, height: 18, color: "#f5f7fb", fontSize: 11, fontFamily: mono },
+            itemStyle: { borderColor: "#101318", borderWidth: 2, gapWidth: 2 },
+            emphasis: { itemStyle: { borderColor: "#ffffff", borderWidth: 2 } },
+            levels: [{ itemStyle: { borderWidth: 0, gapWidth: 4 } }, { itemStyle: { borderWidth: 2, gapWidth: 2 } }]
+        }]
+    }, true);
+
+    // Leaves carry the index of the original item; group nodes don't, so only cell clicks call back.
+    chart.off("click");
+    chart.on("click", p => {
+        if (dotNetRef && p.data && p.data.index !== undefined)
+            dotNetRef.invokeMethodAsync("HandleCellClick", p.data.index);
+    });
+
+    const resizeObserver = new ResizeObserver(() => { if (!chart.isDisposed()) chart.resize(); });
+    resizeObserver.observe(container);
+
+    const previous = groupedTreemaps.get(containerId);
+    if (previous) previous.resizeObserver.disconnect();
+    groupedTreemaps.set(containerId, { chart, resizeObserver });
+}
+
+export function disposeGroupedTreemap(containerId) {
+    const state = groupedTreemaps.get(containerId);
+
+    if (state) {
+        state.resizeObserver.disconnect();
+        if (!state.chart.isDisposed()) state.chart.dispose();
+        groupedTreemaps.delete(containerId);
+    }
+}

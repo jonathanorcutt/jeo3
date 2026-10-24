@@ -1,0 +1,125 @@
+﻿@namespace JEO3.Site.Components.Charting
+@using JEO3.Generation.Models
+@inherits EChartBase
+
+<div id="@_containerId" class="schema-depth-3d"
+     style="width: @(Width); height: @(Height); padding: @(PaddingStyle); position:absolute; background-color:#000">
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "JEO3 Schema Depth";
+
+    private IQueryTracker Tracker => W.Result.DiagramResultDatabase.Tracker;
+
+    private readonly string _containerId = $"chart-jeo3-schemadepth3d-{Guid.NewGuid():N}";
+
+    private IJSObjectReference? _module;
+    private IQueryTracker? _renderedTracker;
+
+    protected override string JavascriptFilePath { get; set; } = "./js/echarts/charts3d.js";
+
+    protected override string? ContainerId => _containerId;
+
+    public SimplexNoise3D()
+    {
+        Height = "100%";
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (IsDisposed)
+            return;
+
+        try
+        {
+            _module ??= await JSRuntime.InvokeAsync<IJSObjectReference>(
+                "import", JavascriptFilePath);
+
+            if (IsDisposed)
+                return;
+
+            var tracker = Tracker;
+
+            if (!ReferenceEquals(tracker, _renderedTracker))
+            {
+                _renderedTracker = tracker;
+                await BuildSchemaDepth3DAsync(tracker);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"JEO3SchemaDepth3D render failed: {ex}");
+        }
+    }
+
+    private async Task BuildSchemaDepth3DAsync(IQueryTracker tracker)
+    {
+        if (IsDisposed || _module == null)
+            return;
+
+        var nodes = tracker.Nodes
+            .Prepend(tracker.Root)
+            .Where(n => n != null)
+            .DistinctBy(n => n.Id)
+            .ToList();
+
+        var payload = nodes
+            .Where(n => n.Table != null)
+            .GroupBy(n => new
+            {
+                SchemaName = n.Table!.SchemaName ?? "",
+                n.Depth
+            })
+            .Select(g => new
+            {
+                schemaName = g.Key.SchemaName,
+                depth = g.Key.Depth,
+                tableCount = g
+                    .Select(n => n.Table!.TablePath)
+                    .Distinct()
+                    .Count()
+            })
+            .ToList();
+
+        try
+        {
+            await _module.InvokeVoidAsync(
+                "renderQuerySchemaDepth3D",
+                _containerId,
+                Title,
+                payload);
+        }
+        catch (JSException ex)
+        {
+            Console.Error.WriteLine($"JEO3SchemaDepth3D JS error: {ex.Message}");
+        }
+    }
+
+    protected override async ValueTask OnDisposeAsync()
+    {
+        if (_module == null)
+            return;
+
+        try
+        {
+            await _module.InvokeVoidAsync("disposeQuerySchemaDepth3D", _containerId);
+        }
+        catch
+        {
+            // JS runtime can already be gone during circuit shutdown.
+        }
+
+        try
+        {
+            await _module.DisposeAsync();
+        }
+        catch
+        {
+            // Ignore module disposal during shutdown.
+        }
+
+        _module = null;
+    }
+}

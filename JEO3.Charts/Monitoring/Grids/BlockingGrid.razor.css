@@ -1,0 +1,8 @@
+.dashboard-pane-body-container-scroll
+{
+    background-color: var(--jeo-gradient-black) !important;
+}
+
+.rz-group-header{
+    padding:3px 3px 9px 3px !important;
+}

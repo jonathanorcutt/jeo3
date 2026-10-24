@@ -1,0 +1,222 @@
+﻿@using JEO3.Contracts
+@using JEO3.Monitor
+@inherits MonitorBase
+@namespace JEO3.Monitor.ECharts
+
+@if (ActiveRequests is not null && ActiveRequests.Count > 0)
+{
+	<div class="monitor-panel">
+		@if (LabelText != string.Empty)
+		{
+			<div class="monitor-panel-title">
+				<label class="dashboard-monitor-label">
+					<img src="../img/vs_icons/AzureSQLDatabase_color_16x.png" width="18" height="18" class="fa-mr-7" />
+					@LabelText
+				</label>
+				<span class="monitor-section-badge">
+					@OrderedRequests.Count
+				</span>
+@* 				@if (ActiveRequests.Any(r => r.IsBlocked))
+				{
+					<span class="monitor-section-badge monitor-badge-warn">
+						@ActiveRequests.Count(r => r.IsBlocked) BLOCKED
+					</span>
+				} *@
+			</div>
+		}
+
+		<div class="dashboard-pane-container" style="height:@(Height); width:@(Width)">
+			<div class="dashboard-pane-body-container-scroll">
+
+				<RadzenDataGrid Data="@OrderedRequests"
+								TItem="IActiveRequestRow"
+								AllowSorting="true"
+								AllowFiltering="true"
+								AllowColumnResize="true"
+								AllowColumnReorder="true"
+								Density="Density.Compact"
+								AllowAlternatingRows="true"
+								AllowVirtualization="true"
+								RowSelect="@(async (t) => { await OnSelectionChanged.InvokeAsync(t); })"
+								Style="width: 100%; font-family:">
+
+					<Columns>
+						<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.DatabaseName)" Title="Database" Width="70px" />
+						<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.HostName)" Title="Host" Width="70px" />
+						<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.LoginName)" Title="Login" Width="70px" />
+
+						<!-- Engine Status & Operations -->
+						<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.Status)" Title="Status" TextAlign="TextAlign.Center" Width="75px">
+							<Template Context="r">
+								<span style="color: @(r.Status == "running" ? "#4CAF50" : r.Status == "suspended" ? "#FF9800" : "#888"); font-weight: bold;">
+									@r.Status
+								</span>
+							</Template>
+						</RadzenDataGridColumn>
+
+						
+						<!-- Code / Payload Statement -->
+						<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.StatementText)" Title="Active Statement" Width="220px">
+							<Template Context="r">
+								<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11px; color: #aaa;" title="@r.StatementText">
+									@r.StatementText
+								</div>
+							</Template>
+						</RadzenDataGridColumn>
+
+						<!-- Operational Metrics (With inline mini bar meters) -->
+						<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.WaitTimeSec)" Title="Wait (sec)" Width="70px">
+							<Template Context="r">
+								@if (r.WaitTimeSec > 0)
+								{
+									<div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+										<span style="font-size: 11px; margin-right: 4px; min-width: 40px; text-align: right;">@r.WaitTimeSec.ToString("N1")s</span>
+										<div style="flex-grow: 1; background: #222; border-radius: 2px; overflow: hidden; height: 8px; border: 1px solid #333;">
+											<RadzenProgressBar Value="@((r.WaitTimeSec / MaxWait) * 100)" ShowValue="false" Style="height: 6px; --rz-progressbar-value-background-color: #D32F2F;" />
+										</div>
+									</div>
+								}
+								else
+								{
+									<span style="color: #555; font-size: 11px;">0.0s</span>
+								}
+							</Template>
+						</RadzenDataGridColumn>
+
+						<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.CpuTimeMs)" Title="CPU" Width="30px">
+							<Template Context="r">
+								@if (r.CpuTimeMs > 0)
+								{
+									<div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+										<span style="font-size: 11px; margin-right: 4px; min-width: 45px; text-align: right;">@r.CpuTimeMs.ToString("N0")</span>
+										<div style="flex-grow: 1; background: #222; border-radius: 2px; overflow: hidden; height: 8px; border: 1px solid #333;">
+											<RadzenProgressBar Value="@(((double)r.CpuTimeMs / MaxCpu) * 100)" ShowValue="false" Style="height: 6px; --rz-progressbar-color: #00bcd4; --rz-progressbar-value-background-color: #2675FF;" />
+										</div>
+									</div>
+								}
+								else
+								{
+									<span style="color: #555; font-size: 11px;">0</span>
+								}
+							</Template>
+						</RadzenDataGridColumn>
+
+						<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.LogicalReads)" Title="Reads" Width="30px">
+							<Template Context="r">
+								@if (r.LogicalReads > 0)
+								{
+									<div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+										<span style="font-size: 11px; margin-right: 4px; min-width: 40px; text-align: right;">@FormatLargeNumbers(r.LogicalReads)</span>
+										<div style="flex-grow: 1; background: #222; border-radius: 2px; overflow: hidden; height: 8px; border: 1px solid #333;">
+											<RadzenProgressBar Value="@(((double)r.LogicalReads / MaxReads) * 100)" ShowValue="false" Style="height: 6px; --rz-progressbar-value-background-color: #673AB7;" />
+										</div>
+									</div>
+								}
+								else
+								{
+									<span style="color: #555; font-size: 11px;">0</span>
+								}
+							</Template>
+						</RadzenDataGridColumn>
+
+						<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.Writes)" Title="Writes" TextAlign="TextAlign.Right" Width="30px">
+							<Template Context="r">
+								<span style="color: @(r.Writes > 0 ? "#E91E63" : "#555");">@r.Writes.ToString("N0")</span>
+							</Template>
+						</RadzenDataGridColumn>
+
+						@*
+							<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.Command)" Title="Command" Width="80px" /> 
+						<!-- Core Identification -->
+							<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.SessionId)" Title="SPID" TextAlign="TextAlign.Center" Width="45px">
+							<Template Context="r">
+								<span style="font-weight: bold; color: #2675FF;">@r.SessionId</span>
+							</Template>
+						</RadzenDataGridColumn> 
+						<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.WaitType)" Title="Wait Type" Width="100px">
+							<Template Context="r">
+								<span style="color: @(r.WaitType != "MISCELLANEOUS" && r.WaitType != "UNKNOWN" ? "#FF4D4D" : "#eee"); font-size: 11px;">
+									@r.WaitType
+								</span>
+							</Template>
+						</RadzenDataGridColumn> 
+
+						<!-- Progress and Blocking Relations -->
+ 						<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.PercentComplete)" Title="% Done" Width="85px">
+							<Template Context="r">
+								@if (r.PercentComplete > 0)
+								{
+									<RadzenProgressBar Value="@r.PercentComplete" ShowValue="true" Style="height: 14px; font-size: 10px; --rz-progressbar-value-background-color: #4CAF50;" />
+								}
+								else
+								{
+									<span style="color: #555; font-size: 11px;">—</span>
+								}
+							</Template>
+						</RadzenDataGridColumn> 
+						<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.OpenTxnCount)" Title="Txns" TextAlign="TextAlign.Center" Width="50px">
+							<Template Context="r">
+								<span style="color: @(r.OpenTxnCount > 0 ? "#00FFFF" : "#555"); font-weight: @(r.OpenTxnCount > 0 ? "bold" : "normal");">
+									@r.OpenTxnCount
+								</span>
+							</Template>
+						</RadzenDataGridColumn> 
+						<RadzenDataGridColumn TItem="IActiveRequestRow" Property="@nameof(IActiveRequestRow.BlockingSessionId)" Title="Blocked By" TextAlign="TextAlign.Center" Width="75px">
+							<Template Context="r">
+								@if (r.BlockingSessionId > 0)
+								{
+									<span style="font-weight: bold; color: #FF4D4D;">@r.BlockingSessionId</span>
+								}
+								else
+								{
+									<span style="color: #555;">—</span>
+								}
+							</Template>
+						</RadzenDataGridColumn> *@
+					</Columns>
+				</RadzenDataGrid>
+
+			</div>
+		</div>
+	</div>
+}
+
+@code {
+	[Parameter] public EventCallback<IActiveRequestRow> OnSelectionChanged { get; set; }
+	[Parameter] public EventCallback<(object? Id, string? Name)> OnRowClick { get; set; }
+	private IReadOnlyList<IActiveRequestRow> OrderedRequests = Array.Empty<IActiveRequestRow>();
+	private IActiveRequestRow selectedQueryRow { get; set; }
+
+	private double MaxWait => OrderedRequests?.Max(x => x.WaitTimeSec) ?? 1.0;
+	private long MaxCpu => OrderedRequests?.Max(x => x.CpuTimeMs) ?? 1;
+	private long MaxReads => OrderedRequests?.Max(x => x.LogicalReads) ?? 1;
+
+	protected override async Task RenderInitialAsync(IMonitorSnapshot initial)
+	{
+		if (initial.ActiveRequests != null)
+		{
+			OrderedRequests = initial.ActiveRequests.OrderByDescending(v => v.StatementText != null && v.StatementText.Length > 0 ? 1 : 0).ThenByDescending(v => v.WaitTimeSec).ToList();
+			selectedQueryRow = OrderedRequests.Count > 0 ? OrderedRequests.First() : selectedQueryRow;
+			await OnSelectionChanged.InvokeAsync(OrderedRequests.FirstOrDefault());
+
+			await InvokeAsync(StateHasChanged);
+		}
+	}
+
+	protected override async Task AppendDeltasAsync(IMonitorDeltaResponse delta)
+	{
+		if (delta.ActiveRequests != null && delta.ActiveRequests.Count > 0)
+		{
+			OrderedRequests = delta.ActiveRequests.OrderByDescending(v => v.StatementText != null && v.StatementText.Length > 0 ? 1 : 0).ThenByDescending(v => v.WaitTimeSec).ToList();
+			await InvokeAsync(StateHasChanged);
+		}
+	}
+
+	private string FormatLargeNumbers(long number)
+	{
+		if (number >= 1000000000) return (number / 1000000000D).ToString("0.0") + "B";
+		if (number >= 1000000) return (number / 1000000D).ToString("0.0") + "M";
+		if (number >= 1000) return (number / 1000D).ToString("0.0") + "K";
+		return number.ToString("#,##0");
+	}
+}

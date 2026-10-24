@@ -1,0 +1,58 @@
+﻿@using System.IO
+@using System.Xml.Serialization
+@using JEO3.Monitor
+
+@namespace JEO3.Site.Dashboard
+
+<div class="plan-node-container">
+    <div class="plan-card @GetNodeClass(Node.PhysicalOp)">
+        <div class="node-header">
+            <span class="op-icon">@GetOperatorIcon(Node.PhysicalOp)</span>
+            <span class="op-title">@Node.PhysicalOp</span>
+        </div>
+        
+        @if (Node.TargetObjects?.Any() == true)
+        {
+            <div class="node-target">
+                @Node.TargetObjects.First().TableName
+                <span class="idx-name">@Node.TargetObjects.First().IndexName</span>
+            </div>
+        }
+
+        <div class="node-metrics">
+            <div class="metric">Cost: <strong>@Node.SubtreeCost.ToString("F4")</strong></div>
+            <div class="metric">Rows: <strong>@Node.EstimateRows.ToString("N0")</strong></div>
+        </div>
+    </div>
+
+    @if (Node.ChildNodes?.Any() == true)
+    {
+        <div class="plan-children">
+            @foreach (var child in Node.ChildNodes)
+            {
+                <ExecutionPlanVisualizer Node="child" />
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public RelOpNode Node { get; set; } = null!;
+
+    private string GetNodeClass(string op) => op.ToLower() switch
+    {
+        var x when x.Contains("seek") || x.Contains("scan") => "card-data-access",
+        var x when x.Contains("join") => "card-join",
+        var x when x.Contains("sort") || x.Contains("aggregate") => "card-compute",
+        _ => "card-generic"
+    };
+
+    private string GetOperatorIcon(string op) => op.ToLower() switch
+    {
+        var x when x.Contains("seek") => "🔍",
+        var x when x.Contains("scan") => "📋",
+        var x when x.Contains("join") => "🤝",
+        var x when x.Contains("sort") => "↕️",
+        _ => "⚡"
+    };
+}

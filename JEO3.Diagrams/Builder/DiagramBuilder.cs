@@ -126,7 +126,7 @@ namespace JEO3.Diagrams
                     Zoom = { Enabled = true },
                     AllowPanning = true,
                     GridSnapToCenter = true,
-                    GridSize = 7
+                    GridSize = 4
                 };
 
                 var diagram = new BlazorDiagram(options);
@@ -357,7 +357,7 @@ namespace JEO3.Diagrams
                     Zoom = { Enabled = true },
                     AllowPanning = true,
                     GridSnapToCenter = true,
-                    GridSize = 7
+                    GridSize = 4
                 };
 
                 var diagram = new BlazorDiagram(options);

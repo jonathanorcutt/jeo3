@@ -205,7 +205,7 @@
 						<RadzenDataGridColumn Property="@nameof(IColumn.TablePath)" Title="Table" Width="130px" Resizable="true" Frozen="@frozen" />
 						<RadzenDataGridColumn Property="@nameof(IColumn.Name)" Title="Column" FilterValue="@W.UI.Grids.SearchColumnName" Width="130px" Resizable="true" Frozen="@frozen2">
 							<FilterTemplate>
-								<input type="text" class="rz-textbox filter-input-full-width" @bind-value="@W.UI.Grids.SearchColumnName" @bind-value:event="oninput" @onchange="@(args => OnColumnSearchFilterChange(args.Value))" />
+								<input type="text" class="rz-textbox filter-input-full-width" @bind-value="@W.UI.Grids.SearchColumnName" @bind-value:event="oninput" @onchange="@(async (args) => await OnColumnSearchFilterChange(args.Value))" />
 							</FilterTemplate>
 						</RadzenDataGridColumn>
 						<RadzenDataGridColumn Property="@nameof(IColumn.OrdinalPosition)" Title="#" Width="50px" />

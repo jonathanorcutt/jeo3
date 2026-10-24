@@ -31,7 +31,7 @@
 }
 
 .matrix-text-label {
-    margin-left:125px !important;
+    margin-left:185px !important;
     font-size: 70px !important;
 }
 
@@ -39,7 +39,7 @@
     content: attr(data-text);
     position: absolute;
     top: 0;
-    left: 0;
+    left: 0;dge
     width: 100%;
     height: 100%;
     animation: glitch 2s infinite;

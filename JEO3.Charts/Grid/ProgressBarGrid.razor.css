@@ -1,0 +1,34 @@
+/* CSS for JEOGrid component */
+
+.jeo-grid .rz-column-title-content {
+    font-size: 8pt;
+}
+
+.jeo-grid .rz-col-icon button {
+    padding: 0px !important;
+    min-height: 15px !important;
+    height: 20px !important;
+}
+
+.jeo-grid {
+    width: 100% !important;
+}
+    .jeo-grid .rz-grid-table th:first-child,
+    .jeo-grid .rz-grid-table td:first-child {
+        min-width: 200px !important;
+        width: 200px !important;
+    }
+
+.link-bold-pointer {
+    font-weight: bolder;
+    cursor: pointer;
+    color: lime !important;
+    min-width: 250px !important;
+    width: 250px !important;
+}
+
+
+/* Highlights the full cell when hovering over the link inside it */
+tr.rz-data-row td[role="gridcell"]:first-child:has(.link-bold-pointer:hover) {
+    background-color: rgba(0, 100, 255, 0.8) !important;
+}

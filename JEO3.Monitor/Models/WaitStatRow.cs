@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using JEO3.Contracts;
 
 namespace JEO3.Monitor
 {
@@ -7,7 +8,7 @@ namespace JEO3.Monitor
     /// One row from sys.dm_os_wait_stats as captured by WaitStatsSnapshotQuery.
     /// Two successive snapshots are diffed by SqlServerMonitorService to compute rates.
     /// </summary>
-    public sealed class WaitStatRow
+    public sealed class WaitStatRow : IWaitStatRow
     {
         [JsonPropertyName("T")]
         public DateTime Timestamp { get; set; }

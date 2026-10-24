@@ -517,6 +517,10 @@ namespace JEO3.Generation
 
             switch (_options.Strategy)
             {
+                case GenerationMethod.PlanDrivenExecution:
+                    methodType = "JEO3 Metric";
+                    methodInfo = $"The number of unique tables reachable from a root table before revisiting an already visited table becomes necessary to discover further relationships. ";
+                    break;
                 case GenerationMethod.FullGraph:
                     methodType = "Full Graph Traversal";
                     methodInfo = $"Traversing from the root, Up and down independently from every discovered table (true graph traversal)";
@@ -528,10 +532,6 @@ namespace JEO3.Generation
                 case GenerationMethod.UpThenDown:
                     methodType = "Up Then Down Traversal";
                     methodInfo = $"Traversing from the root, Up traversal first, then down traversal from every discovered node";
-                    break;
-                case GenerationMethod.PlanDrivenExecution:
-                    methodType = "Constrained Recursive Graph Normalization";
-                    methodInfo = $"Ancestral State Tracking: Prevents infinite loops by forbidding re-entry into current lineage branches.\r\n--    Terminal Leaf Collapse: Eliminates visual noise by identifying duplicate schema types at the furthest descent.\r\n";
                     break;
                 case GenerationMethod.ExtendedDiscovery:
                     methodType = "Extended Discovery";

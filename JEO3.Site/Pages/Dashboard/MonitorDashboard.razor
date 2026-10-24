@@ -1,31 +1,39 @@
-﻿@using BlazorMonaco.Editor
+﻿@using BlazorMonaco
+@using BlazorMonaco.Editor
+@using JEO3.Contracts
 @using JEO3.Core
 @using JEO3.Generation
 @using JEO3.Generation.Models
 @using JEO3.Logging
 @using JEO3.Monitor.ECharts
 @using JEO3.Monitor.Models
+@using JEO3.Providers.Extensions
+@using JEO3.Site.Components.Icons
 @using JEO3.Site.Dashboard
 @using JEO3.Site.Extensions
 @using JEO3.Site.Services
-@using JEO3.Providers.Extensions
 @inject ConnectionService ConnectionService
+@inject DialogService DialogService
+@inject IJSRuntime JS
 @inject WSWorkspace W
 
 @namespace JEO3.Site.Components.ECharts
 
 <div class="dashboard-pane-container">
 	<div class="dashboard-pane-body-container-scroll">
-		@* 
-		<RadzenButton class="rz-shadow-4" Variant="Variant.Filled" Shade="Shade.Darker" Size="ButtonSize.Small" Click="@(async (args) => await GenerateTraffic())" Style="background:var(--jeo-gradient-blue)" Disabled="@W.Observation.Traffic.IsRunning"> <i class="fa-solid fa-warning fa-mr2"></i>🚨 Generate Traffic</RadzenButton>
- *@
-		@* 		@if (W.Observation.Traffic.IsRunning)
+
+		@*@if (System.Environment.MachineName == "MSI")
+		{
+			<RadzenButton class="rz-shadow-4" Variant="Variant.Filled" Shade="Shade.Darker" Size="ButtonSize.Small" Click="@(async (args) => await GenerateTraffic())" Style="background:var(--jeo-gradient-blue)" Disabled="@W.Observation.Traffic.IsRunning"> <i class="fa-solid fa-warning fa-mr2"></i>🚨 Generate Traffic</RadzenButton>
+		} *@
+
+		@if (W.Observation.Traffic.IsRunning)
 		{
 			<RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" Style="margin-left: 10px;">
 				<RadzenLabel Text="@W.Observation.Traffic.CurrentTable" />
 				<RadzenLabel Text="@W.Observation.Traffic.PercentCompleted" />
 			</RadzenStack>
-		} *@
+		}
 
 		<div class="monitor">
 			<div class="monitor-header">
@@ -39,10 +47,10 @@
 
 				<CascadingValue Value="@_selectedTheme">
 					<div class="monitor-grid">
-						<WaitRateChart Width="1495px" Height="300px" LabelText="OVERVIEW" />
+						<WaitRateChart Width="1495px" Height="270px" LabelText="OVERVIEW" />
 					</div>
 					<div class="monitor-grid">
-						<TopExpensiveQueriesGrid @ref="gridTopExpensiveQueries" Height="170px" Width="1500px" LabelText="TOP EXPENSIVE QUERIES" OnSelectionChanged="SelectedQueryChanged"></TopExpensiveQueriesGrid>
+						<TopExpensiveQueriesGrid @ref="gridTopExpensiveQueries" Height="250px" Width="1500px" LabelText="TOP EXPENSIVE QUERIES" OnSelectionChanged="SelectedQueryPlanChanged" OnDataChanged="SelectedQueryChanged"></TopExpensiveQueriesGrid>
 					</div>
 					<div class="monitor-grid" style="width:1495px">
 						<RadzenAccordion Style="width:1495px">
@@ -51,10 +59,10 @@
 													 ExpandTitle="Show Selected Query" CollapseAriaLabel=""
 													 ExpandAriaLabel="Show The Selected Expensive Query" class="monitor-accordion">
 									<RadzenStack Gap="1rem">
-										<div class="dashboard-query-editor-container" style="min-height:100px; height:275px">
+										<div class="dashboard-query-editor-container" style="min-height:100px; height:200px">
 
 											<div class="grid-query-editor" oncontextmenu="return false;" onpointerup="if(event.button === 2) { this.releasePointerCapture(event.pointerId); }" style="background:var(--jeo-gradient-black)">
-												<StandaloneCodeEditor @key=@("query-editor-instance-expensive-queries") CssClass="txtQueryEditor" ConstructionOptions="EditorOptionsTopExpensiveQueries"
+												<StandaloneCodeEditor @key=@("query-editor-instance-expensive-queries") CssClass="txtQueryEditor" ConstructionOptions="EditorOptions"
 																	  @ref="queryEditorTopExpensiveQueries" OnDidInit="OnEditorInitializedTopExpensiveQueries" OnDidChangeModelContent="OnEditorContentChangedTopExpensiveQueries" />
 											</div>
 										</div>
@@ -79,7 +87,58 @@
 					</div>
 
 					<div class="monitor-grid">
-						<ActiveRequestsGrid Width="1495px" Height="120px" LabelText="ACTIVE REQUESTS" />
+						<ActiveRequestsGrid Width="1495px" Height="120px" LabelText="ACTIVE REQUESTS" OnSelectionChanged="SelectedActiveRequestsChanged" />
+					</div>
+					<div class="monitor-grid" style="width:1495px">
+						<RadzenAccordion Style="width:1495px">
+							<Items>
+								<RadzenAccordionItem Text="View Active Request Query.." Icon="account_balance_wallet" CollapseTitle="Hide Query" Selected="true"
+													 ExpandTitle="Show Selected Query" CollapseAriaLabel=""
+													 ExpandAriaLabel="Show The Selected Active Request Query" class="monitor-accordion">
+									<RadzenStack Gap="1rem">
+										<div class="dashboard-query-editor-container" style="min-height:100px; height:175px">
+
+											<div class="grid-query-editor" oncontextmenu="return false;" onpointerup="if(event.button === 2) { this.releasePointerCapture(event.pointerId); }" style="background:var(--jeo-gradient-black)">
+												<StandaloneCodeEditor @key=@("query-editor-instance-active-request-queries") CssClass="txtQueryEditor" ConstructionOptions="EditorOptions"
+																	  @ref="queryEditorActiveRequests" OnDidInit="OnEditorInitializedActiveRequests" OnDidChangeModelContent="OnEditorContentChangedActiveRequests" />
+											</div>
+										</div>
+									</RadzenStack>
+								</RadzenAccordionItem>
+							</Items>
+						</RadzenAccordion>
+					</div>
+
+					<div class="monitor-grid">
+						<BlockingChart Width="735px" Height="200px" LabelText="BLOCKING CHAIN" />
+						<DeadlockChart Width="735px" Height="200px" LabelText="DEADLOCKS" />
+					</div>
+					<div class="monitor-grid">
+						<BlockingGrid @ref="gridBlocking" Height="250px" Width="1500px" LabelText="BLOCKING SESSIONS" OnSelectionChanged="SelectedBlockingSessionChanged"></BlockingGrid>
+					</div>
+
+					<div class="monitor-grid" style="width:1495px">
+						@* 						<button type="button" @onclick="ShowExecutionPlan" title="View JEO3 Metric Definition" class="info-icon-btn" style="margin: 0px 15px 0px 0px">
+							<VSIcon Type="VSIconType.VSIcons" Name="StatusInformation_cyan_16x" Width="16" Height="16" Extension=" ImageType.png" Class=""></VSIcon>
+						</button> *@
+
+						<RadzenAccordion Style="width:1495px">
+							<Items>
+								<RadzenAccordionItem Text="View Blocking Query.." Icon="account_balance_wallet" CollapseTitle="Hide Query" Selected="true"
+													 ExpandTitle="Show Selected Query" CollapseAriaLabel=""
+													 ExpandAriaLabel="Show The Selected Blocking Query" class="monitor-accordion">
+									<RadzenStack Gap="1rem">
+										<div class="dashboard-query-editor-container" style="min-height:100px; height:175px">
+
+											<div class="grid-query-editor" oncontextmenu="return false;" onpointerup="if(event.button === 2) { this.releasePointerCapture(event.pointerId); }" style="background:var(--jeo-gradient-black)">
+												<StandaloneCodeEditor @key=@("query-editor-instance-blocking-queries") CssClass="txtQueryEditor" ConstructionOptions="EditorOptions"
+																	  @ref="queryEditorBlocking" OnDidInit="OnEditorInitializedBlocking" OnDidChangeModelContent="OnEditorContentChangedBlocking" />
+											</div>
+										</div>
+									</RadzenStack>
+								</RadzenAccordionItem>
+							</Items>
+						</RadzenAccordion>
 					</div>
 
 					<label class="dashboard-monitor-label">Sample Charts</label>
@@ -87,11 +146,7 @@
 						<WaitRateStackedAreaChart Width="1495px" Height="200px" LabelText="IO/MEM/CPU/WAIT BAR" />
 					</div>
 
-					<div class="monitor-grid">
-						<BlockingChart Width="735px" Height="200px" LabelText="BLOCKING CHAIN" />
-						<DeadlockChart Width="735px" Height="200px" LabelText="DEADLOCKS" />
-					</div>
-					<div class="monitor-grid" style="margin-bottom:100px">
+					<div class="monitor-grid" style="height:100px;">
 						@* <RadzenWaitRateChart Width="1480px" Height="250px" LabelText="WAIT RATE RADZEN" /> *@
 					</div>
 				</CascadingValue>
@@ -170,13 +225,17 @@
 
 	private readonly HashSet<string> _expandedSqlHandleHexs = new();
 	private TopExpensiveQueriesGrid gridTopExpensiveQueries;
+	private ActiveRequestsGrid gridActiveRequests;
+	private BlockingGrid gridBlocking;
 
 	private StandaloneCodeEditor queryEditorTopExpensiveQueries;
-	private StandaloneEditorConstructionOptions EditorOptionsTopExpensiveQueries(StandaloneCodeEditor editor)
+	private StandaloneCodeEditor queryEditorActiveRequests;
+	private StandaloneCodeEditor queryEditorBlocking;
+
+	private StandaloneEditorConstructionOptions EditorOptions(StandaloneCodeEditor editor)
 	{
 		var br = "\r\n";
-		var defaultText = br + br + br + br + br + "\t// Click on a query to get started :) ...  " + br + br + br + br + br
-			+ string.Join(br, A5C11.GetAsciiArt("JEO3.com", false).Split('\n').Select(v => " " + v.Replace("\r", "").Replace(" ", " ")));
+		var defaultText = br + string.Join(br, A5C11.GetAsciiArt("JEO3.com", false).Split('\n').Select(v => " " + v.Replace("\r", "").Replace(" ", " ")));
 		return new StandaloneEditorConstructionOptions
 		{
 			AutomaticLayout = true,
@@ -186,12 +245,9 @@
 			FontFamily = "Consolas, Cascadia Mono, Cascadia Code, Courier New, monospace",
 			Language = "sql",
 			Theme = "vs",
-			//LineNumbers = "off",
 			//RenderLineHighlight = "none",
 			Guides = new GuidesOptions() { Indentation = false },
 			MouseWheelZoom = true,
-			// Block the editor from downloading validation background workers for other languages
-			// --- flat 3.4.0 settings to suppress background workers ---
 			CodeLens = false,
 			SnippetSuggestions = "none",
 			QuickSuggestions = new QuickSuggestionsOptions { Other = "false", Comments = "false", Strings = "false" }
@@ -208,30 +264,173 @@
 		StateHasChanged();
 	}
 
+	private MonacoThemeData GetTheme()
+	{
+		return new MonacoThemeData
+		{
+			Base = "vs-dark",
+			Inherit = true,
+			Colors = new Dictionary<string, string>
+			{
+				{ "editor.background", "#000000" },
+				{ "editor.foreground", "#00FF00" },
+				{ "editorCursor.foreground", "#00FF00" },
+				{ "editor.lineHighlightBackground", "#000000" }
+			},
+			Rules = new List<MonacoTokenRule>
+			{
+				new MonacoTokenRule { Token = "", Foreground = "00FF00" }
+			}
+		};
+	}
+
+	private async Task ApplyAs400ThemeTopExpensive()
+	{
+		var as400Theme = GetTheme();
+
+		// Define the theme payload in JS and force the switch
+		await JS.InvokeVoidAsync("monacoInterop.defineAndSetTheme", "as400", as400Theme);
+		await queryEditorTopExpensiveQueries.SetPosition(new Position() { LineNumber = 1, Column = 0 }, "");
+		await queryEditorTopExpensiveQueries.Focus();
+	}
+
+	private async Task ApplyAs400ThemeBlocking()
+	{
+		var as400Theme = GetTheme();
+
+		// Define the theme payload in JS and force the switch
+		await JS.InvokeVoidAsync("monacoInterop.defineAndSetTheme", "as400", as400Theme);
+		await queryEditorBlocking.SetPosition(new Position() { LineNumber = 1, Column = 0 }, "");
+		await queryEditorBlocking.Focus();
+	}
+
+	private async Task ApplyAs400ThemeActiveRequests()
+	{
+		var as400Theme = GetTheme();
+
+		// Define the theme payload in JS and force the switch
+		await JS.InvokeVoidAsync("monacoInterop.defineAndSetTheme", "as400", as400Theme);
+		await queryEditorActiveRequests.SetPosition(new Position() { LineNumber = 1, Column = 0 }, "");
+		await queryEditorActiveRequests.Focus();
+	}
+
 	private void OnEditorContentChangedTopExpensiveQueries() { }
+	private void OnEditorContentChangedActiveRequests() { }
+	private void OnEditorContentChangedBlocking() { }
+
 	private async Task OnEditorInitializedTopExpensiveQueries()
 	{
 		isMonacoEditorReady = true;
+		await ApplyAs400ThemeTopExpensive();
 		await InvokeAsync(StateHasChanged);
 	}
 
-	private async Task SelectedQueryChanged(TopExpensiveQueryRow qry)
+	private async Task OnEditorInitializedActiveRequests()
+	{
+		isMonacoEditorReady = true;
+		await ApplyAs400ThemeActiveRequests();
+		await InvokeAsync(StateHasChanged);
+	}
+
+	private async Task OnEditorInitializedBlocking()
+	{
+		isMonacoEditorReady = true;
+		await ApplyAs400ThemeBlocking();
+		await InvokeAsync(StateHasChanged);
+	}
+
+	private async Task SelectedQueryChanged(ITopExpensiveQueryRow qry)
 	{
 		if (isMonacoEditorReady == false || queryEditorTopExpensiveQueries == null) { return; }
 		await queryEditorTopExpensiveQueries.SetValue(qry?.QueryText ?? string.Empty);
+		await InvokeAsync(StateHasChanged);
 	}
 
-	private void OnTopExpensiveQueryRowExpand(TopExpensiveQueryRow blocker)
+	private async Task SelectedQueryPlanChanged(ITopExpensiveQueryRow qry)
+	{
+		if (isMonacoEditorReady == false || queryEditorTopExpensiveQueries == null) { return; }
+		
+		if (qry != null && qry.PlanHandleHex != null && qry.StatementStartOffset != null && qry.StatementEndOffset != null)
+		{
+			var x = await GetPlan(qry.PlanHandleHex, qry.StatementStartOffset, qry.StatementEndOffset);
+
+			if (x != null)
+			{
+				await ShowExecutionPlanDialog(x);
+			}
+		}
+	}
+
+	private void OnTopExpensiveQueryRowExpand(ITopExpensiveQueryRow blocker)
 	{
 		_expandedSqlHandleHexs.Add(blocker.SqlHandleHex);
 	}
 
-	private void OnTopExpensiveQueryRowCollapse(TopExpensiveQueryRow blocker)
+	private void OnTopExpensiveQueryRowCollapse(ITopExpensiveQueryRow blocker)
 	{
 		_expandedSqlHandleHexs.Remove(blocker.SqlHandleHex);
 	}
 
+	private async Task SelectedActiveRequestsChanged(IActiveRequestRow qry)
+	{
+		if (isMonacoEditorReady == false || queryEditorActiveRequests == null) { return; }
+		await queryEditorActiveRequests.SetValue(qry?.StatementText ?? string.Empty);
+	}
+
+	private async Task SelectedBlockingSessionChanged(IBlockingRow qry)
+	{
+		if (isMonacoEditorReady == false || queryEditorBlocking == null) { return; }
+
+		await queryEditorBlocking.SetValue(qry?.QueryText ?? string.Empty);
+
+		if (qry != null && qry.PlanHandle != null && qry.StatementStartOffset != null && qry.StatementEndOffset != null)
+		{
+			var x = await GetPlan(qry.PlanHandle, qry.StatementStartOffset, qry.StatementEndOffset);
+
+			if (x != null)
+			{
+				await ShowExecutionPlanDialog(x);
+			}
+		}
+	}
+
+	private async Task<ExecutionPlanRow?> GetPlan(string handle, int? start, int? end)
+	{
+		var x = await W.Context.Provider.GetInstances<ExecutionPlanRow>($@"
+				SELECT 
+					qp.query_plan AS FullBatchPlanXml,
+					CAST(tp.query_plan AS XML) AS SpecificStatementPlanXml
+				FROM (
+					SELECT
+						CONVERT(VARBINARY(64), '{handle}', 1) AS PlanHandle, 
+						CAST({start} AS INT) AS StatementStartOffset,
+						CAST({end} AS INT) AS StatementEndOffset
+				) b
+				CROSS APPLY sys.dm_exec_query_plan(b.PlanHandle) qp
+				CROSS APPLY sys.dm_exec_text_query_plan(b.PlanHandle, b.StatementStartOffset, b.StatementEndOffset) tp;
+			");
+
+		return x?.FirstOrDefault();
+	}
+
 	private async Task RestoreExpandedTopExpensiveQueryRowsAsync()
 	{
+	}
+
+	
+	private async Task ShowExecutionPlanDialog(ExecutionPlanRow row)
+	{
+		await DialogService.OpenAsync("Query Execution Plan Diagnostics", ds =>
+			@<div class="modal-plan-override">
+				<ExecutionPlanDisplay RawPlanXml="@row.SpecificStatementPlanXml" />
+			</div>,
+		new DialogOptions()
+		{
+			CloseDialogOnOverlayClick = true,
+			ShowClose = true,
+			Width = "1600px",
+			Height = "800px",
+			Style = "border-radius: 10px; overflow: hidden; background-color: #0f172a;"
+		});
 	}
 }

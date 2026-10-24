@@ -1,0 +1,73 @@
+.echart-container {
+    background: transparent !important;
+    width: 250px;
+    height: 250px;
+    padding: 0px;
+    margin: -37px 0 0 -37px;
+    /*margin: -50px 0 0 -50px;*/
+}
+
+.monitor-panel {
+    background: transparent;
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    z-index: 999999;
+    box-shadow: 20px 40px 90px 20px rgba(0,255,0,.4) inset !important;
+    border: 3px solid lime;
+    border-inline: 2px solid black;
+    border-top-left-radius: 110px;
+    border-bottom-right-radius: 110px;
+    border-bottom-left-radius: 110px;
+    border-top-right-radius: 110px;
+    padding: 0px;
+    outline: none !important;
+    width: 200px;
+    height: 200px;
+    /*animation: insane-glow 1.8s ease-in-out infinite alternate !important;*/
+    position: absolute;
+    overflow: hidden;
+    cursor: crosshair;
+}
+
+/*insane-float 4s ease-in-out infinite,*/
+
+g {
+    width: 175px;
+    height: 175px;
+}
+
+/* NEW LIME GREEN SELECTOR STYLES */
+.coordinate-selector {
+    position: absolute;
+    left: var(--mouse-x, -999px); /* Safely hidden off-screen until mouse hover */
+    top: var(--mouse-y, -999px);
+    pointer-events: none; /* Makes sure it doesn't block chart hovers or clicks */
+    transform: translate(-50%, -50%);
+    z-index: 999999; /* Layered cleanly on top of the elements inside */
+}
+
+    /* Selector Crosshair Lines */
+    .coordinate-selector::before,
+    .coordinate-selector::after {
+        content: '';
+        position: absolute;
+        background-color: lime;
+        opacity: 0.6; /* Slightly semi-transparent so chart shows through */
+    }
+
+    /* Horizontal line */
+    .coordinate-selector::before {
+        top: 0;
+        left: -200px;
+        width: 400px;
+        height: 1px;
+    }
+
+    /* Vertical line */
+    .coordinate-selector::after {
+        left: 0;
+        top: -200px;
+        height: 400px;
+        width: 1px;
+    }

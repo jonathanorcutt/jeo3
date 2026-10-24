@@ -11,15 +11,25 @@
 	<RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start" Gap="0px" Style="height:35px !important">
 		<RadzenColumn Size="8" class="navbar-container-left">
 			<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-				<RadzenSidebarToggle Click="@(async () => { await OnSidebarToggleClicked.InvokeAsync(!W.UI.Appearance.IsSidebarExpandedLeft); })" />
-				<ImageIcon Width="40" Height="32" Category="ImageIcon.CategoryType.icons" FileName="jeo3-white.png" Class="fa-ml10 fa-mr10" />
-				<span class="navbar-header-label jeo3-xolonium-regular fa-mr10">Visual Database Intelligence</span>
-				<span class="navbar-header-label-database jeo3-xolonium-regular fa-ml2">@(W.Context?.Provider?.Connection?.Database != null ? "(" + W.Context?.Provider?.Connection?.Database + ")" : "")</span>
+				<RadzenSidebarToggle Click="@(async () => { await OnSidebarToggleClicked.InvokeAsync(!W.UI.Appearance.IsSidebarExpandedLeft); })" Style="margin-top:-5px;" />
+				<ImageIcon Width="40" Height="32" Category="ImageIcon.CategoryType.icons" FileName="jeo3-white.png" Class="fa-ml7 fa-mr7" />
+				<span class="navbar-header-label fa-mr10">SQL Visualization Studio</span>
+				<span class="navbar-header-label-database fa-ml2">@(W.Context?.Provider?.Connection?.Database != null ? "(" + W.Context?.Provider?.Connection?.Database + ")" : "")</span>
 			</RadzenStack>
 		</RadzenColumn>
 		<RadzenColumn Size="4" class="navbar-container-right">
 			<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" class="navbar-container-right">
-				<div>
+			              
+
+                <button type="button" @onclick="ShowSchemaNavigationDialog" title="View JEO3 Metric Definition" class="info-icon-btn" style="margin: 0px 15px 0px 0px">
+                   <VSIcon Type="VSIconType.VSIcons" Name="StatusHelp_cyan_16x" Width="16" Height="16" Extension=" ImageType.png" Class=""></VSIcon>
+                </button>
+                  
+                <button type="button" @onclick="ShowJeo3MetricDialog" title="View JEO3 Metric Definition" class="info-icon-btn" style="margin: 0px 15px 0px 0px">
+                   <VSIcon Type="VSIconType.VSIcons" Name="StatusInformation_cyan_16x" Width="16" Height="16" Extension=" ImageType.png" Class=""></VSIcon>
+                </button>
+
+                <div>
 					<DemoLinks></DemoLinks>
 				</div>
 				<div>
@@ -47,3 +57,152 @@
 		</RadzenColumn>
 	</RadzenRow>
 </div>
+
+@code
+{
+									   
+    private async Task ShowJeo3MetricDialog()
+{
+    await DialogService.OpenAsync(" ", ds => @<RadzenStack Gap="0" Style="min-width: 400px; max-width: 600px;">
+
+        <div style="padding: 1.5rem 1.5rem 1rem; background: linear-gradient(135deg, #202938 0%, #151922 100%); border-bottom: 2px solid #e6b94a;">
+
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: #e6b94a; box-shadow: 0 0 10px #e6b94a;"></span>
+                <span style="font-size: 0.7rem; letter-spacing: 2px; color: #aab5c5; font-weight: 600;">DATABASE INTELLIGENCE</span>
+            </div>
+
+            <div style="font-size: 1.8rem; font-weight: 700; color: #f4f6fa; letter-spacing: -0.5px;">
+                JEO3 <span style="color: #e6b94a;">Metric</span>
+            </div>
+
+            <div style="font-size: 0.85rem; color: #aab5c5; margin-top: 6px;">
+                Root-based relationship reachability
+            </div>
+        </div>
+
+        <div style="padding: 1.5rem; background: #191e28;">
+
+            <div style="border: 1px solid #353e4d; border-radius: 8px; padding: 1.1rem; background: #202735; margin-bottom: 1.25rem;">
+                <div style="font-size: 0.7rem; color: #e6b94a; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 10px;">
+                    DEFINITION
+                </div>
+                <div style="font-size: 0.95rem; line-height: 1.8; color: #e1e6ef;">
+                    The number of unique tables reachable from a root table before revisiting an already visited table becomes necessary to discover further relationships.
+                </div>
+            </div>
+
+            <div style="font-size: 0.85rem; font-weight: 700; color: #f4f6fa; letter-spacing: 1px; margin-bottom: 8px;">
+                WHY IT MATTERS
+            </div>
+
+            <div style="font-size: 0.9rem; line-height: 1.8; color: #b8c2d2; margin-bottom: 1.25rem;">
+                Beyond this boundary, overlapping paths and cycles can multiply join cardinality, putting SQL execution plans at risk of unpredictable complexity.
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: flex-start; border-left: 3px solid #e6b94a; background: #28271f; border-radius: 0 6px 6px 0; padding: 12px 14px;">
+                <span style="font-size: 1.1rem; color: #e6b94a;">&#9888;</span>
+                <div style="font-size: 0.82rem; line-height: 1.7; color: #d6cba9;">
+                    <strong style="color: #f0d98e;">Cardinality explosion</strong><br />
+                    More traversal is not always better. Revisitation can introduce additional joins, overlapping paths, and increasingly expensive query plans.
+                </div>
+            </div>
+
+        </div>
+
+        <div style="padding: 12px 1.5rem; background: #141820; border-top: 1px solid #303744; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.68rem; letter-spacing: 1.2px; color: #78869a;">JEO3 / GRAPH ANALYSIS</span>
+            <span style="font-size: 0.7rem; color: #e6b94a;">UNIQUE TABLES</span>
+        </div>
+
+    </RadzenStack>,
+    new DialogOptions()
+    {
+        CloseDialogOnOverlayClick = true,
+        ShowClose = true,
+        Width = "600px",
+        Style = "border-radius: 10px; overflow: hidden;"
+    });
+}
+
+    private async Task ShowSchemaNavigationDialog()
+    {
+        await DialogService.OpenAsync("SCHEMA NAVIGATION", ds =>
+        @<div class="schema-nav-docs">
+
+            <div class="schema-nav-hero">
+                <div class="schema-nav-image">
+                    <img src="../img/docs/tablesnav.png"
+                         alt="JEO3 database navigation pane"
+                         class="schema-nav-screenshot" />
+                </div>
+
+                <div class="schema-nav-copy">
+                    <div class="schema-nav-eyebrow">
+                        <span>JEO3</span> / DATABASE INTELLIGENCE
+                    </div>
+
+                    <h3>Know Your Schema.</h3>
+                    <p class="schema-nav-lead">
+                        Two views. Three levels of metadata.
+                        One live database model.
+                    </p>
+
+                    <div class="schema-nav-section">
+                        <h4>01 / OBJECT EXPLORER</h4>
+                        <p>
+                            Browse the database through the hierarchical
+                            object tree, or switch to the flat Tables view
+                            to navigate directly through the table inventory.
+                        </p>
+                    </div>
+
+                    <div class="schema-nav-section">
+                        <h4>02 / TABLES</h4>
+                        <p>
+                            Inspect table metadata in the grid. Select a table
+                            to drive the related column views.
+                        </p>
+                    </div>
+
+                    <div class="schema-nav-section">
+                        <h4>03 / COLUMNS &amp; ALL COLUMNS</h4>
+                        <p>
+                            Columns shows the selected table's column metadata.
+                            All Columns exposes the broader column inventory
+                            and automatically filters to the selected table's
+                            primary-key column name.
+                        </p>
+                    </div>
+
+                    <div class="schema-nav-callout">
+                        <span class="schema-nav-mark">◆</span>
+                        <span>
+                            <strong>GO DEEPER</strong>
+                            <br />
+                            The navigation pane is only the entry point.
+                            The metadata grids expose substantially more
+                            detail than the initial tree view.
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="schema-nav-footer">
+                <span>EXPLORE THE STRUCTURE. FOLLOW THE RELATIONSHIPS.</span>
+                <button class="btn btn-primary"
+                        @onclick="() => DialogService.Close()">
+                    GOT IT
+                </button>
+            </div>
+        </div>,
+        new DialogOptions()
+        {
+            CloseDialogOnOverlayClick = true,
+            ShowClose = true,
+            Width = "760px",
+            CssClass = "schema-nav-dialog"
+        });
+    }
+
+}

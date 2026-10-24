@@ -70,8 +70,8 @@ export function renderPanoramic3DChart(containerId, title, xAxisTitle, yAxisTitl
             boxWidth: 160,
             boxHeight: 65,
             boxDepth: 180,
-            top: "-8%",
-            bottom: "20%",
+            top: -70,
+            bottom: 0,
             shading: "lambert",
             viewControl: { autoRotate: false, alpha: 25, beta: 40, distance: 190 },
             light: {
@@ -301,16 +301,16 @@ export function renderRelations3DFlights(containerId, title, tablesNodes, foreig
         blendMode: "lighter",
         data,
         lineStyle: { color, width, opacity },
-        distance:5,
+        distance: 5,
         effect: { show: true, trailWidth: 2, trailLength: 0.15, trailOpacity: 1, trailColor: color }
     });
 
     var texture = '../../img/branding/world.topo.bathy.200401.jpg';
     var bath = '../../img/branding/bathymetry_bw_composite_4k.jpg';
-    var star = '../../img/branding/jeo3.png';  
+    var star = '../../img/branding/jeo3.png';
 
     /* 4. Options */
-    const option = { 
+    const option = {
         backgroundColor: "#000",
         title: {
             text: title || "Database Relations Flight Simulator",
@@ -328,12 +328,12 @@ export function renderRelations3DFlights(containerId, title, tablesNodes, foreig
             }
         },
         globe: {
-            heightTexture: bath, 
+            heightTexture: bath,
             // baseColor: '#000', 
-            baseTexture: texture, 
+            baseTexture: texture,
             environment: star,
             shading: "realistic",
-            displacementScale: 0.1, 
+            displacementScale: 0.1,
             displacementQuality: "high",
             realisticMaterial: { roughness: 0.2, metalness: 0 },
             postEffect: {
@@ -453,7 +453,724 @@ export function disposeRelations3D(containerId) {
 }
 
 
+
 // ---------------------------------------------------------------------------------
+
+// Scatter 3D Simplex
+export function renderQuerySchemaDepth3D(containerId, title, payload) {
+    const dom = document.getElementById(containerId);
+    if (!dom || !payload?.length) return;
+
+    let chart = echarts.getInstanceByDom(dom);
+    if (!chart) chart = echarts.init(dom, 'dark');
+
+    const schemas = [...new Set(payload.map(p => p.schemaName || '(default)'))]
+        .sort((a, b) => a.localeCompare(b));
+
+    const depths = [...new Set(payload.map(p => p.depth))]
+        .sort((a, b) => a - b);
+
+    const maxCount = Math.max(1, ...payload.map(p => p.tableCount));
+
+    const data = payload.map(p => [
+        schemas.indexOf(p.schemaName || '(default)'),
+        p.depth,
+        p.tableCount,
+        p.schemaName || '(default)'
+    ]);
+
+    chart.setOption({
+        backgroundColor: '#000',
+        title: {
+            text: title || 'JEO3 Schema Depth',
+            left: 'center',
+            top: 12,
+            textStyle: { color: '#e6b94a', fontSize: 16 }
+        },
+        tooltip: {
+            formatter: params => {
+                const d = params.value;
+                return `<b>${d[3]}</b><br/>Depth: ${d[1]}<br/>Table count: ${d[2]}`;
+            }
+        },
+        visualMap: {
+            min: 0,
+            max: maxCount,
+            dimension: 2,
+            calculable: true,
+            orient: 'horizontal',
+            left: 'center',
+            bottom: 12,
+            textStyle: { color: '#ddd' },
+            inRange: {
+                color: ['#163b65', '#167d9a', '#e6b94a', '#fff0a8']
+            }
+        },
+        xAxis3D: {
+            type: 'category',
+            name: 'Schema',
+            data: schemas,
+            axisLabel: { color: '#c7d0dc', interval: 0 },
+            nameTextStyle: { color: '#e6b94a' }
+        },
+        yAxis3D: {
+            type: 'value',
+            name: 'Depth',
+            min: Math.min(0, ...depths),
+            max: Math.max(1, ...depths),
+            axisLabel: { color: '#c7d0dc' },
+            nameTextStyle: { color: '#e6b94a' }
+        },
+        zAxis3D: {
+            type: 'value',
+            name: 'Table Count',
+            axisLabel: { color: '#c7d0dc' },
+            nameTextStyle: { color: '#e6b94a' }
+        },
+        grid3D: {
+            boxWidth: 180,
+            boxDepth: 100,
+            viewControl: {
+                projection: 'perspective',
+                autoRotate: false,
+                rotateSensitivity: 1,
+                zoomSensitivity: 1,
+                panSensitivity: 1
+            },
+            light: {
+                main: { intensity: 1.1, shadow: true },
+                ambient: { intensity: 0.35 }
+            },
+            axisLine: { lineStyle: { color: '#66758a' } },
+            splitLine: { lineStyle: { color: '#283343' } }
+        },
+        series: [{
+            type: 'scatter3D',
+            data,
+            symbolSize: value => Math.max(6, Math.min(24, value[2] * 3 + 5)),
+            encode: { x: 0, y: 1, z: 2 },
+            itemStyle: {
+                opacity: 0.9,
+                borderWidth: 1,
+                borderColor: '#f4d77b'
+            },
+            emphasis: {
+                itemStyle: {
+                    opacity: 1,
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }
+            }
+        }]
+    }, true);
+
+    chart.resize();
+}
+
+export function disposeQuerySchemaDepth3D(containerId) {
+    const dom = document.getElementById(containerId);
+    if (!dom) return;
+
+    const chart = echarts.getInstanceByDom(dom);
+    if (chart) chart.dispose();
+}
+
+
+// ---------------------------------------------------------------------------------
+
+// 3d Heat v2
+const panoramicEntityHeatmap3DCharts = new Map();
+
+export function renderPanoramicEntityHeatmap3D(
+    containerId,
+    title,
+    xAxisTitle,
+    yAxisTitle,
+    intensityLabel,
+    xAxisCategories,
+    yAxisCategories,
+    chartData
+) {
+    const element = document.getElementById(containerId);
+
+    if (!element || !window.echarts) {
+        return;
+    }
+
+    let chart = panoramicEntityHeatmap3DCharts.get(containerId);
+
+    if (!chart || chart.isDisposed()) {
+        chart = window.echarts.init(element);
+        panoramicEntityHeatmap3DCharts.set(containerId, chart);
+    }
+
+    chart.setOption({
+        backgroundColor: 'transparent',
+
+        title: {
+            text: title,
+            left: 'center',
+            top: 8,
+            textStyle: {
+                color: '#e0e0e0',
+                fontSize: 15,
+                fontWeight: 'normal'
+            }
+        },
+
+        tooltip: {
+            formatter: function (params) {
+                const value = params.value;
+
+                if (!value || value.length < 3) {
+                    return '';
+                }
+
+                const entityType = xAxisCategories[value[0]] ?? value[0];
+                const table = yAxisCategories[value[1]] ?? value[1];
+                const count = value[2];
+
+                return `<strong>${table}</strong><br/>${entityType}: ${count}`;
+            }
+        },
+
+        visualMap: {
+            show: true,
+            min: 0,
+            max: Math.max(
+                1,
+                ...chartData.map(point => Number(point[2]) || 0)
+            ),
+            dimension: 2,
+            inRange: {
+                color: [
+                    '#163b65',
+                    '#167da8',
+                    '#36c5c0',
+                    '#f0d64e',
+                    '#ff8738'
+                ]
+            },
+            textStyle: {
+                color: '#d0d0d0'
+            },
+            calculable: true,
+            right: 5,
+            top: 'middle'
+        },
+
+        xAxis3D: {
+            type: 'category',
+            name: xAxisTitle,
+            data: xAxisCategories,
+            nameTextStyle: { color: '#d0d0d0' },
+            axisLabel: {
+                color: '#bcbcbc',
+                interval: 0,
+                rotate: 25
+            },
+            axisLine: {
+                lineStyle: { color: '#666666' }
+            }
+        },
+
+        yAxis3D: {
+            type: 'category',
+            name: yAxisTitle,
+            data: yAxisCategories,
+            nameTextStyle: { color: '#d0d0d0' },
+            axisLabel: {
+                color: '#bcbcbc'
+            },
+            axisLine: {
+                lineStyle: { color: '#666666' }
+            }
+        },
+
+        zAxis3D: {
+            type: 'value',
+            name: intensityLabel,
+            min: 0,
+            nameTextStyle: { color: '#d0d0d0' },
+            axisLabel: {
+                color: '#bcbcbc'
+            },
+            axisLine: {
+                lineStyle: { color: '#666666' }
+            },
+            splitLine: {
+                lineStyle: { color: 'rgba(150,150,150,0.2)' }
+            }
+        },
+
+        grid3D: {
+            top: -35,
+            bottom: 0,
+            left: 10,
+            right: 75,
+            boxWidth: 180,
+            boxDepth: Math.max(100, Math.min(300, yAxisCategories.length * 4)),
+            environment: 'auto',
+            axisPointer: {
+                show: true,
+                lineStyle: { color: '#f0d64e' }
+            },
+            viewControl: {
+                projection: 'perspective',
+                autoRotate: false,
+                rotateSensitivity: 1,
+                zoomSensitivity: 1,
+                panSensitivity: 1,
+                distance: 240,
+                alpha: 25,
+                beta: 40
+            },
+            light: {
+                main: {
+                    intensity: 1.2,
+                    shadow: true,
+                    alpha: 35,
+                    beta: 40
+                },
+                ambient: {
+                    intensity: 0.35
+                }
+            }
+        },
+
+        series: [
+            {
+                name: intensityLabel,
+                type: 'bar3D',
+                data: chartData,
+                shading: 'lambert',
+                barSize: 0.8,
+                bevelSize: 0.15,
+                minHeight: 0.2,
+                itemStyle: {
+                    opacity: 0.95
+                },
+                emphasis: {
+                    itemStyle: {
+                        opacity: 1
+                    }
+                }
+            }
+        ]
+    }, true);
+
+    chart.resize();
+}
+
+export function disposePanoramicEntityHeatmap3D(containerId) {
+    const chart = panoramicEntityHeatmap3DCharts.get(containerId);
+
+    if (chart && !chart.isDisposed()) {
+        chart.dispose();
+    }
+
+    panoramicEntityHeatmap3DCharts.delete(containerId);
+}
+
+
+// ---------------------------------------------------------------------------------
+
+// North Atlantic Current / Like a Hurricane
+
+
+const relationCharts2D = new Map();
+
+export function renderRelations2DFlights(
+    containerId,
+    title,
+    tablesNodes,
+    foreignKeyLinks
+) {
+    const container = document.getElementById(containerId);
+
+    if (!container) {
+        console.warn(`JEO3 2D chart container '${containerId}' was not found.`);
+        return;
+    }
+
+    if (typeof echarts === "undefined") {
+        console.error("JEO3 2D chart: ECharts is not loaded.");
+        return;
+    }
+
+    disposeRelations2D(containerId);
+
+    const chart = echarts.init(container);
+    const nodes = (tablesNodes || []).filter(n => n && n.id);
+
+    if (nodes.length === 0) {
+        chart.dispose();
+        return;
+    }
+
+    const nodeById = new Map(nodes.map(n => [n.id, n]));
+
+    // Normalize stable layout coordinates to the available 2D viewport.
+    const xs = nodes.map(n => Number(n.x) || 0);
+    const ys = nodes.map(n => Number(n.y) || 0);
+
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+
+    const spanX = Math.max(1, maxX - minX);
+    const spanY = Math.max(1, maxY - minY);
+
+    const graphNodes = nodes.map(node => ({
+        id: node.id,
+        name: node.name || node.id,
+        x: 50 + ((Number(node.x) - minX) / spanX) * 900,
+        y: 50 + ((Number(node.y) - minY) / spanY) * 500,
+        symbolSize: 7,
+        itemStyle: {
+            color: "#72dfff",
+            shadowBlur: 8,
+            shadowColor: "rgba(0, 190, 255, 0.55)"
+        },
+        label: {
+            show: true,
+            position: "right",
+            distance: 6,
+            color: "rgba(155, 224, 245, 0.8)",
+            fontSize: 10,
+            fontFamily: "Consolas, monospace",
+            textBorderColor: "#02060b",
+            textBorderWidth: 2
+        }
+    }));
+
+    const links = [];
+
+    for (const link of foreignKeyLinks || []) {
+        if (!link ||
+            !nodeById.has(link.source) ||
+            !nodeById.has(link.target)) {
+            continue;
+        }
+
+        links.push({
+            source: link.source,
+            target: link.target,
+            isHighTraffic: !!link.isHighTraffic,
+            lineStyle: {
+                color: link.isHighTraffic
+                    ? "rgba(255, 50, 210, 0.65)"
+                    : "rgba(0, 185, 255, 0.35)",
+                width: link.isHighTraffic ? 1.6 : 0.8,
+                curveness: 0.18,
+                opacity: 0.8
+            }
+        });
+    }
+
+    // Deterministic background noise: no random work on every frame.
+    const noiseCanvas = document.createElement("canvas");
+    noiseCanvas.width = 256;
+    noiseCanvas.height = 256;
+
+    const ctx = noiseCanvas.getContext("2d");
+    const image = ctx.createImageData(256, 256);
+
+    let seed = 90317;
+
+    for (let i = 0; i < image.data.length; i += 4) {
+        seed = (seed * 1664525 + 1013904223) >>> 0;
+        const grain = seed & 255;
+
+        image.data[i] = 35;
+        image.data[i + 1] = 65;
+        image.data[i + 2] = 85;
+        image.data[i + 3] = grain > 224 ? 16 : 3;
+    }
+
+    ctx.putImageData(image, 0, 0);
+
+    const noiseTexture = noiseCanvas.toDataURL("image/png");
+
+    const option = {
+        backgroundColor: "#03070d",
+        animation: true,
+        animationDuration: 900,
+        animationDurationUpdate: 900,
+        animationEasingUpdate: "linear",
+
+        title: {
+            text: title || "Schema Relations — Traffic Flow",
+            left: "center",
+            top: 12,
+            textStyle: {
+                color: "#72dfff",
+                fontSize: 18,
+                fontWeight: "normal",
+                fontFamily: "Consolas, monospace",
+                textShadowColor: "rgba(0, 180, 255, 0.4)",
+                textShadowBlur: 12
+            }
+        },
+
+        graphic: [
+            {
+                type: "rect",
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                silent: true,
+                z: -10,
+                style: {
+                    fill: {
+                        image: noiseTexture,
+                        repeat: "repeat"
+                    },
+                    opacity: 0.6
+                }
+            }
+        ],
+
+        tooltip: {
+            trigger: "item",
+            backgroundColor: "rgba(3, 12, 24, 0.94)",
+            borderColor: "#147c9e",
+            textStyle: {
+                color: "#b9efff",
+                fontFamily: "Consolas, monospace"
+            },
+            formatter: item => {
+                if (item.dataType === "edge") {
+                    return `${item.data.source}<br/>→ ${item.data.target}`;
+                }
+
+                return item.data.name || item.name;
+            }
+        },
+
+        series: [
+            {
+                name: "Schema Relations",
+                type: "graph",
+                layout: "none",
+                coordinateSystem: null,
+                roam: true,
+                draggable: false,
+                data: graphNodes,
+                links,
+                symbol: "circle",
+                edgeSymbol: ["none", "none"],
+                lineStyle: {
+                    curveness: 0.18
+                },
+                emphasis: {
+                    focus: "adjacency",
+                    lineStyle: {
+                        width: 2.5,
+                        opacity: 1
+                    },
+                    itemStyle: {
+                        shadowBlur: 18,
+                        shadowColor: "#00c8ff"
+                    }
+                }
+            }
+        ]
+    };
+
+    chart.setOption(option);
+
+    // Animated traffic overlay: lightweight Canvas, independent of ECharts.
+    const overlay = document.createElement("canvas");
+    overlay.style.cssText =
+        "position:absolute;inset:0;width:100%;height:100%;" +
+        "pointer-events:none;z-index:2;";
+
+    // Keep the overlay aligned with the chart container.
+    if (getComputedStyle(container).position === "static") {
+        container.style.position = "relative";
+    }
+
+    container.appendChild(overlay);
+
+    const overlayCtx = overlay.getContext("2d");
+    let frameId = 0;
+    let disposed = false;
+    let lastTime = 0;
+    let elapsed = 0;
+    let width = 0;
+    let height = 0;
+
+    const flights = links.map((link, index) => ({
+        link,
+        phase: (index * 0.61803398875) % 1,
+        speed: link.isHighTraffic ? 0.035 : 0.018,
+        size: link.isHighTraffic ? 2.1 : 1.2
+    }));
+
+    function resizeOverlay() {
+        const rect = container.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        width = rect.width;
+        height = rect.height;
+
+        overlay.width = Math.round(width * dpr);
+        overlay.height = Math.round(height * dpr);
+
+        overlayCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function drawNoise(time) {
+        // Sparse, slow-moving grain glints.
+        overlayCtx.save();
+        overlayCtx.globalCompositeOperation = "lighter";
+
+        for (let i = 0; i < 36; i++) {
+            const x = ((i * 127.1) % 997) / 997 * width;
+            const y = ((i * 311.7) % 991) / 991 * height;
+            const pulse = (Math.sin(time * 0.00035 + i * 1.7) + 1) / 2;
+
+            overlayCtx.fillStyle = `rgba(48,180,220,${0.015 + pulse * 0.025})`;
+            overlayCtx.fillRect(x, y, 1, 1);
+        }
+
+        overlayCtx.restore();
+    }
+
+    function drawFlights(delta, time) {
+        const chartRect = container.getBoundingClientRect();
+
+        // Convert ECharts graph coordinates to container pixels.
+        const plotWidth = 1000;
+        const plotHeight = 600;
+        const scaleX = width / plotWidth;
+        const scaleY = height / plotHeight;
+
+        overlayCtx.save();
+        overlayCtx.globalCompositeOperation = "lighter";
+        overlayCtx.lineCap = "round";
+
+        for (const flight of flights) {
+            const source = nodeById.get(flight.link.source);
+            const target = nodeById.get(flight.link.target);
+
+            if (!source || !target) continue;
+
+            const x1 = (50 + ((Number(source.x) - minX) / spanX) * 900) * scaleX;
+            const y1 = (50 + ((Number(source.y) - minY) / spanY) * 500) * scaleY;
+            const x2 = (50 + ((Number(target.x) - minX) / spanX) * 900) * scaleX;
+            const y2 = (50 + ((Number(target.y) - minY) / spanY) * 500) * scaleY;
+
+            // Match the subtle curve used by the graph edges.
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            const bend = 0.18;
+            const cx = (x1 + x2) / 2 - dy * bend;
+            const cy = (y1 + y2) / 2 + dx * bend;
+
+            flight.phase = (flight.phase + delta * flight.speed / 1000) % 1;
+
+            const t = flight.phase;
+            const oneMinusT = 1 - t;
+
+            const x = oneMinusT * oneMinusT * x1 +
+                2 * oneMinusT * t * cx + t * t * x2;
+            const y = oneMinusT * oneMinusT * y1 +
+                2 * oneMinusT * t * cy + t * t * y2;
+
+            const color = flight.link.isHighTraffic
+                ? "255,50,210"
+                : "0,200,255";
+
+            const radius = flight.size;
+
+            // Soft halo.
+            const glow = overlayCtx.createRadialGradient(
+                x, y, 0, x, y, radius * 5
+            );
+
+            glow.addColorStop(0, `rgba(${color},0.85)`);
+            glow.addColorStop(0.25, `rgba(${color},0.28)`);
+            glow.addColorStop(1, `rgba(${color},0)`);
+
+            overlayCtx.fillStyle = glow;
+            overlayCtx.beginPath();
+            overlayCtx.arc(x, y, radius * 5, 0, Math.PI * 2);
+            overlayCtx.fill();
+
+            // Small luminous particle.
+            overlayCtx.fillStyle = `rgba(${color},0.95)`;
+            overlayCtx.beginPath();
+            overlayCtx.arc(x, y, radius, 0, Math.PI * 2);
+            overlayCtx.fill();
+        }
+
+        overlayCtx.restore();
+    }
+
+    function animate(time) {
+        if (disposed) return;
+
+        const delta = lastTime === 0 ? 16 : Math.min(time - lastTime, 50);
+        lastTime = time;
+        elapsed += delta;
+
+        overlayCtx.clearRect(0, 0, width, height);
+
+        drawNoise(elapsed);
+        drawFlights(delta, elapsed);
+
+        frameId = requestAnimationFrame(animate);
+    }
+
+    resizeOverlay();
+    frameId = requestAnimationFrame(animate);
+
+    const resizeObserver = new ResizeObserver(() => {
+        chart.resize();
+        resizeOverlay();
+    });
+
+    resizeObserver.observe(container);
+
+    relationCharts2D.set(containerId, {
+        chart,
+        overlay,
+        resizeObserver,
+        stop: () => {
+            disposed = true;
+            cancelAnimationFrame(frameId);
+            resizeObserver.disconnect();
+            overlay.remove();
+        }
+    });
+}
+
+export function disposeRelations2D(containerId) {
+    const state = relationCharts2D.get(containerId);
+
+    if (state) {
+        state.stop();
+        state.chart.dispose();
+        relationCharts2D.delete(containerId);
+    }
+
+    const container = document.getElementById(containerId);
+
+    if (container) {
+        const chart = echarts.getInstanceByDom(container);
+
+        if (chart) chart.dispose();
+    }
+}
+
+
+
+// ---------------------------------------------------------------------------------
+
 // Buildings - Doesnt Currently Work
 export async function renderPanoramicBuildings3D(containerId, title, geoJsonPath, tableMetrics) {
     var chartContainer = document.getElementById(containerId);
@@ -537,3 +1254,4 @@ export async function renderPanoramicBuildings3D(containerId, title, geoJsonPath
         console.error("Failed to execute urban WebGL maps render pass: ", err);
     }
 }
+

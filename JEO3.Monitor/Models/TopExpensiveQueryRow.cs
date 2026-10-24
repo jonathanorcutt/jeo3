@@ -1,8 +1,9 @@
 ﻿using System.Text.Json.Serialization;
+using JEO3.Contracts;
 
 namespace JEO3.Monitor.Models
 {
-    public sealed class TopExpensiveQueryRow
+    public sealed class TopExpensiveQueryRow : ITopExpensiveQueryRow
     {
         [JsonPropertyName("T")]
         public DateTime Timestamp { get; set; }
@@ -10,6 +11,10 @@ namespace JEO3.Monitor.Models
         public string SqlHandleHex { get; set; } = string.Empty;
         [JsonPropertyName("P")]
         public string PlanHandleHex { get; set; } = string.Empty;
+        [JsonPropertyName("SSO")]
+        public int? StatementStartOffset { get; set; }
+        [JsonPropertyName("SEO")]
+        public int? StatementEndOffset { get; set; }
         [JsonPropertyName("D")]
         public string DatabaseName { get; set; } = string.Empty;
         [JsonPropertyName("Q")]

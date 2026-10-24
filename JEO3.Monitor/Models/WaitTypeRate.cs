@@ -1,9 +1,10 @@
 ﻿using System.Text.Json.Serialization;
+using JEO3.Contracts;
 
 namespace JEO3.Monitor
 {
     /// <summary>Per-wait-type rate contribution within a WaitRateSample.</summary>
-    public sealed class WaitTypeRate
+    public sealed class WaitTypeRate : IWaitTypeRate
     {
         [JsonPropertyName("T")]
         public DateTime Timestamp { get; set; }

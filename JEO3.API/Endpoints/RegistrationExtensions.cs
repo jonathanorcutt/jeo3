@@ -130,7 +130,18 @@ namespace JEO3.API.Endpoints
                         DatabaseName = r.DatabaseName,
                         LoginName = r.LoginName,
                         CpuTimeMs = r.CpuTimeMs,
-                        LogicalReads = r.LogicalReads
+                        LogicalReads = r.LogicalReads,
+                        PhysicalReads = r.PhysicalReads,
+                        Command = r.Command,
+                        HostName = r.HostName,
+                        IsBlocked = r.IsBlocked,
+                        OpenTxnCount = r.OpenTxnCount,
+                        PercentComplete = r.PercentComplete,
+                        ProgramName = r.ProgramName,
+                        StatementText = r.StatementText,
+                        Writes = r.Writes
+                        //PhysicalReads = r.PhysicalReads,
+                        //Status = r.Status,
                     }),
 
                     BlockingChain = s.BlockingChain.Select(b => new
@@ -142,7 +153,21 @@ namespace JEO3.API.Endpoints
                         LoginName = b.LoginName,
                         WaitType = b.WaitType,
                         WaitTimeSec = b.WaitTimeSec,
-                        OpenTranDurationSec = b.OpenTranDurationSec
+                        OpenTranDurationSec = b.OpenTranDurationSec,
+                        Command = b.Command,
+                        HostName = b.HostName,
+                        IsolationLevel = b.IsolationLevel,
+                        IsVictim = b.IsVictim,
+                        MemoryGrantMb = b.MemoryGrantMb,
+                        PlanHandle = b.PlanHandle,
+                        ProgramName = b.ProgramName,
+                        QueryText = b.QueryText,
+                        RequestStartTime = b.RequestStartTime,
+                        SqlHandle = b.SqlHandle,
+                        StatementEndOffset = b.StatementEndOffset,
+                        StatementStartOffset = b.StatementStartOffset,
+                        TransactionBeginTime = b.TransactionBeginTime,
+                        WaitResource = b.WaitResource
                     }),
 
                     RecentDeadlocks = s.RecentDeadlocks.Select(d => new
@@ -163,6 +188,8 @@ namespace JEO3.API.Endpoints
                         Timestamp = q.Timestamp,
                         SqlHandleHex = q.SqlHandleHex,
                         PlanHandleHex = q.PlanHandleHex,
+                        StatementStartOffset = q.StatementStartOffset,
+                        StatementEndOffset = q.StatementEndOffset,
                         DatabaseName = q.DatabaseName,
                         QueryText = q.QueryText,
                         ExecutionCount = q.ExecutionCount,

@@ -106,9 +106,9 @@ namespace JEO3.Site.Dashboard
             {
                 options.Traversal.EnforceStrictness();
 
-                var gen = new DiagramDrivenGraphGenerator();
-                // Offload diagram generation to background thread to prevent UI blocking
-                W.Result.DiagramResultDatabase = await Task.Run(() => gen.Generate(graphTable, options));
+                //var gen = new DiagramDrivenGraphGenerator();
+                //// Offload diagram generation to background thread to prevent UI blocking
+                //W.Result.DiagramResultDatabase = await Task.Run(() => gen.Generate(graphTable, options));
                 await DebouncedReRunLayout();
             }
             catch (Exception ex)

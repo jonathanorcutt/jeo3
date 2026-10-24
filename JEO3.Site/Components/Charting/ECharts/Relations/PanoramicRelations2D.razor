@@ -1,0 +1,163 @@
+﻿@namespace JEO3.Site.Components.Charting
+@inherits EChartBase
+
+<div id="@_containerId" class="schema-relations-2d" style="width: @(Width); height: @(Height); position:absolute;">
+</div>
+
+@code {
+	[Parameter] public string Title { get; set; } = "Schema Relations — Traffic Flow";
+
+	[Parameter] public IEnumerable<JEO3.Schema.ITable> Tables { get; set; } = [];
+
+	private readonly string _containerId = $"chart-relations-2d-{Guid.NewGuid():N}";
+
+	protected override string? ContainerId => _containerId;
+
+	private IJSObjectReference? _module;
+
+	protected override string JavascriptFilePath { get; set; } = "./js/echarts/charts3d.js";
+
+	public PanoramicRelations2D()
+	{
+		Height = "100%";
+	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		await base.OnAfterRenderAsync(firstRender);
+
+		if (!firstRender || IsDisposed)
+			return;
+
+		try
+		{
+			_module = await JSRuntime.InvokeAsync<IJSObjectReference>(
+				"import", JavascriptFilePath);
+
+			await BuildRelationFlightsAsync();
+		}
+		catch (Exception ex)
+		{
+			Console.Error.WriteLine(
+				$"PanoramicRelations2D initialization failed: {ex}");
+		}
+	}
+
+	private async Task BuildRelationFlightsAsync()
+	{
+		if (IsDisposed || _module == null || Tables == null)
+			return;
+
+		var tablesList = Tables
+			.Where(t => t != null &&
+						!string.IsNullOrWhiteSpace(t.TablePath))
+			.ToList();
+
+		if (tablesList.Count == 0)
+			return;
+
+		var nodesPayload = tablesList
+			.Select(table =>
+			{
+				var random = new Random(StableHash(table.TablePath));
+
+				return new
+				{
+					id = table.TablePath,
+					name = table.TablePath,
+					x = random.Next(-100, 101),
+					y = random.Next(-100, 101)
+				};
+			})
+			.ToList();
+
+		var linksPayload = new List<object>();
+
+		foreach (var sourceTable in tablesList)
+		{
+			if (sourceTable.ForeignKeys == null)
+				continue;
+
+			foreach (var fk in sourceTable.ForeignKeys)
+			{
+				var targetTable = fk.ParentTable;
+
+				if (targetTable == null ||
+					string.IsNullOrWhiteSpace(targetTable.TablePath))
+					continue;
+
+				linksPayload.Add(new
+				{
+					source = sourceTable.TablePath,
+					target = targetTable.TablePath,
+					isHighTraffic =
+						sourceTable.Triggers != null &&
+						sourceTable.Triggers.Count > 0
+				});
+			}
+		}
+
+		try
+		{
+			await _module.InvokeVoidAsync(
+				"renderRelations2DFlights",
+				_containerId,
+				Title,
+				nodesPayload,
+				linksPayload);
+		}
+		catch (JSException ex)
+		{
+			Console.Error.WriteLine(
+				$"PanoramicRelations2D JS error: {ex.Message}");
+		}
+		catch (Exception ex)
+		{
+			Console.Error.WriteLine(
+				$"PanoramicRelations2D render failed: {ex}");
+		}
+	}
+
+	private static int StableHash(string? value)
+	{
+		if (string.IsNullOrEmpty(value))
+			return 0;
+
+		unchecked
+		{
+			var hash = 17;
+
+			foreach (var character in value)
+				hash = hash * 31 + character;
+
+			return hash;
+		}
+	}
+
+	protected override async ValueTask OnDisposeAsync()
+	{
+		if (_module == null)
+			return;
+
+		try
+		{
+			await _module.InvokeVoidAsync(
+				"disposeRelations2D", _containerId);
+		}
+		catch
+		{
+			// JS runtime can already be gone during circuit shutdown.
+		}
+
+		try
+		{
+			await _module.DisposeAsync();
+		}
+		catch
+		{
+			// Ignore module disposal during shutdown.
+		}
+
+		_module = null;
+	}
+}

@@ -217,6 +217,7 @@
     {
         NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "Button Clicked", Detail = text });
     }
+
     private async Task ShowGenerationMethodsDialog()
     {
         var result = await DialogService.OpenAsync("QUERY GENERATION METHODS", ds =>
@@ -381,86 +382,6 @@
                 </RadzenStack>
             </RadzenStack>
     ,
-            new DialogOptions()
-            {
-                CloseDialogOnOverlayClick = true,
-                ShowClose = true,
-                Width = "auto"
-            });
-    }
-
-    private async Task RenderSchemaInformationDialog()
-    {
-        var result = await DialogService.OpenAsync("SCHEMA INFORMATION", ds =>
-@<RadzenStack Gap="1rem" Style="min-width: 400px; max-width: 600px; max-height: 750px;">
-    <div>
-        <div>This version: Enterprise Torture Schema V2</div>
-        <div>includes:</div>
-        <div></div>
-        <div>40 business-themed tables</div>
-        <div>100 foreign-key relationships</div>
-        <div>Depth-10 traversal chain</div>
-        <div>Two separate depth-8 chains</div>
-        <div>Multiple cycles</div>
-        <div>Self-referencing entities</div>
-        <div>Composite PK/FK example</div>
-        <div>Diamond and cross-link patterns</div>
-        <div>Nullable and required relationships</div>
-        <div>Multiple graph entry points</div>
-        <div></div>
-        <div>For query-generation tool, Id specifically test:</div>
-        <div></div>
-        <div>Root traversal from every table.</div>
-        <div>Upward-only traversal.</div>
-        <div>Downward-only traversal.</div>
-        <div>Bidirectional traversal.</div>
-        <div>Cycle detection.</div>
-        <div>Duplicate-path elimination.</div>
-        <div>Join exclusion/reinclusion.</div>
-        <div>Coverage scoring.</div>
-        <div>Alias collision handling.</div>
-        <div>Layout rendering (tree, force-directed, radial, layered, orthogonal, etc.)</div>
-        <div></div>
-        <div>Once youve beaten this schema up a bit, the next interesting step is a V3 Nightmare Schema:</div>
-        <div></div>
-        <div>50–60 tables</div>
-        <div>150–200 FKs</div>
-        <div>multiple disconnected graph islands</div>
-        <div>composite PK chains 4–5 levels deep</div>
-        <div>inheritance-like structures</div>
-        <div>bridge tables referencing bridge tables</div>
-        <div>circular composite FKs</div>
-        <div>intentional ambiguity multiple valid join paths between the same endpoints</div>
-        <div>Thats usually where query generators start exposing edge cases. </div>
-    </div>
-</RadzenStack>
-,
-            new DialogOptions()
-            {
-                CloseDialogOnOverlayClick = true,
-                ShowClose = true,
-                Width = "auto"
-            });
-    }
-
-    private async Task ShowStrategyModalDialog()
-    {
-        var result = await DialogService.OpenAsync("SCHEMA INFORMATION", ds =>
-@<div class="dialog-content-wrapper">
-    <div class="engine-strategy-docs dialog-body-content">
-        <h3 class="dialog-title">Engine Traversal Strategy</h3>
-        <p>The engine uses a <strong>Constrained Recursive Graph Normalization</strong> strategy:</p>
-        <ol>
-            <li><strong>Ancestral State Tracking:</strong> Prevents infinite loops by forbidding re-entry into current lineage branches.</li>
-            <li><strong>Terminal Leaf Collapse:</strong> Eliminates visual noise by identifying duplicate schema types at the furthest descent.</li>
-        </ol>
-    </div>
-
-    <div class="dialog-footer-wrapper">
-        <button class="btn btn-primary" @onclick="() => DialogService.Close()">Acknowledge</button>
-    </div>
-</div>
-,
             new DialogOptions()
             {
                 CloseDialogOnOverlayClick = true,

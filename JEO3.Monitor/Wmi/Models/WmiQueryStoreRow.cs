@@ -1,19 +1,21 @@
-﻿namespace JEO3.Monitor.Wmi
+﻿using JEO3.Contracts;
+
+namespace JEO3.Monitor.Wmi
 {
-    public sealed class WmiQueryStoreRow
+    public sealed class WmiQueryStoreRow : IWmiQueryStoreRow
     {
-        public string Caption { get; set; }
-        public string Description { get; set; }
-        public UInt64 Frequency_Object { get; set; }
-        public UInt64 Frequency_PerfTime { get; set; }
-        public UInt64 Frequency_Sys100NS { get; set; }
-        public String Name { get; set; }
-        public UInt64 QueryStoreCPUusage { get; set; }
-        public UInt64 QueryStorelogicalreads { get; set; }
-        public UInt64 QueryStorelogicalwrites { get; set; }
-        public UInt64 QueryStorephysicalreads { get; set; }
-        public UInt64 Timestamp_Object { get; set; }
-        public UInt64 Timestamp_PerfTime { get; set; }
-        public UInt64 Timestamp_Sys100NS { get; set; }
+        public string Caption { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public ulong Frequency_Object { get; set; }
+        public ulong Frequency_PerfTime { get; set; }
+        public ulong Frequency_Sys100NS { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public ulong QueryStoreCPUusage { get; set; }
+        public ulong QueryStorelogicalreads { get; set; }
+        public ulong QueryStorelogicalwrites { get; set; }
+        public ulong QueryStorephysicalreads { get; set; }
+        public ulong Timestamp_Object { get; set; }
+        public ulong Timestamp_PerfTime { get; set; }
+        public ulong Timestamp_Sys100NS { get; set; }
     }
 }

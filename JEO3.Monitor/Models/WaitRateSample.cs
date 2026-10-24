@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using JEO3.Contracts;
 using JEO3.Providers.Extensions;
 
 namespace JEO3.Monitor
@@ -17,7 +18,7 @@ namespace JEO3.Monitor
     /// A negative delta (server restart reset counters) is treated as zero.
     /// </summary>
     [JeoTable(nameof(WaitRateSample), Schema = "Prod")]
-    public class WaitRateSample
+    public class WaitRateSample : IWaitRateSample
     {
         /// <summary>UTC timestamp of the second (more recent) snapshot.</summary>
         [JeoKey(IsDbGenerated = false, IsPrimaryKey = true, Name = nameof(Timestamp))]
@@ -42,5 +43,6 @@ namespace JEO3.Monitor
         /// <summary>Per-wait-type breakdown, sorted descending by WaitMsPerSec.</summary>
         [JsonPropertyName("TW")]
         public IReadOnlyList<WaitTypeRate> TopWaits { get; init; } = [];
+        IReadOnlyList<IWaitTypeRate> IWaitRateSample.TopWaits => TopWaits;
     }
 }

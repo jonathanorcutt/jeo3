@@ -14,6 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\JEO3.Contracts\JEO3.Contracts.csproj" />
 		<ProjectReference Include="..\JEO3.IO\JEO3.IO.csproj" />
 		<ProjectReference Include="..\JEO3.Logging\JEO3.Logging.csproj" />
 		<ProjectReference Include="..\JEO3.Providers.Extensions\JEO3.Providers.Extensions.csproj" />

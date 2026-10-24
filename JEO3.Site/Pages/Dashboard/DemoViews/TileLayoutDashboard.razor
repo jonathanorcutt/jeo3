@@ -64,7 +64,7 @@
             Title = "Panoramic Contour 3D",
             Icon = "analytics",
             Col = 33, Row = 17, ColSpan = 35, RowSpan = 27,
-            ChildContent = @<PanoramicContour3D TRow="ITable" Rows="@W.Context?.Tables" Columns="@MetricNames" RowLabelSelector="@(t => t.TablePath)" Width="770px" Height="400px"
+            ChildContent = @<PanoramicContour3D TRow="ITable" Rows="@W.Context?.Tables" Columns="@MetricNames" RowLabelSelector="@(t => t.TablePath)" Width="770px" Height="470px"
 						  CellSelector="@((t, m) => GetContourNormalizedMetric(t, m))" Title="Schema Heat Map" IntensityLabel="Complexity" />
 
         },

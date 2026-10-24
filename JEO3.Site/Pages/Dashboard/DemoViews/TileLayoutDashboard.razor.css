@@ -1,0 +1,53 @@
+/* CSS for TileLayoutDashboard component */
+/* Centers content completely both vertically (valign) and horizontally (halign) */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px; /* Takes up substantial vertical space. Change to 100vh for full-screen. */
+    width: 100%;
+    gap: 1.25rem; /* Even spacing between spinner and text */
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Modern CSS Spinner */
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #0078d4; /* Blazor/Microsoft Blue - swap out for your theme color */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Styled typography */
+.loading-text {
+    color: #555555;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: -0.01em;
+    animation: pulse 2s ease-in-out infinite; /* Subtle pulsing effect */
+}
+
+/* Animations */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}

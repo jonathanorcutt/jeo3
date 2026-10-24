@@ -208,12 +208,10 @@ namespace JEO3.Site.Dashboard
             }
             catch (TaskCanceledException)
             {
-                return;
             }
 
             W.UI.Grids.SearchColumnName = value?.ToString();
-            W.NotifyMainLayoutStateChanged();
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
 
         #endregion

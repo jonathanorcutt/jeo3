@@ -1,23 +1,53 @@
 
 
-#pcm-c {
-    height: 250px !important;
-}
 
-.pcm-p {
-    height: 200px !important;
-    top: 200px;
-    left: 40%;
-}
+/* Force canvas backdrop layout to fill full container viewport */
+/*.pacman-fullscreen-wrapper {
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}*/
 
+/* Keep the strict dimension structure the JavaScript relies on, then upscale it smoothly */
+/*#logo {
+    position: relative !important;
+    width: 554px !important;
+    height: 450px !important;
+    top:50px;
+    transform: scale(2.5);*/ /* Increase or decrease scale safely without breaking calculations */
+    /*transform-origin: center center;
+    image-rendering: pixelated;
+    overflow: visible !important;*/ /* Ensures boundary elements do not clip */
+/*}*/
+
+/*
 #logo {
     width: 560px;
     height: 200px !important;
-    background: black url(https://rustybrick.s3.amazonaws.com/pacman10-hp.png) 0 0 no-repeat;
+    background: black 0 0 no-repeat;
     position: relative;
     margin-bottom: 0px
 }
+*/
 
+/*#pcm-c {
+    min-height: 450px !important;
+    height: 450px !important;
+    padding: 0px 0px 0px 0px !important;
+    border: 0px 0px 0px 0px !important;
+}
+*/
+.pcm-p {
+    height: 350px !important;
+    top: 35% !important;
+    left: 40%;
+    margin: 0px 0px 0px 0px !important;
+}
 #logo-l {
     width: 200px;
     height: 2px;

@@ -1,0 +1,101 @@
+﻿@namespace JEO3.Site.Components.Charting
+@using Microsoft.JSInterop
+@inherits EChartBase
+@typeparam TItem
+
+@if (_items.Count > 0)
+{
+    <div id="@_containerId" class="jeo-echarts-treemap" style="width:100%; height:@(Height);"></div>
+}
+else
+{
+    <div class="jeo-echarts-treemap-empty">No data available.</div>
+}
+
+@code {
+    [Parameter, EditorRequired] public IEnumerable<TItem> Data { get; set; } = [];
+    [Parameter, EditorRequired] public Func<TItem, string> LabelSelector { get; set; } = default!;
+    [Parameter, EditorRequired] public Func<TItem, double> ValueSelector { get; set; } = default!;
+    [Parameter] public Func<TItem, string?>? SubLabelSelector { get; set; }
+    [Parameter] public Func<TItem, string?>? GroupKeySelector { get; set; }
+    [Parameter] public EventCallback<TItem> OnCellClick { get; set; }
+    [Parameter] public string Title { get; set; } = "TREEMAP";
+    [Parameter] public string[]? Palette { get; set; }
+
+    private readonly string _containerId = $"chart-treemap-{Guid.NewGuid():N}";
+    protected override string? ContainerId => _containerId;
+    protected override string JavascriptFilePath { get; set; } = "./js/echarts/charts2d.js";
+
+    private IJSObjectReference? _module;
+    private DotNetObjectReference<TreemapEChart<TItem>>? _selfRef;
+    private List<TItem> _items = [];
+    private bool _needsRender = true;
+
+    public TreemapEChart()
+    {
+        Height = "100%";
+    }
+
+    protected override void OnParametersSet()
+    {
+        _items = Data?.ToList() ?? [];
+        _needsRender = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (IsDisposed) return;
+
+        if (firstRender)
+        {
+            try
+            {
+                _module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", JavascriptFilePath);
+                _selfRef = DotNetObjectReference.Create(this);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Treemap initialization failed: {ex}");
+                return;
+            }
+        }
+
+        if (_module == null || !_needsRender || _items.Count == 0) return;
+        _needsRender = false;
+
+        // index points back into _items so a click can return the original TItem.
+        var payload = _items.Select((item, i) => new { index = i, name = LabelSelector(item) ?? string.Empty, value = SafeValue(ValueSelector(item)), subLabel = SubLabelSelector?.Invoke(item) ?? string.Empty, groupKey = GroupKeySelector?.Invoke(item) ?? string.Empty }).Where(x => x.value > 0).ToList();
+
+        try
+        {
+            await _module.InvokeVoidAsync("renderGroupedTreemap", _containerId, Title, payload, Palette, _selfRef);
+        }
+        catch (JSException ex)
+        {
+            Console.Error.WriteLine($"Treemap JS error: {ex.Message}");
+        }
+    }
+
+    [JSInvokable]
+    public async Task HandleCellClick(int index)
+    {
+        if (index >= 0 && index < _items.Count && OnCellClick.HasDelegate)
+            await OnCellClick.InvokeAsync(_items[index]);
+    }
+
+    private static double SafeValue(double value) => double.IsFinite(value) ? Math.Max(0, value) : 0;
+
+    protected override async ValueTask OnDisposeAsync()
+    {
+        if (_module != null)
+        {
+            try { await _module.InvokeVoidAsync("disposeGroupedTreemap", _containerId); } catch { }
+            try { await _module.DisposeAsync(); } catch { }
+            _module = null;
+        }
+
+        _selfRef?.Dispose();
+        _selfRef = null;
+    }
+}

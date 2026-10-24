@@ -1,0 +1,59 @@
+﻿@namespace JEO3.Site.Dashboard
+
+
+@using System.IO
+@using System.Text
+@using System.Xml.Serialization
+@using JEO3.Monitor
+
+<div class="plan-viewer-wrapper">
+    <h3>Live Execution Plan Root</h3>
+    
+    @if (ParsedPlan?.QueryPlan?.RootRelOp != null)
+    {
+        <div class="statement-sql-box">
+            <code>@ParsedPlan.StatementText</code>
+        </div>
+
+        <div class="diagram-canvas">
+            <ExecutionPlanVisualizer Node="ParsedPlan.QueryPlan.RootRelOp" />
+        </div>
+    }
+    else
+    {
+        <div class="loading-state">
+            <span>🔄 Shredding Plan Node XML Structures...</span>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string RawPlanXml { get; set; } = string.Empty; // Pass the SpecificStatementPlanXml here
+    private PlanStatement? ParsedPlan { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrWhiteSpace(RawPlanXml))
+        {
+            try
+            {
+                // Wrap block to ensure valid parsing container boundary constraints
+                var xmlText = RawPlanXml.Trim();
+                if (!xmlText.StartsWith("<ShowPlanXML"))
+                {
+                    xmlText = $"<ShowPlanXML xmlns=\"http://microsoft.com\"><BatchSequence><Batch><Statements><StmtSimple>{xmlText}</StmtSimple></Statements></Batch></BatchSequence></ShowPlanXML>";
+                }
+
+                var serializer = new XmlSerializer(typeof(ShowPlanXmlContainer));
+                using var reader = new StringReader(xmlText);
+                var container = (ShowPlanXmlContainer?)serializer.Deserialize(reader);
+                
+                ParsedPlan = container?.Batches?.FirstOrDefault()?.Statements?.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"XML Deserialization Failure: {ex.Message}");
+            }
+        }
+    }
+}

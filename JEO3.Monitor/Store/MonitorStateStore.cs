@@ -1,4 +1,6 @@
-﻿namespace JEO3.Monitor
+﻿using JEO3.Contracts;
+
+namespace JEO3.Monitor
 {
     public sealed class MonitorStateStore
     {

@@ -1,8 +1,10 @@
 ﻿using System.Text.Json.Serialization;
+using JEO3.Contracts;
 
 namespace JEO3.Monitor
 {
-    public sealed class ActiveRequestRow
+
+    public sealed class ActiveRequestRow : IActiveRequestRow
     {
         [JsonPropertyName("T")]
         public DateTime Timestamp { get; set; }

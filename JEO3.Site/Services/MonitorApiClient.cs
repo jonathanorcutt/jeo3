@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using JEO3.Contracts;
 using JEO3.Monitor;
 
 namespace JEO3.Site.Services
@@ -6,15 +7,15 @@ namespace JEO3.Site.Services
     public sealed class MonitorApiClient : IMonitorApiClient
     {
         private readonly HttpClient _http;
-        private readonly ILogger<MonitorApiClient> _logger;
+        private readonly ILogger<IMonitorApiClient> _logger;
 
-        public MonitorApiClient(HttpClient http, ILogger<MonitorApiClient> logger)
+        public MonitorApiClient(HttpClient http, ILogger<IMonitorApiClient> logger)
         {
             _http = http;
             _logger = logger;
         }
 
-        public async Task<MonitorSnapshot?> GetInitialSnapshotAsync(CancellationToken ct = default)
+        public async Task<IMonitorSnapshot?> GetInitialSnapshotAsync(CancellationToken ct = default)
         {
             try
             {
@@ -42,7 +43,7 @@ namespace JEO3.Site.Services
             }
         }
 
-        public async Task<MonitorDeltaResponse?> GetDeltaAsync(DateTime sinceUtc, CancellationToken ct = default)
+        public async Task<IMonitorDeltaResponse?> GetDeltaAsync(DateTime sinceUtc, CancellationToken ct = default)
         {
             try
             {
