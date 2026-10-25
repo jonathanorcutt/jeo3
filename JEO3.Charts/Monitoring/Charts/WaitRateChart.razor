@@ -4,16 +4,6 @@
 
 <div class="monitor-panel">
 
-	@if (LabelText != string.Empty)
-	{
-		<div class="monitor-panel-title">
-			<label class="dashboard-monitor-label">
-				<img src="../img/vs_icons/StatisticsWarning_16x.png" width="18" height="18" class="fa-mr-7" />
-				@LabelText
-			</label>
-		</div>
-	}
-
 	<div class="echart-container">
 		<PanoramicData.ECharts.EChart @ref="Chart" Options="@Options" Width="@Width" Height="@Height" />
 	</div>

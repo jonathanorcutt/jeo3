@@ -1,12 +1,12 @@
 ﻿namespace JEO3.Monitor
 {
-//    public enum MonitorPollingStatus
-//    {
-//        Stopped,
-//        Polling,
-//        Error,
-//        InsufficientPermissions
-//    }
+    //    public enum MonitorPollingStatus
+    //    {
+    //        Stopped,
+    //        Polling,
+    //        Error,
+    //        InsufficientPermissions
+    //    }
 
     public enum WmiDataType
     {

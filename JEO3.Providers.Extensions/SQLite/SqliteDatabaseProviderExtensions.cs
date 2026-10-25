@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Data;
 using System.Linq.Expressions;
 using System.Text;
@@ -439,7 +437,7 @@ namespace JEO3.Providers.Extensions.Sqlite
                 throw;
             }
         }
-       
+
         public async Task<int?> ExecuteScalar(IDatabaseProvider provider, string query, CommandType commandType = CommandType.Text) { throw new NotImplementedException(); }
 
         #endregion

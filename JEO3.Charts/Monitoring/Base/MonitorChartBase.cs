@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PanoramicData.ECharts;
-using System;
-using System.Threading.Tasks;
 
 namespace JEO3.Monitor.ECharts
 {

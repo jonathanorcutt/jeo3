@@ -50,7 +50,7 @@ namespace JEO3.Site.Services
                 DateTime now = DateTime.Now;
 
                 var url = $"/api/monitor/delta?sinceUtc={Uri.EscapeDataString(sinceUtc.ToString("o"))}";
-                var result =  await _http.GetFromJsonAsync<MonitorDeltaResponse>(url, ct).ConfigureAwait(false);
+                var result = await _http.GetFromJsonAsync<MonitorDeltaResponse>(url, ct).ConfigureAwait(false);
 
                 var log = Math.Round((DateTime.Now - now).TotalSeconds, 2);
                 Trace.WriteLine($"JEO3.Site - MonitorApiClient - GetDeltaAsync - Elapsed {log}sec");

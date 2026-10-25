@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace JEO3.Monitor.Wmi
+﻿namespace JEO3.Monitor.Wmi
 {
     public sealed class WmiMonitorSnapshot
     {

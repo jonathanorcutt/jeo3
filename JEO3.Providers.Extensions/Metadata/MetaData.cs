@@ -11,8 +11,8 @@ namespace JEO3.Providers.Extensions
             var tableAttr = type.GetCustomAttribute<JeoTable>()
                 ?? throw new InvalidOperationException($"Type {type.Name} is missing [{typeof(JeoTable).Name}].");
             var columns = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => p.CanRead && p.CanWrite && p.GetCustomAttributes().Any(v => v.GetType() == typeof(NotMappedAttribute)) == false 
-                    && (includeCollections == false ? p.PropertyType.IsGenericType == false : true) 
+                .Where(p => p.CanRead && p.CanWrite && p.GetCustomAttributes().Any(v => v.GetType() == typeof(NotMappedAttribute)) == false
+                    && (includeCollections == false ? p.PropertyType.IsGenericType == false : true)
                 )
                 .Select(p =>
                 {
@@ -33,7 +33,7 @@ namespace JEO3.Providers.Extensions
                     };
                 }).ToList();
 
-            var cols =  !columns.Any(c => c.IsPrimaryKey)
+            var cols = !columns.Any(c => c.IsPrimaryKey)
                 ? throw new InvalidOperationException($"Type {type.Name} must define at least one Primary Key.")
                 : new EntityDescriptor
                 {

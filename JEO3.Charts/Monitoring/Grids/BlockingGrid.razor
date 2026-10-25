@@ -7,19 +7,6 @@
 @namespace JEO3.Monitor.ECharts
 
 <div class="monitor-panel">
-	@if (LabelText != string.Empty)
-	{
-		<div class="monitor-panel-title">
-			<label class="dashboard-monitor-label">
-				<img src="../img/vs_icons/StoredProcedurefromCLRWarning_16x.png" width="18" height="18" class="fa-mr-7" />
-				@LabelText
-			</label>
-
-			<span class="monitor-section-badge">
-				@Blocking.Count
-			</span>
-		</div>
-	}
 
 	<div class="dashboard-pane-container" style="height:@(Height); width:@(Width)">
 		<div class="dashboard-pane-body-container-scroll">

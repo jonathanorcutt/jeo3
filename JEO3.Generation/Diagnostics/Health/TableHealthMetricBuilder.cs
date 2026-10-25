@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using JEO3.Generation.Models;
+﻿using JEO3.Generation.Models;
 using JEO3.Schema;
 
 namespace JEO3.Generation.Diagnostics.Health

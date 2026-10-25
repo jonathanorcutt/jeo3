@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using JEO3.Contracts;
+﻿using JEO3.Contracts;
 using Microsoft.AspNetCore.Components;
 
 namespace JEO3.Monitor.ECharts

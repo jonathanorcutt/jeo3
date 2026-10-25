@@ -1,9 +1,8 @@
+using JEO3.Contracts; // Required to catch the exact JS exception type
 using JEO3.Core;
 using JEO3.Logging;
 using Microsoft.AspNetCore.Components;
 using PanoramicData.ECharts;
-using Microsoft.JSInterop;
-using JEO3.Contracts; // Required to catch the exact JS exception type
 
 namespace JEO3.Monitor.ECharts
 {

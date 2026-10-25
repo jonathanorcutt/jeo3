@@ -74,7 +74,7 @@ namespace JEO3.API
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment() || true)    // On Internet - Remove
-            {                
+            {
                 app.MapOpenApi();                           // Exposes the raw /openapi/v1.json specification document
                 app.MapScalarApiReference(options =>
                 {

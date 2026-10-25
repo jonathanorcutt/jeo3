@@ -1,5 +1,4 @@
-﻿using BlazorMonaco;
-using JEO3.Core;
+﻿using JEO3.Core;
 using PanoramicData.ECharts;
 
 namespace JEO3.Monitor.ECharts
@@ -34,7 +33,7 @@ namespace JEO3.Monitor.ECharts
                     Left = "1%",
                     Right = "1%",
                     Top = "1%",
-                    Bottom = "20%",   // was 18% — extra room so the zoom bar + legend don't crowd the axis labels
+                    Bottom = "15%",   // was 18% — extra room so the zoom bar + legend don't crowd the axis labels
                     ContainLabel = true,
                     ShadowBlur = 12,
                     ShadowColor = theme.TextColor

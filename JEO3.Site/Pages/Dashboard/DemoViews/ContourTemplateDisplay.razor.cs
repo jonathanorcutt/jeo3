@@ -1,5 +1,4 @@
 using JEO3.Schema;
-using JEO3.Site.Components.Charting;
 using Microsoft.AspNetCore.Components;
 
 namespace JEO3.Site.Dashboard

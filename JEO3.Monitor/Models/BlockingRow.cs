@@ -1,7 +1,5 @@
-﻿using System.Runtime.Intrinsics.X86;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using JEO3.Contracts;
-using Microsoft.Data.SqlClient;
 
 namespace JEO3.Monitor
 {
@@ -58,6 +56,6 @@ namespace JEO3.Monitor
         [JsonPropertyName("SSO")]
         public int? StatementStartOffset { get; set; }
         [JsonPropertyName("SEO")]
-        public int? StatementEndOffset { get; set; }  
+        public int? StatementEndOffset { get; set; }
     }
 }

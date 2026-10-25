@@ -150,7 +150,7 @@ namespace JEO3.Engine
                 };
                 var log = Math.Round((DateTime.Now - now).TotalSeconds, 2);
                 Trace.WriteLine($"JEO3.Site - GetFlatContext - Tables: {(newCtx?.Tables?.Count ?? 0)}. Elapsed {log}sec");
-                
+
                 return newCtx;
             }
         }

@@ -11,16 +11,11 @@
 	{
 		<div class="monitor-panel-title">
 			<label class="dashboard-monitor-label">
-				<img src="../img/vs_icons/StoredProcedurefromCLRWarning_16x.png" width="18" height="18" class="fa-mr-7" />
+				<img src="../img/vs_icons/Callout_16x.png" width="18" height="18" class="fa-mr-7" />
 				@LabelText
 			</label>
-
-			<span class="monitor-section-badge">
-				@Queries.Count
-			</span>
 		</div>
 	}
-
 	<div class="dashboard-pane-container" style="height:@(Height); width:@(Width)">
 		<div class="dashboard-pane-body-container-scroll">
 			<ProgressBarGrid DataTable="@queriesTable" PrimaryKeyColumn="PrimaryKeyColumn"
@@ -166,16 +161,16 @@
 			MaxElapsedMs = Math.Round(v.MaxElapsedMs, 2),
 			TotalElapsedMs = Math.Round(v.TotalElapsedMs, 2),
 			v.ExecutionCount,
-			Impact = Math.Round(v.QueryImpact, 2),
-			AvgCpuMs = Math.Round(v.AvgCpuMs, 2),
+			// AvgCpuMs = Math.Round(v.AvgCpuMs, 2),
 			// v.MaxCpuMs,
 			TotalCpuMs = Math.Round(v.TotalCpuMs, 2),
 			// v.MaxLogicalWrites,
-			AvgLogWrites = Math.Round(v.AvgLogicalWrites, 0),
+			// AvgLogWrites = Math.Round(v.AvgLogicalWrites, 0),
 			TotalLogWrites = Math.Round((decimal)v.TotalLogicalWrites, 0),
-			AvgLogReads = Math.Round(v.AvgLogicalReads, 0),
+			// AvgLogReads = Math.Round(v.AvgLogicalReads, 0),
 			// v.MaxLogicalReads,
 			TotalLogReads = Math.Round((decimal)v.TotalLogicalReads, 0),
+			Impact = Math.Round(v.QueryImpact, 2),
 			// v.AvgIo,
 			// v.MaxIo,
 			// v.TotalIo,

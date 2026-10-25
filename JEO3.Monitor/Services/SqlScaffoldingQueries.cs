@@ -1,8 +1,4 @@
-﻿using System.CodeDom.Compiler;
-using System.Numerics;
-using System.Xml.Linq;
-
-namespace JEO3.Monitor
+﻿namespace JEO3.Monitor
 {
     public static class SqlScaffoldingQueries
     {

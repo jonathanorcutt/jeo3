@@ -1,11 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Data;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Text;
-using Microsoft.Data.SqlClient;
-using JEO3.Providers;
 using JEO3.Extensions;
+using Microsoft.Data.SqlClient;
 
 namespace JEO3.Providers.Extensions.MSSQL
 {
@@ -151,7 +149,7 @@ namespace JEO3.Providers.Extensions.MSSQL
             var table = await ExecuteCommandToDataTable(provider, cmd, conn);
             return table.ToList<T>();
         }
-       
+
         /// <summary>
         /// Get By FK - Requires use of class and key attribute decorations JeoTable and JeoKey
         /// </summary>
@@ -470,7 +468,7 @@ namespace JEO3.Providers.Extensions.MSSQL
                 throw;
             }
         }
-        
+
         public async Task<int?> ExecuteScalar(IDatabaseProvider provider, string query, CommandType commandType = CommandType.Text)
         {
             try

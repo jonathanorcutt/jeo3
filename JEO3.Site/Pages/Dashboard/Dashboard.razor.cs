@@ -8,7 +8,6 @@ using JEO3.Extensions;
 using JEO3.Generation;
 using JEO3.Generation.Models;
 using JEO3.Logging;
-using JEO3.Monitor.ECharts;
 using JEO3.Providers;
 using JEO3.Providers.Extensions;
 using JEO3.Schema;

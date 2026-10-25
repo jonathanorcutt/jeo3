@@ -5,7 +5,7 @@
         DateTime Timestamp { get; }
         string SqlHandleHex { get; }
         string PlanHandleHex { get; }
-        int? StatementStartOffset { get; } 
+        int? StatementStartOffset { get; }
         int? StatementEndOffset { get; }
         string DatabaseName { get; }
         string QueryText { get; }

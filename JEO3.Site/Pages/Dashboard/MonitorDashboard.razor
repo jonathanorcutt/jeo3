@@ -50,8 +50,9 @@
 						<WaitRateChart Width="1495px" Height="270px" LabelText="OVERVIEW" />
 					</div>
 					<div class="monitor-grid">
-						<TopExpensiveQueriesGrid @ref="gridTopExpensiveQueries" Height="250px" Width="1500px" LabelText="TOP EXPENSIVE QUERIES" OnSelectionChanged="SelectedQueryPlanChanged" OnDataChanged="SelectedQueryChanged"></TopExpensiveQueriesGrid>
+						<TopExpensiveQueriesGrid @ref="gridTopExpensiveQueries" Height="140px" Width="100%" LabelText="TOP EXPENSIVE QUERIES" OnSelectionChanged="SelectedQueryPlanChanged" OnDataChanged="SelectedQueryChanged"></TopExpensiveQueriesGrid>
 					</div>
+
 					<div class="monitor-grid" style="width:1495px">
 						<RadzenAccordion Style="width:1495px">
 							<Items>
@@ -59,7 +60,7 @@
 													 ExpandTitle="Show Selected Query" CollapseAriaLabel=""
 													 ExpandAriaLabel="Show The Selected Expensive Query" class="monitor-accordion">
 									<RadzenStack Gap="1rem">
-										<div class="dashboard-query-editor-container" style="min-height:100px; height:200px">
+										<div class="dashboard-query-editor-container" style="min-height:100px; height:120px">
 
 											<div class="grid-query-editor" oncontextmenu="return false;" onpointerup="if(event.button === 2) { this.releasePointerCapture(event.pointerId); }" style="background:var(--jeo-gradient-black)">
 												<StandaloneCodeEditor @key=@("query-editor-instance-expensive-queries") CssClass="txtQueryEditor" ConstructionOptions="EditorOptions"
@@ -71,50 +72,13 @@
 							</Items>
 						</RadzenAccordion>
 					</div>
+
 					<div class="monitor-grid">
-						<WaitCandleChart Width="735px" Height="200px" LabelText="WAIT ACTIVITY — LIVE" />
-						<TaskRateChart Width="735px" Height="200px" LabelText="WAITING TASKS/SEC" />
+						<BlockingChart Width="1495px" Height="120px" LabelText="BLOCKING CHAIN" />
 					</div>
 
 					<div class="monitor-grid">
-						<TopWaitsChart Width="735px" Height="200px" LabelText="TOP WAIT TYPES (latest sample)" />
-						<ActiveRequestsChart Width="735px" Height="200px" LabelText="ACTIVE REQUESTS — top 10 by wait" />
-					</div>
-
-					<div class="monitor-grid">
-						<WaitDistributionChart Width="735px" Height="350px" LabelText="TOP WAITS DISTRIBUTION" />
-						<CorrelationChart Width="735px" Height="350px" LabelText="CONTENTION PROFILE (Tasks vs Wait)" />
-					</div>
-
-					<div class="monitor-grid">
-						<ActiveRequestsGrid Width="1495px" Height="120px" LabelText="ACTIVE REQUESTS" OnSelectionChanged="SelectedActiveRequestsChanged" />
-					</div>
-					<div class="monitor-grid" style="width:1495px">
-						<RadzenAccordion Style="width:1495px">
-							<Items>
-								<RadzenAccordionItem Text="View Active Request Query.." Icon="account_balance_wallet" CollapseTitle="Hide Query" Selected="true"
-													 ExpandTitle="Show Selected Query" CollapseAriaLabel=""
-													 ExpandAriaLabel="Show The Selected Active Request Query" class="monitor-accordion">
-									<RadzenStack Gap="1rem">
-										<div class="dashboard-query-editor-container" style="min-height:100px; height:175px">
-
-											<div class="grid-query-editor" oncontextmenu="return false;" onpointerup="if(event.button === 2) { this.releasePointerCapture(event.pointerId); }" style="background:var(--jeo-gradient-black)">
-												<StandaloneCodeEditor @key=@("query-editor-instance-active-request-queries") CssClass="txtQueryEditor" ConstructionOptions="EditorOptions"
-																	  @ref="queryEditorActiveRequests" OnDidInit="OnEditorInitializedActiveRequests" OnDidChangeModelContent="OnEditorContentChangedActiveRequests" />
-											</div>
-										</div>
-									</RadzenStack>
-								</RadzenAccordionItem>
-							</Items>
-						</RadzenAccordion>
-					</div>
-
-					<div class="monitor-grid">
-						<BlockingChart Width="735px" Height="200px" LabelText="BLOCKING CHAIN" />
-						<DeadlockChart Width="735px" Height="200px" LabelText="DEADLOCKS" />
-					</div>
-					<div class="monitor-grid">
-						<BlockingGrid @ref="gridBlocking" Height="250px" Width="1500px" LabelText="BLOCKING SESSIONS" OnSelectionChanged="SelectedBlockingSessionChanged"></BlockingGrid>
+						<BlockingGrid @ref="gridBlocking" Height="120px" Width="100%" LabelText="BLOCKING SESSIONS" OnSelectionChanged="SelectedBlockingSessionChanged"></BlockingGrid>
 					</div>
 
 					<div class="monitor-grid" style="width:1495px">
@@ -128,7 +92,7 @@
 													 ExpandTitle="Show Selected Query" CollapseAriaLabel=""
 													 ExpandAriaLabel="Show The Selected Blocking Query" class="monitor-accordion">
 									<RadzenStack Gap="1rem">
-										<div class="dashboard-query-editor-container" style="min-height:100px; height:175px">
+										<div class="dashboard-query-editor-container" style="min-height:100px; height:120px">
 
 											<div class="grid-query-editor" oncontextmenu="return false;" onpointerup="if(event.button === 2) { this.releasePointerCapture(event.pointerId); }" style="background:var(--jeo-gradient-black)">
 												<StandaloneCodeEditor @key=@("query-editor-instance-blocking-queries") CssClass="txtQueryEditor" ConstructionOptions="EditorOptions"
@@ -141,9 +105,50 @@
 						</RadzenAccordion>
 					</div>
 
+					<div class="monitor-grid">
+						<ActiveRequestsChart Width="1495px" Height="120px" LabelText="ACTIVE REQUESTS — top 10 by wait" />
+					</div>
+					<div class="monitor-grid">
+						<ActiveRequestsGrid Width="100%" Height="120px" LabelText="ACTIVE REQUESTS" OnSelectionChanged="SelectedActiveRequestsChanged" />
+					</div>
+					<div class="monitor-grid" style="width:1495px">
+						<RadzenAccordion Style="width:1495px">
+							<Items>
+								<RadzenAccordionItem Text="View Active Request Query.." Icon="account_balance_wallet" CollapseTitle="Hide Query" Selected="true"
+													 ExpandTitle="Show Selected Query" CollapseAriaLabel=""
+													 ExpandAriaLabel="Show The Selected Active Request Query" class="monitor-accordion">
+									<RadzenStack Gap="1rem">
+										<div class="dashboard-query-editor-container" style="min-height:100px; height:140px">
+
+											<div class="grid-query-editor" oncontextmenu="return false;" onpointerup="if(event.button === 2) { this.releasePointerCapture(event.pointerId); }" style="background:var(--jeo-gradient-black)">
+												<StandaloneCodeEditor @key=@("query-editor-instance-active-request-queries") CssClass="txtQueryEditor" ConstructionOptions="EditorOptions"
+																	  @ref="queryEditorActiveRequests" OnDidInit="OnEditorInitializedActiveRequests" OnDidChangeModelContent="OnEditorContentChangedActiveRequests" />
+											</div>
+										</div>
+									</RadzenStack>
+								</RadzenAccordionItem>
+							</Items>
+						</RadzenAccordion>
+					</div>
+
+					<div class="monitor-grid-2x2">
+						<WaitCandleChart Width="735px" Height="300px" LabelText="WAIT ACTIVITY — LIVE" />
+						<TaskRateChart Width="735px" Height="300px" LabelText="WAITING TASKS/SEC" />
+					</div>
+
+					<div class="monitor-grid-2x2">
+						<TopWaitsChart Width="735px" Height="300px" LabelText="TOP WAIT TYPES (latest sample)" />
+						<WaitDistributionChart Width="735px" Height="300px" LabelText="TOP WAITS DISTRIBUTION" />
+					</div>
+
+					<div class="monitor-grid-2x2">
+						<CorrelationChart Width="735px" Height="300px" LabelText="CONTENTION PROFILE (Tasks vs Wait)" />
+						<DeadlockChart Width="735px" Height="300px" LabelText="DEADLOCKS" />
+					</div>
+
 					<label class="dashboard-monitor-label">Sample Charts</label>
 					<div class="monitor-grid">
-						<WaitRateStackedAreaChart Width="1495px" Height="200px" LabelText="IO/MEM/CPU/WAIT BAR" />
+						<WaitRateStackedAreaChart Width="1495px" Height="300px" LabelText="IO/MEM/CPU/WAIT BAR" />
 					</div>
 
 					<div class="monitor-grid" style="height:100px;">
@@ -349,7 +354,7 @@
 	private async Task SelectedQueryPlanChanged(ITopExpensiveQueryRow qry)
 	{
 		if (isMonacoEditorReady == false || queryEditorTopExpensiveQueries == null) { return; }
-		
+
 		if (qry != null && qry.PlanHandleHex != null && qry.StatementStartOffset != null && qry.StatementEndOffset != null)
 		{
 			var x = await GetPlan(qry.PlanHandleHex, qry.StatementStartOffset, qry.StatementEndOffset);

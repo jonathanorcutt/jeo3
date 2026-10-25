@@ -1,12 +1,10 @@
 using System.Collections.Concurrent;
 using System.Data;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Text;
+using JEO3.Extensions;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
-using JEO3.Providers;
-using JEO3.Extensions;
 
 namespace JEO3.Providers.Extensions.Oracle
 {

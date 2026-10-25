@@ -1,5 +1,3 @@
-using JEO3.Schema;
-
 namespace JEO3.Generation.Models
 {
     /// <summary>

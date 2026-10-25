@@ -1,4 +1,4 @@
-.monitor-grid {
+.monitor-grid-2x2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
@@ -19,7 +19,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 8px;
+    padding: 0px 0px 0px 10px;
     box-sizing: border-box;
     background: #0f1620;
     border: 1px solid #1f2b38;
@@ -39,7 +39,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
 }
 
     .monitor-header > div {
@@ -64,4 +64,20 @@
 
 .monitor-metric {
     min-width: 100px;
+}
+
+
+
+
+.dashboard-pane-container {
+    /*width: 100%;*/
+    min-height: 100px;
+/*    overflow: hidden;
+    flex-direction: column;
+    border: 1px solid var(--jeo-gradient-rz);
+    box-shadow: 5px 0 10px var(--jeo-gradienr-rz-light);*/
+}
+
+.dashboard-pane-container{
+    background: black !important;
 }

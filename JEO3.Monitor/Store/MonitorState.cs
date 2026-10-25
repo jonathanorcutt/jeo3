@@ -1,5 +1,4 @@
 using JEO3.Contracts;
-using JEO3.Monitor.Models;
 
 namespace JEO3.Monitor
 {

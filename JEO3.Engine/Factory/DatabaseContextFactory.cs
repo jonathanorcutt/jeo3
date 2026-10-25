@@ -134,7 +134,7 @@ namespace JEO3.Engine
 
                     // TABLE -> CHECK CONSTRAINTS
                     table.CheckConstraints = checkConstraintsByTable[objectId].ToList();
-    
+
                     // COLUMN -> CHECK CONSTRAINTS (exact column Path match: Schema.Table.Column)
                     foreach (var column in table.Columns)
                     {
@@ -191,7 +191,8 @@ namespace JEO3.Engine
                 var indexByTableAndId = tableList
                     .SelectMany(table => table.Indexes
                         .Where(i => i.IndexId.HasValue)
-                        .Select(i => new {
+                        .Select(i => new
+                        {
                             Key = (SchemaName: table.SchemaName, TableName: table.Name, IndexId: i.IndexId!.Value),
                             Index = i
                         }))

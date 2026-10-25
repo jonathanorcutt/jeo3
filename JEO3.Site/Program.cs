@@ -3,7 +3,6 @@ using JEO3.Contracts;
 using JEO3.Core;
 using JEO3.Monitor;
 using JEO3.Monitor.ECharts;
-using JEO3.Monitor.Wmi;
 using JEO3.Schema;
 using JEO3.Site.Dashboard;
 using JEO3.Site.Extensions;

@@ -1,12 +1,7 @@
-using System.Data;
 using System.Diagnostics;
 using BlazorMonaco;
 using BlazorMonaco.Editor;
-using JEO3.Core;
-using JEO3.Generation;
-using JEO3.Schema;
 using JEO3.Site.Components;
-using JEO3.Site.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Radzen;

@@ -18,7 +18,7 @@ public abstract class EChartBase : ComponentBase, IAsyncDisposable
     [Parameter] public string LabelText { get; set; } = string.Empty;
 
     [Parameter] public string PaddingStyle { get; set; } = "0px 2px 50px 0px";
-    
+
     [Inject] protected IJSRuntime JSRuntime { get; set; } = default!;
 
     /// <summary>DOM id of the element ECharts renders into. May be null until the chart exists (e.g. a PanoramicData Chart reference).</summary>

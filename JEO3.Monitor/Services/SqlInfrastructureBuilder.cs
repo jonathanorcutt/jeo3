@@ -10,7 +10,7 @@ namespace JEO3.Monitor.Services.API
     {
         private MonitorSettings _settings { get; set; } = new();
         private const string MonitorDbName = "Monitor";
-       
+
 
         internal SqlInfrastructureBuilder(MonitorSettings settings)
         {
@@ -90,7 +90,7 @@ namespace JEO3.Monitor.Services.API
             queries = queries.Concat(new[] { string.Format(SqlScaffoldingQueries.CreateTableRowCountsView, EnvironmentResolver.DevelopmentPrefix) }).ToList();
             queries = queries.Concat(new[] { string.Format(SqlScaffoldingQueries.CreateTableRowCountsView, EnvironmentResolver.ProductionPrefix) }).ToList();
             // Exceptions
-            queries = queries.Concat(new[] {SqlScaffoldingQueries.CreateExceptionLogProcedure }).ToList();
+            queries = queries.Concat(new[] { SqlScaffoldingQueries.CreateExceptionLogProcedure }).ToList();
 
             // Ensure Instance Entry
             queries = queries.Concat(new[] { string.Format(SqlScaffoldingQueries.InsertUpdateMonitorInstanceQuery, _settings.UserName, _settings.MachineName, _settings.ApiBaseUrl, _settings.TimestampLastRegistered, _settings.TimestampLastActive) }).ToList();

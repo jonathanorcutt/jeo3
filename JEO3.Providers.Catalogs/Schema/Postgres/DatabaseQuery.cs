@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace JEO3.Providers.Catalogs
+﻿namespace JEO3.Providers.Catalogs
 {
     internal static partial class PostgresQueries
     {

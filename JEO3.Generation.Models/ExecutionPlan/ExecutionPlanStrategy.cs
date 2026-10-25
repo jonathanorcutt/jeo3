@@ -1,6 +1,4 @@
-﻿using JEO3.Generation.Models;
-
-namespace JEO3.Generation.Models
+﻿namespace JEO3.Generation.Models
 {
     public sealed class ExecutionPlanStrategy
     {

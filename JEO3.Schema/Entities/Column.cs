@@ -172,7 +172,7 @@ namespace JEO3.Schema
             }
         }
         public override IObject? Parent { get; internal set; }
-        public override IEnumerable<IChildGrouping> Children => Array.Empty<IChildGrouping>(); 
+        public override IEnumerable<IChildGrouping> Children => Array.Empty<IChildGrouping>();
         //new IChildGrouping[]
         //{
         //    new ChildGrouping<Index> { Children = Indexes }

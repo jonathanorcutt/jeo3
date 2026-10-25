@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using JEO3.Contracts;
 using JEO3.Providers.Extensions;
 

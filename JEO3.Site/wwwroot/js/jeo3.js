@@ -70,45 +70,40 @@ async function toggleElementFullscreen(fullscreenDiv, enterFullScreen) {
     }
 };
 
-// Toggle Diagram Pane Size To/From 50% Screen (Left Side)
-async function toggleElementHalfscreen(fullscreenDiv, enterFullScreen) {
+
+
+// Toggle a component between its original location and a target workspace.
+async function toggleElementExpandCollapse(fullscreenDiv, targetDiv, expand) {
     try {
-        if (!fullscreenDiv) return;
+        if (!fullscreenDiv || !targetDiv) return;
 
-        // Find the target TABLES titlebar element to read its current Y location
-        const targetWorkspaceTablesContainer = document.querySelector('.dashboard-pane-titlebar-container');
+        if (expand) {
+            // Capture the component's current geometry before expanding.
+            const rect = targetDiv.getBoundingClientRect();
 
-        if (enterFullScreen) {
-            // Default fallback if the TABLES titlebar isn't found in the DOM yet
-            let targetTop = 50;
-
-            if (targetWorkspaceTablesContainer) {
-                // Get the exact pixel distance from the top of the browser viewport
-                const rect = targetWorkspaceTablesContainer.getBoundingClientRect();
-                targetTop = rect.top - 51.5;
-            }
-
-            // Lock it as a fixed overlay covering the left half of the screen stretching to the bottom
             fullscreenDiv.style.position = 'fixed';
-            fullscreenDiv.style.top = `${targetTop}px`;
-            fullscreenDiv.style.left = '8px'; // Snaps clean with 8px grid padding
-            fullscreenDiv.style.width = fullscreenDiv.parentElement.style.flexBasis;//'56.3%'; // Matches left metadata column width perfectly
-            fullscreenDiv.style.height = `calc(100vh - ${targetTop + 57}px)`;
-            fullscreenDiv.style.zIndex = '99999'; // Layers it safely over the COLUMNS pane
-            fullscreenDiv.classList.add('is-js-expanded');
+            fullscreenDiv.style.top = `${rect.top}px`;
+            fullscreenDiv.style.left = `${rect.left}px`;
+            fullscreenDiv.style.width = '1500px';
+            fullscreenDiv.style.height = targetDiv.height;
+            fullscreenDiv.style.zIndex = '99999';
+            fullscreenDiv.style.backgroundColor = 'black';
+
+            // fullscreenDiv.classList.add('is-js-expanded');
         }
         else {
-            // Revert all inline styles completely so it snaps back into its natural CSS Grid slot
+            // Restore natural positioning and sizing.
             fullscreenDiv.style.position = '';
             fullscreenDiv.style.top = '';
             fullscreenDiv.style.left = '';
             fullscreenDiv.style.width = '';
             fullscreenDiv.style.height = '';
             fullscreenDiv.style.zIndex = '';
-            fullscreenDiv.classList.remove('is-js-expanded');
-        }
 
-    } catch (err) {
+            // fullscreenDiv.classList.remove('is-js-expanded');
+        }
+    }
+    catch (err) {
         console.error(`Error attempting to toggle fullscreen: ${err.message}`);
     }
 }

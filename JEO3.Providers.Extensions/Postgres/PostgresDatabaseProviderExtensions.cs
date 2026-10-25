@@ -1,12 +1,9 @@
 using System.Collections.Concurrent;
 using System.Data;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Text;
-using Npgsql;
-using NpgsqlTypes;
-using JEO3.Providers;
 using JEO3.Extensions;
+using Npgsql;
 
 namespace JEO3.Providers.Extensions.Postgres
 {
@@ -346,7 +343,7 @@ namespace JEO3.Providers.Extensions.Postgres
 
             return totalRowsAffected;
         }
-      
+
         /// <summary>
         /// Update - Requires use of class and key attribute decorations JeoTable and JeoKey
         /// </summary>
@@ -465,13 +462,13 @@ namespace JEO3.Providers.Extensions.Postgres
         {
             return _descriptorCache.GetOrAdd(typeof(T), _ => EntityScanner.Scan<T>());
         }
-     
+
         /// <summary>
         /// Double-quotes an identifier for PostgreSQL, preserving exact casing
         /// (PostgreSQL folds unquoted identifiers to lowercase).
         /// </summary>
         private static string Q(string identifier) => $"\"{identifier}\"";
-       
+
         /// <summary>
         /// Builds a schema-qualified, correctly-quoted table reference.
         /// Deliberately does NOT use EntityDescriptor.FullTableName, which is hardcoded

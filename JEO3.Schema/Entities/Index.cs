@@ -49,5 +49,5 @@ namespace JEO3.Schema
             new ChildGrouping<IColumn> { Name = "Key Columns", Children = KeyColumns },
             new ChildGrouping<IColumn> { Name = "Included Columns", Children = IncludedColumns }
     };
-}
+    }
 }
